@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7324275424428632901}
+  - component: {fileID: 6816017618577237725}
   m_Layer: 0
   m_Name: PlayerCode
   m_TagString: Untagged
@@ -32,6 +33,25 @@ Transform:
   - {fileID: 5059368883227359491}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6816017618577237725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7588933265451258189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 466d8bd80a334b3890a4492dd71f42af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickableLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  lineMaterial: {fileID: 0}
+  lineWidth: 0.1
+  trailDuration: 1.5
+  sortingLayerName: Trail
 --- !u!1001 &4429162231053426959
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -43,6 +63,14 @@ PrefabInstance:
     - target: {fileID: 1060123943827794059, guid: 96863505c260f45c0892180c0cd8f94d, type: 3}
       propertyPath: m_Name
       value: PlayerSprite
+      objectReference: {fileID: 0}
+    - target: {fileID: 1166827579300267231, guid: 96863505c260f45c0892180c0cd8f94d, type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1166827579300267231, guid: 96863505c260f45c0892180c0cd8f94d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 2000955231
       objectReference: {fileID: 0}
     - target: {fileID: 8881651126717011980, guid: 96863505c260f45c0892180c0cd8f94d, type: 3}
       propertyPath: m_LocalPosition.x
