@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Game.Core.Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Game.Core.Input;
 
 namespace Game.Player.Scripts
 {
@@ -9,87 +9,94 @@ namespace Game.Player.Scripts
     {
         [Header("Click Settings")]
         [SerializeField] private LayerMask clickableLayer;   
-    
+
         [Header("Trail Settings")]
-        [SerializeField] private Material lineMaterial;       // Assign a simple unlit/red material in the Inspector
-        [SerializeField] private float lineWidth = 0.1f;      // Thickness of the trail
-        [Tooltip("Sorting Layer name for the LineRenderer")]
+        [SerializeField] private Material lineMaterial;
+        [SerializeField] private float lineWidth = 0.1f;
         [SerializeField] private string sortingLayerName;
-    
-        private List<GameObject> _currentLineObjects = new List<GameObject>();
-    
-        private Camera _mainCam;
-        private GameInput _controls;
-        private InputAction _clickAction;
-        private InputAction _pointAction;
+        
+        private class TrailSegment
+        {
+            public LineRenderer lr;
+            public Transform fromT, toT;
+            public Vector3 fromLocalPos, toLocalPos;
+        }
+
+        private List<TrailSegment> _segments = new List<TrailSegment>();
+        private GameObject   _lastPlatform;
+        private Camera       _mainCam;
+        private InputAction  _clickAction;
 
         void Awake()
         {
-            _mainCam      = Camera.main;
-            _controls     = InputSystemSingleton.Instance.InputSystem;
-            _clickAction  = _controls.PlayerControls.Click;
-            _pointAction  = _controls.PlayerControls.Point;
+            _mainCam     = Camera.main;
+            _clickAction = InputSystemSingleton.Instance.InputSystem.PlayerControls.Click;
         }
 
-        void OnEnable()
-        {
-            _clickAction.performed += OnClick;
-        }
-
-        void OnDisable()
-        {
-            _clickAction.performed -= OnClick;
-        }
+        void OnEnable()  => _clickAction.performed += OnClick;
+        void OnDisable() => _clickAction.performed -= OnClick;
 
         private void OnClick(InputAction.CallbackContext ctx)
         {
             Vector2 screenPos = Mouse.current.position.ReadValue();
-            Vector2 worldPos  = _mainCam.ScreenToWorldPoint(screenPos);
-        
+            Vector3 worldPos = _mainCam.ScreenToWorldPoint(screenPos);
+
             var hit = Physics2D.Raycast(worldPos, Vector2.zero, 0f, clickableLayer);
-            if (hit.collider == null)
-                return;
-        
-            GameObject platform = hit.collider.gameObject;
-        
-            HandleNewMovement(transform.position, platform.transform.position, platform);
-        
-            transform.position = platform.transform.position;
-        
+            if (hit.collider == null) return;
 
+            var newPlatform = hit.collider.gameObject;
+
+            if (_lastPlatform != null && newPlatform != _lastPlatform)
+                CreateSegment(_lastPlatform, newPlatform);
+
+            _lastPlatform = newPlatform;
+            transform.position = newPlatform.transform.position;
         }
 
-        private void HandleNewMovement(Vector3 from, Vector3 to, GameObject platform)
+        private void CreateSegment(GameObject fromGO, GameObject toGO)
         {
-            
-            var lineobj = DrawTrail(from, to);
-            _currentLineObjects.Add(lineobj);
-            
-        
-        }
+            Vector3 fromWorld = fromGO.transform.position;
+            Vector3 toWorld   = toGO.transform.position;
 
-        private GameObject DrawTrail(Vector3 from, Vector3 to)
-        {
-            GameObject lineObj = new GameObject("ClickTrail");
+            // Compute local offsets
+            Vector3 fromLocal = fromGO.transform.InverseTransformPoint(fromWorld);
+            Vector3 toLocal   = toGO.transform.InverseTransformPoint(toWorld);
+
+            // Build line
+            var lineObj = new GameObject("ClickTrail");
             var lr = lineObj.AddComponent<LineRenderer>();
+            lr.useWorldSpace   = true;                 // we'll drive positions manually
+            lr.positionCount   = 2;
+            lr.startWidth      = lineWidth;
+            lr.endWidth        = lineWidth;
+            lr.numCapVertices  = 4;
+            lr.material        = lineMaterial;
+            lr.sortingLayerName= sortingLayerName;
 
-            // Basic setup
-            lr.positionCount = 2;
-            lr.SetPosition(0, from);
-            lr.SetPosition(1, to);
-            lr.startWidth = lineWidth;
-            lr.endWidth   = lineWidth;
-            lr.material    = lineMaterial;
-            lr.startColor  = Color.red;
-            lr.endColor    = Color.red;
-            lr.numCapVertices = 4;  
-            lr.sortingLayerName = sortingLayerName;
-            return lineObj;
+            // Initial “dumb” set so we see it immediately:
+            lr.SetPosition(0, fromWorld);
+            lr.SetPosition(1, toWorld);
+
+            // Store it
+            _segments.Add(new TrailSegment {
+                lr           = lr,
+                fromT        = fromGO.transform,
+                toT          = toGO.transform,
+                fromLocalPos = fromLocal,
+                toLocalPos   = toLocal
+            });
         }
 
-        private bool CheckForShape()
+        void LateUpdate()
         {
-            return false;
+            // Recompute all segment endpoints
+            foreach (var seg in _segments)
+            {
+                Vector3 p0 = seg.fromT.TransformPoint(seg.fromLocalPos);
+                Vector3 p1 = seg.toT  .TransformPoint(seg.toLocalPos);
+                seg.lr.SetPosition(0, p0);
+                seg.lr.SetPosition(1, p1);
+            }
         }
     }
 }
