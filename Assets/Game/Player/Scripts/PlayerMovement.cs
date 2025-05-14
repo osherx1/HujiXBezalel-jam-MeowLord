@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Game.Core.Input;
+using Game.Core.Utils;
 
 namespace Game.Player.Scripts
 {
@@ -10,6 +12,9 @@ namespace Game.Player.Scripts
     {
         [Header("Click Settings")] [SerializeField]
         private LayerMask clickableLayer;
+
+        [SerializeField] private LayerMask enemyLayer;
+
 
         [Header("Trail Settings")] [SerializeField]
         private Material lineMaterial;
@@ -104,9 +109,18 @@ namespace Game.Player.Scripts
                 CreateSegment(_lastPlat.gameObject, newPlat.gameObject);
                 if (_visited.Contains(newPlat))
                 {
-                    // found a loop: remove all segments from the first occurrence of newPlat onward
                     int idx = _visited.IndexOf(newPlat);
-                    // destroy all segment GameObjects in the loop
+
+                    // 1) snapshot exactly the loop of platforms
+                    List<Transform> loopPlatforms = _visited.GetRange(
+                        idx,
+                        _visited.Count - idx // <-- no +1 here
+                    );
+
+                    // 2) immediately prune your history
+                    _visited.RemoveRange(idx+1, _visited.Count - idx -1);
+
+                    // 3) schedule the LineRenderer cleanup
                     DOVirtual.DelayedCall(delayForSegments, () =>
                     {
                         for (int i = _segments.Count - 1; i >= idx; i--)
@@ -116,9 +130,10 @@ namespace Game.Player.Scripts
                         }
                     });
 
-                    // drop those platforms from the visited list (keep newPlat at idx, remove after)
-                    _visited.RemoveRange(idx + 1, _visited.Count - (idx + 1));
+                    // 4) destroy enemies inside that polygon
+                    DestroyEnemiesInLoop(loopPlatforms);
                 }
+
                 else
                 {
                     // 3. no loop → create a brand‐new segment
@@ -159,6 +174,33 @@ namespace Game.Player.Scripts
                 FromLocalPos = fromLocal,
                 ToLocalPos = toLocal
             });
+        }
+
+
+        private void DestroyEnemiesInLoop(List<Transform> loopPlatforms)
+        {
+            // 1) gather the ordered vertices of the loop
+            Vector2[] poly = loopPlatforms
+                .Select(t => (Vector2)t.position)
+                .ToArray();
+
+            // 2) compute bounding box so OverlapAreaAll is efficient
+            float minX = poly.Min(v => v.x), maxX = poly.Max(v => v.x);
+            float minY = poly.Min(v => v.y), maxY = poly.Max(v => v.y);
+            Vector2 min = new Vector2(minX, minY);
+            Vector2 max = new Vector2(maxX, maxY);
+
+            // 3) get all enemy colliders in that AABB
+            Collider2D[] candidates =
+                Physics2D.OverlapAreaAll(min, max, enemyLayer);
+
+            // 4) for each, test the precise polygon
+            foreach (var c in candidates)
+            {
+                Vector2 pt = c.transform.position;
+                if (EladsHelperFunctions.PointInPolygon(poly, pt))
+                    Destroy(c.gameObject);
+            }
         }
 
         void LateUpdate()
