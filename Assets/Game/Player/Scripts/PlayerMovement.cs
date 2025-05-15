@@ -211,6 +211,7 @@ namespace Game.Player.Scripts
             {
                 seg.Lr.SetPosition(0, seg.FromT.TransformPoint(seg.FromLocalPos));
                 seg.Lr.SetPosition(1, seg.ToT.TransformPoint(seg.ToLocalPos));
+                transform.position = seg.ToT.position;
             }
         }
     }
