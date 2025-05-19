@@ -7,8 +7,19 @@ public class MouseSensor : MonoBehaviour
     [SerializeField] private int requiredCount = 1;
 
     [Tooltip("Tag used by mouse objects")]
-    [SerializeField] private string mouseTag = "Mouse";
+    [SerializeField] private string mouseTag = "Rat";
+    
+    [Tooltip("Layer to detect (use LayerMask.NameToLayer)")]
+    [SerializeField] private string targetLayerName = "Enemy";
+    private int targetLayer;
 
+    
+    private void Awake()
+    {
+        targetLayer = LayerMask.NameToLayer(targetLayerName);
+    }
+
+    
     /// <summary>
     /// Public flag – true when enough mice are within range.
     /// </summary>
@@ -17,19 +28,20 @@ public class MouseSensor : MonoBehaviour
     private int currentCount;
 
     // Called when another collider enters the trigger
+    // Called when another collider enters the trigger
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag(mouseTag))
+        if (other.CompareTag(mouseTag) && other.gameObject.layer == targetLayer)
         {
             currentCount++;
             EvaluateState();
         }
     }
 
-    // Called when another collider exits the trigger
+// Called when another collider exits the trigger
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.CompareTag(mouseTag))
+        if (other.CompareTag(mouseTag) && other.gameObject.layer == targetLayer)
         {
             currentCount = Mathf.Max(0, currentCount - 1);
             EvaluateState();
