@@ -1,5 +1,6 @@
 using Game.Core.Input;
 using Game.Core.Managers;
+using Game.Core.Utils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,31 +9,40 @@ namespace Game.Core.Camera.Scripts
     public class HybridCameraFollow : MonoBehaviour
     {
         public Transform player;
-        public float panSpeed = 10f;
-        public float returnSpeed = 15f;
-        public float safeZoneWidthPercent = 0.5f;
-        public float safeZoneHeightPercent = 0.5f;
+        [SerializeField] private float panSpeed = 10f;
+        [SerializeField] private float returnSpeed = 15f;
+        [SerializeField] private float safeZoneWidthPercent = 0.5f;
+        [SerializeField] private float safeZoneHeightPercent = 0.5f;
+        
+        [SerializeField] private SpriteRenderer backgroundRenderer;
 
         private bool edgePanning = false;
         private bool isCameraLocked = false;
 
+        void Start()
+        {
+            if (backgroundRenderer == null)
+            {
+                Debug.LogError("Background renderer is null!");
+            }
+        }
         void OnEnable()
         {
             InputSystemSingleton.Instance.InputSystem.PlayerControls.Lock.performed += OnLockPerformed;
-            GameEvents.OnPlayerMoved += OnLockPerformed;
+            GameEvents.OnPlayerMoved += OnPlayerMoved;
         }
 
         void OnDisable()
         {
             InputSystemSingleton.Instance.InputSystem.PlayerControls.Lock.performed -= OnLockPerformed;
-            GameEvents.OnPlayerMoved -= OnLockPerformed;
+            GameEvents.OnPlayerMoved -= OnPlayerMoved;
         }
 
         private void OnLockPerformed(InputAction.CallbackContext ctx)
         {
             isCameraLocked = !isCameraLocked;
         }
-        private void OnLockPerformed()
+        private void OnPlayerMoved()
         {
             isCameraLocked = false;
         }
@@ -59,9 +69,14 @@ namespace Game.Core.Camera.Scripts
             // If the mouse is outside the safe zone, edge pan
             if (!safeZone.Contains(mousePos))
             {
+                if (!EladsHelperFunctions.IsWithinBoundsXY(backgroundRenderer.bounds, transform.position))
+                {
+                    Debug.Log("Position is out of bounds");
+                    return;
+                }
                 edgePanning = true;
                 Vector2 direction = ((Vector2)mousePos - safeZone.center).normalized;
-                transform.position += new Vector3(direction.x, direction.y, 0) * panSpeed * Time.deltaTime;
+                transform.position += new Vector3(direction.x, direction.y, 0) * (panSpeed * Time.deltaTime);
             }
             else
             {

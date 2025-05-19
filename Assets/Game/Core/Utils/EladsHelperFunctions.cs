@@ -22,5 +22,12 @@ namespace Game.Core.Utils
             }
             return inside;
         }
+        
+        
+        public static bool IsWithinBoundsXY(Bounds b, Vector3 pos)
+        {
+            return pos.x >= b.min.x && pos.x <= b.max.x &&
+                   pos.y >= b.min.y && pos.y <= b.max.y;
+        }
     }
 }
