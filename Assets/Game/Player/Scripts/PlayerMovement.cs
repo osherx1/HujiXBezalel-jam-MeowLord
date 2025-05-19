@@ -4,6 +4,7 @@ using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Game.Core.Input;
+using Game.Core.Managers;
 using Game.Core.Utils;
 
 
@@ -140,7 +141,7 @@ namespace Game.Player.Scripts
                     // 3. no loop → create a brand‐new segment
                     _visited.Add(newPlat);
                 }
-
+                GameEvents.PlayerMoved();
                 _lastPlat = newPlat;
                 transform.position = newPlat.position;
             }
