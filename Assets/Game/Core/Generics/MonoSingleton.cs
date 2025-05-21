@@ -43,8 +43,8 @@ namespace Game.Core.Generics
                 DontDestroyOnLoad(gameObject);
                 _isInitialized = true;
             }
+            
         }
-
         protected virtual void Awake()
         {
             if (_instance == null)

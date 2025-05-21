@@ -45,6 +45,16 @@ namespace Game.Core.Utils
             );
         }
 
+        public static Vector3 ClampPositionToBounds(Bounds bounds, Vector3 position)
+        {
+            var min = bounds.min;
+            var max = bounds.max;
+            return new Vector3(
+                Mathf.Clamp(position.x, min.x, max.x),
+                Mathf.Clamp(position.y, min.y, max.y),
+                position.z
+            );
+        }
 
         
         

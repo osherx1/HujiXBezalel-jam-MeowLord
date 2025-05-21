@@ -12,6 +12,7 @@ namespace Game.Player.Scripts
 {
     public class PlayerMovement : MonoBehaviour
     {
+        [SerializeField] private PlayerLogger playerLogger;
         [Header("Click Settings")] [SerializeField]
         private LayerMask clickableLayer;
 
@@ -27,6 +28,8 @@ namespace Game.Player.Scripts
         [SerializeField] [Range(1, 20)] private int maxSegments;
         [SerializeField, ReadOnly] private int leftSegments;
         public int LeftSegments => leftSegments;
+        public List<Transform> PlayerPlatforms => _visited;
+
         private List<SegmentCreator.TrailSegment> _segments = new List<SegmentCreator.TrailSegment>();
         private List<Transform> _visited = new List<Transform>();
         private Transform _lastPlat;
@@ -50,7 +53,6 @@ namespace Game.Player.Scripts
             _mainCam = Camera.main;
             
             // Find the nearest platform and its sensor
-            
         }
 
         private void RegisterToPlatform(MouseSensor sensor)
@@ -69,7 +71,6 @@ namespace Game.Player.Scripts
         {
             if (platform != null)
             {
-                GameEvents.PlayerMoved();
                 _lastPlat = platform;
                 if (_visited.Count == 0)
                 {
@@ -78,9 +79,10 @@ namespace Game.Player.Scripts
                 else if (_visited.Count > 0 && _visited[_visited.Count - 1] != platform)
                 {
                     _visited.Add(platform);
-                    Debug.Log("added to visited list");
+                    playerLogger.Log($"Player {_visited.Count} moving to {platform.name}");
                 }
                 transform.position = platform.position;
+                GameEvents.PlayerMoved();
             }
         }
 
@@ -189,7 +191,7 @@ namespace Game.Player.Scripts
             Destroy(_segments[i].Lr.gameObject);
             _segments.RemoveAt(i);
             leftSegments = maxSegments - _segments.Count;
-            Debug.Log("removed segment list");
+            playerLogger.Log("Removed Segment Line");
         }
 
         private void CreateNewSegment(Transform newPlat)
