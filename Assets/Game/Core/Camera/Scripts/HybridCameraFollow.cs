@@ -7,6 +7,7 @@ using Game.Player.Scripts;
 using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace Game.Core.Camera.Scripts
 {
@@ -22,7 +23,10 @@ namespace Game.Core.Camera.Scripts
         [SerializeField] private float dontMoveZoneWidthPercent = 0.7f;
         
         [SerializeField] private CinemachineTargetGroup targetGroup;
-        [SerializeField] private CameraLogger cameraLogger;
+        [SerializeField] private CinemachineGroupFraming targetFraming;
+        [SerializeField] [Range(0, 11)] private float startingFrameSize;
+        [SerializeField] private int maxPlatformsForFrameShrinking = 5;
+        [SerializeField] private TargetLogger targetLogger;
         
         
         
@@ -46,7 +50,7 @@ namespace Game.Core.Camera.Scripts
             _cam = UnityEngine.Camera.main;
             if (backgroundRenderer == null)
             {
-                cameraLogger?.Log("Background Renderer not set");
+                targetLogger?.Log("Background Renderer not set");
             }
         }
         void OnEnable()
@@ -107,12 +111,6 @@ namespace Game.Core.Camera.Scripts
 
             // Clamp the camera target to background bounds (optional, for safety)
             transform.position = EladsHelperFunctions.ClampPositionToBounds(backgroundRenderer.bounds, transform.position);
-
-            // Wait until after Cinemachine processes camera position (usually LateUpdate), but for simplicity:
-            // Let's check IMMEDIATELY if the camera moved (for most setups this is sufficient, but see note below!)
-           
-
-            
         }
 
         
@@ -130,7 +128,7 @@ namespace Game.Core.Camera.Scripts
                     Vector3 cameraWorldCenter = UnityEngine.Camera.main.transform.position;
                     cameraWorldCenter.z = transform.position.z;
                     transform.position = cameraWorldCenter;
-                    cameraLogger?.Log("Camera target snapped to center after being stuck.");
+                    targetLogger?.Log("Camera target snapped to center after being stuck.");
                     _noMovementTime = 0; // Reset timer so it doesn't keep snapping
                 }
             }
@@ -139,24 +137,22 @@ namespace Game.Core.Camera.Scripts
                 // Camera moved, so reset timer
                 _noMovementTime = 0;
             }
-       
+            
+            int numPlatforms = CurrentPlayerPlatforms.Count;
 
-            // 1. Get the platforms you want to show in the camera (e.g., playerMovement.PlayerPlatforms)
-            var platformsToShow = playerMovement.PlayerPlatforms;
-
-            // 2. Clear the old targets
-            targetGroup.Targets.Clear();
-
-            // 3. Add each platform to the group
-            foreach (var t in platformsToShow)
+            // If 0 or 1, keep the starting frame size
+            if (numPlatforms <= 1)
             {
-                if (t != null)
-                    targetGroup.Targets.Add(new CinemachineTargetGroup.Target { Object = t, Weight = 1, Radius = 0 });
+                targetFraming.FramingSize = startingFrameSize;
             }
-
-            // 4. (Optional) Also add the player if not already in the list
-            if (!platformsToShow.Contains(player))
-                targetGroup.Targets.Add(new CinemachineTargetGroup.Target { Object = player, Weight = 1, Radius = 0 });
+            else
+            {
+                // Linear interpolation between startingFrameSize (at 2 platforms)
+                // and 0 (at maxPlatformsForFrameShrinking)
+                float t = Mathf.Clamp01((float)(numPlatforms - 1) / (maxPlatformsForFrameShrinking - 1));
+                targetFraming.FramingSize = Mathf.Lerp(startingFrameSize, 0f, t);
+            }
+           
         }
 
         void OnDrawGizmos()

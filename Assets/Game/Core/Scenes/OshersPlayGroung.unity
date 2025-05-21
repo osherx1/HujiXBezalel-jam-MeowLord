@@ -725,7 +725,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 6.3694267
+  orthographic size: 7.194245
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -750,7 +750,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.36943007, z: -1}
+  m_LocalPosition: {x: 0, y: -0.7654402, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -938,7 +938,6 @@ GameObject:
   - component: {fileID: 576777296}
   - component: {fileID: 576777295}
   - component: {fileID: 576777299}
-  - component: {fileID: 576777300}
   - component: {fileID: 576777301}
   m_Layer: 0
   m_Name: CinemachineCamera
@@ -1045,19 +1044,6 @@ MonoBehaviour:
     Weight: 1
     Radius: 0
   m_LegacyTargets: []
---- !u!114 &576777300
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 576777294}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 51b0b84e76154d78a42e35355805061f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  backgroundRenderer: {fileID: 1406787728}
 --- !u!114 &576777301
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1071,14 +1057,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FramingMode: 2
-  FramingSize: 0.157
+  FramingSize: 0.139
   CenterOffset: {x: 0, y: 0}
-  Damping: 2
+  Damping: 1.734
   SizeAdjustment: 2
   LateralAdjustment: 0
   FovRange: {x: 1, y: 100}
   DollyRange: {x: -100, y: 100}
-  OrthoSizeRange: {x: 1, y: 1000}
+  OrthoSizeRange: {x: 1, y: 11}
 --- !u!1001 &599681054
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1584,7 +1570,10 @@ MonoBehaviour:
   dontMoveZoneHeightPercent: 0.7
   dontMoveZoneWidthPercent: 0.8
   targetGroup: {fileID: 746767337}
-  cameraLogger: {fileID: 1216841731}
+  targetFraming: {fileID: 576777301}
+  startingFrameSize: 0.139
+  maxPlatformsForFrameShrinking: 10
+  targetLogger: {fileID: 1216841731}
   backgroundRenderer: {fileID: 1406787728}
   logMessages: 0
   cameraStuckThreshold: 0.3
@@ -1600,7 +1589,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43e6d559d8204799a54c13f240bad794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
 --- !u!1001 &1254025830
 PrefabInstance:
   m_ObjectHideFlags: 0

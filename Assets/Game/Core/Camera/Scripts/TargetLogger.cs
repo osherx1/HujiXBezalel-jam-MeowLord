@@ -2,7 +2,7 @@ using Game.Core.Utils;
 
 namespace Game.Core.Camera.Scripts
 {
-    public class CameraLogger: GameLogger
+    public class TargetLogger: GameLogger
     {
         
     }
