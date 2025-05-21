@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Core.Utils
 {
-    public class EladsHelperFunctions
+    public static class EladsHelperFunctions
     {
         /// <summary>
         /// Returns true if p is inside the polygon defined by verts (must be in order).
