@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -12,7 +13,8 @@ public class MouseSensor : MonoBehaviour
     [Tooltip("Layer to detect (use LayerMask.NameToLayer)")]
     [SerializeField] private string targetLayerName = "Enemy";
     private int targetLayer;
-
+    
+    public event Action OnPlatformDown;
     
     private void Awake()
     {

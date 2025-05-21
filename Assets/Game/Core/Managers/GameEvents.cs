@@ -4,6 +4,7 @@ namespace Game.Core.Managers
 {
     public static class GameEvents
     {
+        public static event Action OnPlayerFall;
         public static event Action OnPlayerMoved;
         public static event Action OnTimerFinished;
         public static event Action OnTimerStarted;
@@ -29,7 +30,11 @@ namespace Game.Core.Managers
         {
             OnMouseCatch?.Invoke();
         }
-        
-        
+
+
+        public static void PlayerFall()
+        {
+            OnPlayerFall?.Invoke();
+        }
     }
 }

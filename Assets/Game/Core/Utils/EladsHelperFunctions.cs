@@ -1,5 +1,6 @@
 
 
+using System;
 using UnityEngine;
 
 namespace Game.Core.Utils
@@ -29,5 +30,24 @@ namespace Game.Core.Utils
             return pos.x >= b.min.x && pos.x <= b.max.x &&
                    pos.y >= b.min.y && pos.y <= b.max.y;
         }
+
+        public static Rect GetCenteredRect(float widthPercent, float heightPercent)
+        {
+            float screenWidth = Screen.width;
+            float screenHeight = Screen.height;
+            float w = screenWidth * widthPercent;
+            float h = screenHeight * heightPercent;
+            return new Rect(
+                (screenWidth - w) / 2f,
+                (screenHeight - h) / 2f,
+                w,
+                h
+            );
+        }
+
+
+        
+        
+
     }
 }

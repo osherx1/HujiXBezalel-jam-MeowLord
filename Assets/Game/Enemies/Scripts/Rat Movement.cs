@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Game.Enemies.Scripts
 {
@@ -95,5 +97,8 @@ namespace Game.Enemies.Scripts
             RaycastHit2D hit = Physics2D.Raycast(transform.position, _randomDirection, 1f, wallLayer);
             return hit.collider != null;
         }
+        
+        
+        
     }
 }
