@@ -1,12 +1,11 @@
 using System;
+using Game.Core.Managers;
 using UnityEngine;
 
 namespace Game.Enemies.Scripts
 {
     public class RatHealth : MonoBehaviour
     {
-        public static event Action<RatHealth> OnRatDied;
-
         [SerializeField] public int maxHealth = 1;
         private int _currentHealth;
 
@@ -32,7 +31,7 @@ namespace Game.Enemies.Scripts
 
         private void Die()
         {
-            OnRatDied?.Invoke(this);
+            GameEvents.MouseCatch(); // 🔔 Notify listeners
             RatPoolManager.Instance.ReturnRat(gameObject);
         }
     }
