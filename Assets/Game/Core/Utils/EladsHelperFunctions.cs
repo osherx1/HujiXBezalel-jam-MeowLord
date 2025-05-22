@@ -1,10 +1,11 @@
 
 
+using System;
 using UnityEngine;
 
 namespace Game.Core.Utils
 {
-    public class EladsHelperFunctions
+    public static class EladsHelperFunctions
     {
         /// <summary>
         /// Returns true if p is inside the polygon defined by verts (must be in order).
@@ -29,5 +30,34 @@ namespace Game.Core.Utils
             return pos.x >= b.min.x && pos.x <= b.max.x &&
                    pos.y >= b.min.y && pos.y <= b.max.y;
         }
+
+        public static Rect GetCenteredRect(float widthPercent, float heightPercent)
+        {
+            float screenWidth = Screen.width;
+            float screenHeight = Screen.height;
+            float w = screenWidth * widthPercent;
+            float h = screenHeight * heightPercent;
+            return new Rect(
+                (screenWidth - w) / 2f,
+                (screenHeight - h) / 2f,
+                w,
+                h
+            );
+        }
+
+        public static Vector3 ClampPositionToBounds(Bounds bounds, Vector3 position)
+        {
+            var min = bounds.min;
+            var max = bounds.max;
+            return new Vector3(
+                Mathf.Clamp(position.x, min.x, max.x),
+                Mathf.Clamp(position.y, min.y, max.y),
+                position.z
+            );
+        }
+
+        
+        
+
     }
 }

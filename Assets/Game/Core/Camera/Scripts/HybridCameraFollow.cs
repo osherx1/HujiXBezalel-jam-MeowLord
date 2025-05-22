@@ -1,50 +1,84 @@
+using System.Collections.Generic;
+using DG.Tweening;
 using Game.Core.Input;
 using Game.Core.Managers;
 using Game.Core.Utils;
+using Game.Player.Scripts;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace Game.Core.Camera.Scripts
 {
     public class HybridCameraFollow : MonoBehaviour
     {
-        public Transform player;
+        [SerializeField] private Transform player;
+        [SerializeField] private PlayerMovement playerMovement;
         [SerializeField] private float panSpeed = 10f;
         [SerializeField] private float returnSpeed = 15f;
-        [SerializeField] private float safeZoneWidthPercent = 0.5f;
-        [SerializeField] private float safeZoneHeightPercent = 0.5f;
+        [SerializeField] private float goBackToCenterZoneWidthPercent = 0.5f;
+        [SerializeField] private float goBackToCenterZoneHeightPercent = 0.5f;
+        [SerializeField] private float dontMoveZoneHeightPercent = 0.7f;
+        [SerializeField] private float dontMoveZoneWidthPercent = 0.7f;
+        
+        [SerializeField] private CinemachineTargetGroup targetGroup;
+        [SerializeField] private CinemachineGroupFraming targetFraming;
+        [SerializeField] [Range(0, 11)] private float startingFrameSize;
+        [SerializeField] private int maxPlatformsForFrameShrinking = 5;
+        [SerializeField] private TargetLogger targetLogger;
+        
+        
         
         [SerializeField] private SpriteRenderer backgroundRenderer;
-
+        
+        private Tween cameraMoveTween;  
         private bool edgePanning = false;
         private bool isCameraLocked = false;
+        [SerializeField] private bool logMessages;
+        private UnityEngine.Camera _cam;
+        private Vector3 _camPosBefore;
+        private float _noMovementTime = 0f;
+        [SerializeField] private float cameraStuckThreshold = 0.3f;
+        private bool _didEdgePan;
+
+        private List<Transform> CurrentPlayerPlatforms => playerMovement.PlayerPlatforms;
+        
 
         void Start()
         {
+            _cam = UnityEngine.Camera.main;
             if (backgroundRenderer == null)
             {
-                Debug.LogError("Background renderer is null!");
+                targetLogger?.Log("Background Renderer not set");
             }
         }
         void OnEnable()
         {
-            InputSystemSingleton.Instance.InputSystem.PlayerControls.Lock.performed += OnLockPerformed;
+            // InputSystemSingleton.Instance.InputSystem.PlayerControls.Lock.performed += OnLockPerformed;
             GameEvents.OnPlayerMoved += OnPlayerMoved;
         }
-
-        void OnDisable()
-        {
-            InputSystemSingleton.Instance.InputSystem.PlayerControls.Lock.performed -= OnLockPerformed;
-            GameEvents.OnPlayerMoved -= OnPlayerMoved;
-        }
-
-        private void OnLockPerformed(InputAction.CallbackContext ctx)
-        {
-            isCameraLocked = !isCameraLocked;
-        }
+        //
+        // void OnDisable()
+        // {
+        //     InputSystemSingleton.Instance.InputSystem.PlayerControls.Lock.performed -= OnLockPerformed;
+        //     GameEvents.OnPlayerMoved -= OnPlayerMoved;
+        // }
+        //
+        // private void OnLockPerformed(InputAction.CallbackContext ctx)
+        // {
+        //     isCameraLocked = !isCameraLocked;
+        // }
         private void OnPlayerMoved()
         {
-            isCameraLocked = false;
+            if (player != null)
+            {
+                // Kill any existing tween before starting a new one
+                cameraMoveTween?.Kill();
+
+                cameraMoveTween = transform.DOMove(player.position, 2f)
+                    .SetEase(Ease.OutQuad);
+            }
         }
 
         void Update()
@@ -52,80 +86,102 @@ namespace Game.Core.Camera.Scripts
             if (isCameraLocked)
                 return;
 
-            float screenWidth = Screen.width;
-            float screenHeight = Screen.height;
-            float safeZoneWidth = screenWidth * safeZoneWidthPercent;
-            float safeZoneHeight = screenHeight * safeZoneHeightPercent;
-
-            Rect safeZone = new Rect(
-                (screenWidth - safeZoneWidth) / 2f,
-                (screenHeight - safeZoneHeight) / 2f,
-                safeZoneWidth,
-                safeZoneHeight
-            );
-
             Vector3 mousePos = UnityEngine.Input.mousePosition;
+            Rect dontMoveRect = EladsHelperFunctions.GetCenteredRect(dontMoveZoneWidthPercent, dontMoveZoneHeightPercent);
 
-            // If the mouse is outside the safe zone, edge pan
-            if (!safeZone.Contains(mousePos))
+            // Calculate camera's current position before moving the target
+            _camPosBefore = UnityEngine.Camera.main.transform.position;
+
+            _didEdgePan = false;
+
+            // --- EDGE PAN LOGIC ---
+            if (!dontMoveRect.Contains(mousePos))
             {
-                if (!EladsHelperFunctions.IsWithinBoundsXY(backgroundRenderer.bounds, transform.position))
-                {
-                    Debug.Log("Position is out of bounds");
-                    return;
-                }
+                // Try to pan the camera target
                 edgePanning = true;
-                Vector2 direction = ((Vector2)mousePos - safeZone.center).normalized;
+                Vector2 direction = ((Vector2)mousePos - dontMoveRect.center).normalized;
                 transform.position += new Vector3(direction.x, direction.y, 0) * (panSpeed * Time.deltaTime);
+                _didEdgePan = true;
             }
             else
             {
+                _didEdgePan = false;
                 edgePanning = false;
             }
 
-            // If not edge-panning, smoothly return to follow the player
-            if (!edgePanning && player != null)
+            // Clamp the camera target to background bounds (optional, for safety)
+            transform.position = EladsHelperFunctions.ClampPositionToBounds(backgroundRenderer.bounds, transform.position);
+        }
+
+        
+        private void LateUpdate()
+        {
+            Vector3 camPosAfter = UnityEngine.Camera.main.transform.position;
+
+            // Check if edge-panning was attempted and camera didn't move
+            if (camPosAfter == _camPosBefore)
             {
-                Vector3 targetPos = new Vector3(player.position.x, player.position.y, transform.position.z);
-                transform.position = Vector3.Lerp(transform.position, targetPos, returnSpeed * Time.deltaTime);
+                _noMovementTime += Time.deltaTime;
+                if (_noMovementTime > cameraStuckThreshold)
+                {
+                    // Snap camera target to center
+                    Vector3 cameraWorldCenter = UnityEngine.Camera.main.transform.position;
+                    cameraWorldCenter.z = transform.position.z;
+                    transform.position = cameraWorldCenter;
+                    targetLogger?.Log("Camera target snapped to center after being stuck.");
+                    _noMovementTime = 0; // Reset timer so it doesn't keep snapping
+                }
             }
+            else
+            {
+                // Camera moved, so reset timer
+                _noMovementTime = 0;
+            }
+            
+            int numPlatforms = CurrentPlayerPlatforms.Count;
+
+            // If 0 or 1, keep the starting frame size
+            if (numPlatforms <= 1)
+            {
+                targetFraming.FramingSize = startingFrameSize;
+            }
+            else
+            {
+                // Linear interpolation between startingFrameSize (at 2 platforms)
+                // and 0 (at maxPlatformsForFrameShrinking)
+                float t = Mathf.Clamp01((float)(numPlatforms - 1) / (maxPlatformsForFrameShrinking - 1));
+                targetFraming.FramingSize = Mathf.Lerp(startingFrameSize, 0f, t);
+            }
+           
         }
 
         void OnDrawGizmos()
         {
             if (!Application.isPlaying) return;
-
-            float screenWidth = Screen.width;
-            float screenHeight = Screen.height;
-            float safeZoneWidth = screenWidth * safeZoneWidthPercent;
-            float safeZoneHeight = screenHeight * safeZoneHeightPercent;
-
-            Rect safeZone = new Rect(
-                (screenWidth - safeZoneWidth) / 2f,
-                (screenHeight - safeZoneHeight) / 2f,
-                safeZoneWidth,
-                safeZoneHeight
-            );
-
             UnityEngine.Camera cam = UnityEngine.Camera.main;
             if (!cam) return;
 
-            Vector3[] screenCorners = new Vector3[4];
-            screenCorners[0] = new Vector3(safeZone.xMin, safeZone.yMin, cam.nearClipPlane);
-            screenCorners[1] = new Vector3(safeZone.xMin, safeZone.yMax, cam.nearClipPlane);
-            screenCorners[2] = new Vector3(safeZone.xMax, safeZone.yMax, cam.nearClipPlane);
-            screenCorners[3] = new Vector3(safeZone.xMax, safeZone.yMin, cam.nearClipPlane);
+            // Draw goBackToCenter zone
+            DrawScreenRectGizmo(EladsHelperFunctions.GetCenteredRect(goBackToCenterZoneWidthPercent, goBackToCenterZoneHeightPercent), cam, Color.green);
 
-            for (int i = 0; i < 4; i++)
-            {
-                screenCorners[i] = cam.ScreenToWorldPoint(screenCorners[i]);
-            }
-
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawLine(screenCorners[0], screenCorners[1]);
-            Gizmos.DrawLine(screenCorners[1], screenCorners[2]);
-            Gizmos.DrawLine(screenCorners[2], screenCorners[3]);
-            Gizmos.DrawLine(screenCorners[3], screenCorners[0]);
+            // Draw dontMove zone
+            DrawScreenRectGizmo(EladsHelperFunctions.GetCenteredRect(dontMoveZoneWidthPercent, dontMoveZoneHeightPercent), cam, Color.yellow);
         }
+
+        private void DrawScreenRectGizmo(Rect rect, UnityEngine.Camera cam, Color color)
+        {
+            Vector3[] corners = new Vector3[4];
+            corners[0] = cam.ScreenToWorldPoint(new Vector3(rect.xMin, rect.yMin, cam.nearClipPlane));
+            corners[1] = cam.ScreenToWorldPoint(new Vector3(rect.xMin, rect.yMax, cam.nearClipPlane));
+            corners[2] = cam.ScreenToWorldPoint(new Vector3(rect.xMax, rect.yMax, cam.nearClipPlane));
+            corners[3] = cam.ScreenToWorldPoint(new Vector3(rect.xMax, rect.yMin, cam.nearClipPlane));
+
+            Gizmos.color = color;
+            Gizmos.DrawLine(corners[0], corners[1]);
+            Gizmos.DrawLine(corners[1], corners[2]);
+            Gizmos.DrawLine(corners[2], corners[3]);
+            Gizmos.DrawLine(corners[3], corners[0]);
+        }
+
     }
 }
