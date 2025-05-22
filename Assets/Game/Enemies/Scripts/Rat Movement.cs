@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -18,7 +17,7 @@ namespace Game.Enemies.Scripts
         private bool _isMoving;
         
         private float _moveTimer;
-        private float _moveInterval = 5f;
+        private readonly float _moveInterval = 1f;
         
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -72,7 +71,7 @@ namespace Game.Enemies.Scripts
             }
 
             // Move normally
-            transform.Translate(_randomDirection * speed * Time.deltaTime);
+            transform.Translate(_randomDirection * (speed * Time.deltaTime));
 
             float distanceMoved = Vector2.Distance(_startPosition, transform.position);
             if (distanceMoved >= _targetDistance)
@@ -97,8 +96,5 @@ namespace Game.Enemies.Scripts
             RaycastHit2D hit = Physics2D.Raycast(transform.position, _randomDirection, 1f, wallLayer);
             return hit.collider != null;
         }
-        
-        
-        
     }
 }

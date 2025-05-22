@@ -7,6 +7,7 @@ using UnityEngine.InputSystem;
 using Game.Core.Input;
 using Game.Core.Managers;
 using Game.Core.Utils;
+using Game.Enemies.Scripts;
 
 namespace Game.Player.Scripts
 {
@@ -219,7 +220,13 @@ namespace Game.Player.Scripts
             {
                 Vector2 pt = c.transform.position;
                 if (EladsHelperFunctions.PointInPolygon(poly, pt))
-                    Destroy(c.gameObject);
+                {
+                    RatHealth ratHealth = c.GetComponent<RatHealth>();
+                    if (ratHealth != null)
+                    {
+                        ratHealth.TakeDamage(1); // Or however much damage the cat deals
+                    }
+                }
             }
         }
 
