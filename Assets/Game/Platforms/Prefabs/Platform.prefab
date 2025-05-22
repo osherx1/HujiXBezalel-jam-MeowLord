@@ -33,6 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8999192674512870964}
+  - {fileID: 1606423050537056324}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8275058871073227316
@@ -285,3 +286,69 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.7089171, y: 1.6741236}
   m_EdgeRadius: 0
+--- !u!1001 &4015280717697640432
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7917731241732862186}
+    m_Modifications:
+    - target: {fileID: 1169653239679267741, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446032705185734580, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446032705185734580, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.59
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446032705185734580, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446032705185734580, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446032705185734580, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446032705185734580, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446032705185734580, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446032705185734580, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446032705185734580, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2446032705185734580, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5186205747028021582, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+      propertyPath: m_Name
+      value: Spine Mecanim GameObject (server)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+--- !u!4 &1606423050537056324 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2446032705185734580, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+  m_PrefabInstance: {fileID: 4015280717697640432}
+  m_PrefabAsset: {fileID: 0}
