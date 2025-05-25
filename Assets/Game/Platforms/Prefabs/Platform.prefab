@@ -340,7 +340,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5186205747028021582, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
       propertyPath: m_Name
-      value: Spine Mecanim GameObject (server)
+      value: ArtServer
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
