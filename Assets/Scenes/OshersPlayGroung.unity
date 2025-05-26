@@ -777,7 +777,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8ef5f0c52de4619a4f84108bdd3b6d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1697,7 +1697,6 @@ MonoBehaviour:
   maxPlatformsForFrameShrinking: 10
   targetLogger: {fileID: 1216841731}
   backgroundRenderer: {fileID: 1406787728}
-  logMessages: 0
   cameraStuckThreshold: 0.3
 --- !u!114 &1216841731
 MonoBehaviour:
@@ -1711,7 +1710,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43e6d559d8204799a54c13f240bad794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
 --- !u!1 &1232328405
 GameObject:
   m_ObjectHideFlags: 0

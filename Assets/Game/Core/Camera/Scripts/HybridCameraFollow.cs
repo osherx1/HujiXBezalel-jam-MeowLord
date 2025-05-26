@@ -35,7 +35,6 @@ namespace Game.Core.Camera.Scripts
         private Tween cameraMoveTween;  
         private bool edgePanning = false;
         private bool isCameraLocked = false;
-        [SerializeField] private bool logMessages;
         private UnityEngine.Camera _cam;
         private Vector3 _camPosBefore;
         private float _noMovementTime = 0f;
@@ -43,8 +42,11 @@ namespace Game.Core.Camera.Scripts
         private bool _didEdgePan;
 
         private List<Transform> CurrentPlayerPlatforms => playerMovement.PlayerPlatforms;
-        
 
+        void Awake()
+        {
+            
+        }
         void Start()
         {
             _cam = UnityEngine.Camera.main;
@@ -56,6 +58,7 @@ namespace Game.Core.Camera.Scripts
         void OnEnable()
         {
             // InputSystemSingleton.Instance.InputSystem.PlayerControls.Lock.performed += OnLockPerformed;
+            targetLogger?.Log("Target subscribed to player");
             GameEvents.OnPlayerMoved += OnPlayerMoved;
         }
         //
@@ -71,11 +74,12 @@ namespace Game.Core.Camera.Scripts
         // }
         private void OnPlayerMoved()
         {
+            targetLogger?.Log("Target Entered Player moved Function");
             if (player != null)
             {
                 // Kill any existing tween before starting a new one
                 cameraMoveTween?.Kill();
-
+                targetLogger?.Log("Camera Moved Towards Player");
                 cameraMoveTween = transform.DOMove(player.position, 2f)
                     .SetEase(Ease.OutQuad);
             }
@@ -128,7 +132,6 @@ namespace Game.Core.Camera.Scripts
                     Vector3 cameraWorldCenter = UnityEngine.Camera.main.transform.position;
                     cameraWorldCenter.z = transform.position.z;
                     transform.position = cameraWorldCenter;
-                    targetLogger?.Log("Camera target snapped to center after being stuck.");
                     _noMovementTime = 0; // Reset timer so it doesn't keep snapping
                 }
             }
