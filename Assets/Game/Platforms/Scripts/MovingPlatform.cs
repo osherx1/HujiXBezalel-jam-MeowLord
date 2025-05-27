@@ -128,6 +128,22 @@ namespace Game.Platforms.Scripts
         {
             if (animator != null)
                 animator.SetBool("IsAfraid", isAfraid);
+            
+            var polygonCollider = GetComponent<PolygonCollider2D>();
+            if (polygonCollider != null)
+                polygonCollider.enabled = !isAfraid;
+
+            // If afraid, immediately return to start and despawn (return to pool)
+            if (isAfraid)
+            {
+                // Move instantly to start of route
+                if (waypoints != null && waypoints.Count > 0)
+                    transform.position = waypoints[0].transform.position;
+
+                // Deactivate and return to pool
+                _isMoving = false;
+                _onFinish?.Invoke(this); // return to pool immediately
+            }
         }
         
         private void UpdateSpriteDirection(Vector3 direction)

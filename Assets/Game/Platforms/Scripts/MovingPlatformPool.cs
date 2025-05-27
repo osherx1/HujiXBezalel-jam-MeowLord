@@ -37,6 +37,9 @@ namespace Game.Platforms.Scripts
         // Internal lookup for fast access
         private Dictionary<PlatformType, List<GameObject>> routesByType = new Dictionary<PlatformType, List<GameObject>>();
 
+        // Track which routes are currently in use
+        private Dictionary<GameObject, bool> activeRoutes = new Dictionary<GameObject, bool>();
+
         void Awake()
         {
             // Initialize pools
@@ -53,10 +56,15 @@ namespace Game.Platforms.Scripts
                 pools[data.type] = queue;
             }
 
-            // Build routes lookup
+            // Build routes lookup and activeRoutes flags
             foreach (var group in routesSetup)
             {
                 routesByType[group.type] = group.routes;
+                foreach (var route in group.routes)
+                {
+                    if (!activeRoutes.ContainsKey(route))
+                        activeRoutes[route] = false;
+                }
             }
         }
 
@@ -66,6 +74,28 @@ namespace Game.Platforms.Scripts
             {
                 Debug.LogError("No pool for type: " + type);
                 return;
+            }
+
+            // Only choose a route that is currently not in use
+            if (!routesByType.ContainsKey(type) || routesByType[type] == null || routesByType[type].Count == 0)
+            {
+                Debug.LogError("No routes set for type: " + type);
+                return;
+            }
+
+            GameObject chosenRoute = null;
+            foreach (var route in routesByType[type])
+            {
+                if (!activeRoutes[route])
+                {
+                    chosenRoute = route;
+                    break;
+                }
+            }
+            if (chosenRoute == null)
+            {
+                Debug.Log("All routes for " + type + " are currently active. No spawn.");
+                return; // Don't spawn if all routes are busy
             }
 
             MovingPlatform platform;
@@ -80,24 +110,21 @@ namespace Game.Platforms.Scripts
                 platform.platformType = type;
             }
 
-            // Select random route for this type from the pool's setup
-            if (!routesByType.ContainsKey(type) || routesByType[type] == null || routesByType[type].Count == 0)
-            {
-                Debug.LogError("No routes set for type: " + type);
-                return;
-            }
-            var chosenRoute = routesByType[type][Random.Range(0, routesByType[type].Count)];
+            // Mark the chosen route as active
+            activeRoutes[chosenRoute] = true;
 
             platform.gameObject.SetActive(true);
             platform.transform.position = spawnPoint.position;
-            platform.Init(chosenRoute, platform.moveSpeed, ReturnToPool);
+
+            // Pass the chosen route and a callback that knows which route to release
+            platform.Init(chosenRoute, platform.moveSpeed, (p) => ReturnToPool(p, chosenRoute));
         }
 
-        private void ReturnToPool(MovingPlatform platform)
+        private void ReturnToPool(MovingPlatform platform, GameObject route)
         {
             platform.transform.position = spawnPoint.position;
             pools[platform.platformType].Enqueue(platform);
+            activeRoutes[route] = false; // Route now available
         }
     }
 }
-

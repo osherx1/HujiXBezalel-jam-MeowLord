@@ -264,7 +264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa16b03754588734db59b8906c99595d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredCount: 3
+  requiredCount: 1
   mouseTag: Rat
   targetLayerName: Enemy
 --- !u!60 &8019716929123911415
