@@ -58,7 +58,7 @@ namespace Game.Platforms.Scripts
         
         void Awake()
         {
-            animator = GetComponent<Animator>();
+            animator = GetComponentInChildren<Animator>();
             
             mouseSensor = GetComponentInChildren<MouseSensor>();
         }
@@ -191,7 +191,7 @@ namespace Game.Platforms.Scripts
 
             var polygonCollider = GetComponent<PolygonCollider2D>();
             if (polygonCollider != null)
-                polygonCollider.enabled = !isAfraid;
+                polygonCollider.enabled = false;
 
             if (isAfraid)
             {
