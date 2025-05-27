@@ -118,7 +118,7 @@ namespace Game.Platforms.Scripts
                 {
                     if (animator != null)
                         animator.SetBool("IsWalking", false);
-                    return true; // משאירים את ה-Update כאן
+                    return true;
                 }
             }
             return false;
@@ -187,7 +187,7 @@ namespace Game.Platforms.Scripts
         public void SetAfraid(bool isAfraid)
         {
             if (animator != null)
-                animator.SetBool("IsAfraid", isAfraid);
+                animator.SetTrigger("IsAfraid");
 
             var polygonCollider = GetComponent<PolygonCollider2D>();
             if (polygonCollider != null)
