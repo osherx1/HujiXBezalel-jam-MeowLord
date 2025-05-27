@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Game.Platforms.Scripts;
 
-
 namespace Game.Platforms.Scripts
 {
     public class MovingPlatformPool : MonoBehaviour
@@ -12,6 +11,13 @@ namespace Game.Platforms.Scripts
         {
             public PlatformType type;
             public MovingPlatform prefab;
+        }
+
+        [System.Serializable]
+        public class RouteGroup
+        {
+            public PlatformType type;
+            public List<GameObject> routes;
         }
 
         [Header("All platform prefabs")]
@@ -25,15 +31,11 @@ namespace Game.Platforms.Scripts
         [Header("Spawn position (all platforms start here)")]
         public Transform spawnPoint;
 
-        [Header("Available routes by type")]
-        public List<RouteSelector> routesByType;
+        [Header("Available routes for each type")]
+        public List<RouteGroup> routesSetup;
 
-        [System.Serializable]
-        public class RouteSelector
-        {
-            public PlatformType type;
-            public List<GameObject> possibleRoutes; // List of parent GameObjects, each with children as waypoints
-        }
+        // Internal lookup for fast access
+        private Dictionary<PlatformType, List<GameObject>> routesByType = new Dictionary<PlatformType, List<GameObject>>();
 
         void Awake()
         {
@@ -49,6 +51,12 @@ namespace Game.Platforms.Scripts
                     queue.Enqueue(obj);
                 }
                 pools[data.type] = queue;
+            }
+
+            // Build routes lookup
+            foreach (var group in routesSetup)
+            {
+                routesByType[group.type] = group.routes;
             }
         }
 
@@ -67,26 +75,22 @@ namespace Game.Platforms.Scripts
             }
             else
             {
-                // If empty, instantiate a new one
                 var prefab = platformPrefabs.Find(p => p.type == type).prefab;
                 platform = Instantiate(prefab, spawnPoint.position, Quaternion.identity, this.transform);
                 platform.platformType = type;
             }
 
-            // Select random route for this type
-            var routeList = routesByType.Find(r => r.type == type)?.possibleRoutes;
-            if (routeList == null || routeList.Count == 0)
+            // Select random route for this type from the pool's setup
+            if (!routesByType.ContainsKey(type) || routesByType[type] == null || routesByType[type].Count == 0)
             {
                 Debug.LogError("No routes set for type: " + type);
                 return;
             }
-            var chosenRoute = routeList[Random.Range(0, routeList.Count)];
+            var chosenRoute = routesByType[type][Random.Range(0, routesByType[type].Count)];
 
-            // Initialize and activate
+            platform.gameObject.SetActive(true);
             platform.transform.position = spawnPoint.position;
             platform.Init(chosenRoute, platform.moveSpeed, ReturnToPool);
-
-            // (Optional) Set color, animation, etc. according to type here
         }
 
         private void ReturnToPool(MovingPlatform platform)
@@ -96,3 +100,4 @@ namespace Game.Platforms.Scripts
         }
     }
 }
+

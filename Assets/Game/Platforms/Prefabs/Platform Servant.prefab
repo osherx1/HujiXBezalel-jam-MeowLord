@@ -103,9 +103,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 554c614d3bea1384d959141b0bcc4945, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  routeParent: {fileID: 0}
   moveSpeed: 2
   _isMoving: 1
+  animator: {fileID: 8049382775920395355}
+  spriteRoot: {fileID: 7917731241732862186}
   platformType: 2
 --- !u!60 &7104857474933435423
 PolygonCollider2D:
@@ -385,5 +386,10 @@ PrefabInstance:
 --- !u!4 &1606423050537056324 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2446032705185734580, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+  m_PrefabInstance: {fileID: 4015280717697640432}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &8049382775920395355 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6344448677804106667, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
   m_PrefabInstance: {fileID: 4015280717697640432}
   m_PrefabAsset: {fileID: 0}

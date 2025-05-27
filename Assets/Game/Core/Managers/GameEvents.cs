@@ -10,6 +10,13 @@ namespace Game.Core.Managers
         public static event Action OnTimerStarted;
 
         public static event Action OnMouseCatch;
+        
+        public static event Action<bool> OnAfraidChanged;
+        
+        public static void AfraidChanged(bool value)
+        {
+            OnAfraidChanged?.Invoke(value);
+        }
         public static void PlayerMoved()
         {
             OnPlayerMoved?.Invoke();

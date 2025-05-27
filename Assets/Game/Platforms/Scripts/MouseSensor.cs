@@ -53,6 +53,13 @@ public class MouseSensor : MonoBehaviour
     // Updates the IsMouseInRange flag based on the current count
     private void EvaluateState()
     {
+        bool prev = IsMouseInRange;
         IsMouseInRange = currentCount >= requiredCount;
+
+        // אם הערך השתנה — נפעיל את האירוע
+        if (IsMouseInRange != prev)
+        {
+            Game.Core.Managers.GameEvents.AfraidChanged(IsMouseInRange);
+        }
     }
 }
