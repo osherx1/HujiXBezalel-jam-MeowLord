@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Attributes;
@@ -8,6 +9,7 @@ using Game.Core.Input;
 using Game.Core.Managers;
 using Game.Core.Utils;
 using Game.Enemies.Scripts;
+using Game.Platforms.Scripts;
 
 namespace Game.Player.Scripts
 {
@@ -77,9 +79,10 @@ namespace Game.Player.Scripts
                 {
                     _visited.Add(platform);
                 }
-                else if (_visited.Count > 0 && _visited[_visited.Count - 1] != platform)
+                else if ( _visited[_visited.Count - 1] != platform)
                 {
                     _visited.Add(platform);
+                    RegisterMovingPlatformEvent(platform);
                     playerLogger.Log($"Player {_visited.Count} moving to {platform.name}");
                 }
                 transform.position = platform.position;
@@ -162,6 +165,10 @@ namespace Game.Player.Scripts
                 List<Transform> loopPlatforms = _visited.GetRange(idx, _visited.Count - idx);
 
                 // 2) immediately prune your history
+                for (int i = idx + 1; i < _visited.Count; i++)
+                {
+                    UnregisterMovingPlatformEvent(_visited[i]);
+                }
                 _visited.RemoveRange(idx + 1, _visited.Count - idx - 1);
 
                 // 3) schedule the LineRenderer cleanup
@@ -230,6 +237,30 @@ namespace Game.Player.Scripts
                 }
             }
         }
+        
+        private Dictionary<Transform, Action> _platformReturnDelegates = new();
+
+        private void RegisterMovingPlatformEvent(Transform plat)
+        {
+            var moving = plat.GetComponentInChildren<MovingPlatform>();
+            if (moving != null && !_platformReturnDelegates.ContainsKey(plat))
+            {
+                Action handler = () => OnPlatformReturnHandler(plat);
+                moving.OnPlatformReturn += handler;
+                _platformReturnDelegates[plat] = handler;
+            }
+        }
+
+        private void UnregisterMovingPlatformEvent(Transform plat)
+        {
+            var moving = plat.GetComponentInChildren<MovingPlatform>();
+            if (moving != null && _platformReturnDelegates.ContainsKey(plat))
+            {
+                moving.OnPlatformReturn -= _platformReturnDelegates[plat];
+                _platformReturnDelegates.Remove(plat);
+            }
+        }
+
 
         void LateUpdate()
         {
@@ -245,6 +276,29 @@ namespace Game.Player.Scripts
                 seg.Lr.SetPosition(0, seg.FromT.TransformPoint(seg.FromLocalPos));
                 seg.Lr.SetPosition(1, seg.ToT.TransformPoint(seg.ToLocalPos));
             }
+        }
+        
+        private void OnPlatformReturnHandler(Transform platform)
+        {
+            // Find index in _visited
+            int idx = _visited.IndexOf(platform);
+            if (idx == -1) return; // Not in list
+
+            // Unregister from all platforms being removed (from 0 to idx inclusive)
+            for (int i = 0; i <= idx; i++)
+            {
+                UnregisterMovingPlatformEvent(_visited[i]);
+            }
+
+            // Remove segments (segments connect _visited[i] to _visited[i+1])
+            // So remove the first 'idx' segments (segment 0 to idx-1)
+            for (int i = idx; i >= 0; i--)
+            {
+                RemoveSegment(i);
+            }
+
+            // Remove platforms from 0 to idx inclusive
+            _visited.RemoveRange(0, idx + 1);
         }
     }
 }

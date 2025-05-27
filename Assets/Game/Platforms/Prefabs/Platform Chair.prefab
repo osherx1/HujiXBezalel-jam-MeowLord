@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7917731241732862186}
   - component: {fileID: 8275058871073227316}
-  - component: {fileID: 7149848837680513071}
   - component: {fileID: 1801250745992199103}
   m_Layer: 6
   m_Name: Platform Chair
@@ -90,21 +89,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7149848837680513071
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3567169852133036069}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 554c614d3bea1384d959141b0bcc4945, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waypoints: []
-  moveSpeed: 2
-  _isMoving: 0
 --- !u!60 &1801250745992199103
 PolygonCollider2D:
   m_ObjectHideFlags: 0

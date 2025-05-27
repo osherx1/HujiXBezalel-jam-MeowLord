@@ -92,6 +92,7 @@ namespace Game.Platforms.Scripts
                     break;
                 }
             }
+
             if (chosenRoute == null)
             {
                 Debug.Log("All routes for " + type + " are currently active. No spawn.");
@@ -117,8 +118,12 @@ namespace Game.Platforms.Scripts
             platform.transform.position = spawnPoint.position;
 
             // Pass the chosen route and a callback that knows which route to release
-            platform.Init(chosenRoute, platform.moveSpeed, (p) => ReturnToPool(p, chosenRoute));
-        }
+            platform.Init(chosenRoute, platform.moveSpeed, (p) =>
+            {
+                ReturnToPool(p, chosenRoute);
+                platform.PlatformReturn();
+            });
+    }
 
         private void ReturnToPool(MovingPlatform platform, GameObject route)
         {

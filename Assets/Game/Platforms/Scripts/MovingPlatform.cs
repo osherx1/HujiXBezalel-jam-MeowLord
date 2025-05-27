@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +16,8 @@ namespace Game.Platforms.Scripts
         
         [SerializeField] private Transform spriteRoot;
         public bool isMoving => _isMoving;
+        public event Action OnPlatformReturn;
+
         public PlatformType platformType;
 
         private GameObject routeParent;
@@ -225,5 +228,11 @@ namespace Game.Platforms.Scripts
             scale.x = Mathf.Abs(scale.x) * facing;
             flipTarget.localScale = scale;
         }
+
+        public void PlatformReturn()
+        {
+            OnPlatformReturn?.Invoke();
+        }
+        
     }
 }

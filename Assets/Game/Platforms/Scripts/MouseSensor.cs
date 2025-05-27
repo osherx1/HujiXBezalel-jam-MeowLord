@@ -60,6 +60,7 @@ public class MouseSensor : MonoBehaviour
             IsMouseInRange = newValue;
             Debug.Log("MouseSensor: IsMouseInRange changed Active");
             Game.Core.Managers.GameEvents.AfraidChanged(IsMouseInRange);
+            OnPlatformDown?.Invoke();
         }
     }
 }
