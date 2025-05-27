@@ -276,15 +276,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f66f552f5a60df74780f31e0d1a0368c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  platformPrefabs:
-  - type: 2
-    prefab: {fileID: 7149848837680513071, guid: f99dec0c289e2b6468d4d29f13f3925f, type: 3}
-  initialPoolSize: 10
-  spawnPoint: {fileID: 712530533}
-  routesSetup:
-  - type: 2
-    routes:
-    - {fileID: 1826174945}
+  platformPrefabs: []
+  initialPoolSize: 5
+  spawnPoint: {fileID: 0}
+  routesSetup: []
 --- !u!114 &69098867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,7 +292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12f0e59db2714404081b434fa5b8a785, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pool: {fileID: 69098866}
+  pool: {fileID: 0}
   spawnType: 2
   spawnInterval: 5
 --- !u!1001 &93021172
@@ -1693,7 +1688,7 @@ MonoBehaviour:
   dontMoveZoneWidthPercent: 0.8
   targetGroup: {fileID: 576777299}
   targetFraming: {fileID: 576777301}
-  startingFrameSize: 0.104
+  startingFrameSize: 0
   maxPlatformsForFrameShrinking: 10
   targetLogger: {fileID: 1216841731}
   backgroundRenderer: {fileID: 1406787728}
@@ -2889,11 +2884,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1750225224}
   m_CullTransparentMesh: 1
---- !u!1 &1826174945 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8267765534973294249, guid: e71b5a8a1d7c71642a421e650f02974a, type: 3}
-  m_PrefabInstance: {fileID: 7700317615129151975}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1826174946 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1451161716927059830, guid: e71b5a8a1d7c71642a421e650f02974a, type: 3}

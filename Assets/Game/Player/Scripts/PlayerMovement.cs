@@ -95,7 +95,7 @@ namespace Game.Player.Scripts
 
         private (Transform, MouseSensor) FindNearestPlatformer()
         {
-            float searchRadius = 10f;
+            float searchRadius = 40f;
             Collider2D[] all = Physics2D.OverlapCircleAll(
                 transform.position,
                 searchRadius,
