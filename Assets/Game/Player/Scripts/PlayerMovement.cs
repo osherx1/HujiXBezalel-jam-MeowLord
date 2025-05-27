@@ -41,16 +41,16 @@ namespace Game.Player.Scripts
         void Awake()
         {
             leftSegments = maxSegments;
-            var (nearest, sensor) = FindNearestPlatformer();
-
-            // Register and snap onto it if found
-            RegisterToPlatform(sensor);
-            MovePlayerToPlatform(nearest);
             _clickAction = InputSystemSingleton.Instance.InputSystem.PlayerControls.Click;
         }
 
         void Start()
         {
+            var (nearest, sensor) = FindNearestPlatformer();
+
+            // Register and snap onto it if found
+            RegisterToPlatform(sensor);
+            MovePlayerToPlatform(nearest);
             _mainCam = Camera.main;
             
             // Find the nearest platform and its sensor
@@ -83,6 +83,7 @@ namespace Game.Player.Scripts
                     playerLogger.Log($"Player {_visited.Count} moving to {platform.name}");
                 }
                 transform.position = platform.position;
+                playerLogger?.Log("Player Activated event PlayerMoved");
                 GameEvents.PlayerMoved();
             }
         }
@@ -94,7 +95,7 @@ namespace Game.Player.Scripts
 
         private (Transform, MouseSensor) FindNearestPlatformer()
         {
-            float searchRadius = 10f;
+            float searchRadius = 40f;
             Collider2D[] all = Physics2D.OverlapCircleAll(
                 transform.position,
                 searchRadius,
