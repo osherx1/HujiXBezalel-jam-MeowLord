@@ -56,6 +56,8 @@ namespace Game.Platforms.Scripts
             _waiting = false;
             _waitTimer = 0f;
             transform.position = waypoints.Count > 0 ? waypoints[0].transform.position : Vector3.zero;
+            var polygonCollider = GetComponent<PolygonCollider2D>();
+            polygonCollider.enabled = true;
             gameObject.SetActive(true);
         }
         

@@ -57,6 +57,53 @@ namespace Game.Player.Scripts
             
             // Find the nearest platform and its sensor
         }
+    
+        void OnEnable()
+        {
+            _clickAction.performed += OnClick;
+            GameEvents.OnPlayerFall += HandlePlayerFall;
+        }
+
+        private void HandlePlayerFall()
+        {
+            // 1. Remove all segment lines
+            for (int i = _segments.Count - 1; i >= 0; i--)
+            {
+                RemoveSegment(i);
+            }
+
+            // 2. Unregister from all MovingPlatform return events
+            foreach (var plat in _visited)
+            {
+                UnregisterMovingPlatformEvent(plat);
+            }
+            _platformReturnDelegates.Clear();
+
+            // 3. Unregister from OnPlatformDown of the last platform
+            if (_lastPlatScript != null)
+            {
+                _lastPlatScript.OnPlatformDown -= PlayerFall;
+                _lastPlatScript = null;
+            }
+
+            // 4. Clear the platforms list
+            _visited.Clear();
+
+            // 5. Find nearest platform and restart trail
+            var (nearest, sensor) = FindNearestPlatformer();
+            RegisterToPlatform(sensor);
+            MovePlayerToPlatform(nearest);
+
+            // Optionally log or trigger events
+            playerLogger?.Log("Player fell: reset trail and snapped to nearest platform.");
+        }
+
+
+        void OnDisable()
+        {
+            _clickAction.performed -= OnClick;
+            GameEvents.OnPlayerFall -= HandlePlayerFall;
+        } 
 
         private void RegisterToPlatform(MouseSensor sensor)
         {
@@ -114,15 +161,13 @@ namespace Game.Player.Scripts
                 {
                     minDist = d;
                     nearest = c.transform;
-                    sensor = c.GetComponent<MouseSensor>();
+                    sensor = c.GetComponentInChildren<MouseSensor>();
                 }
             }
 
             return (nearest, sensor);
         }
 
-        void OnEnable() => _clickAction.performed += OnClick;
-        void OnDisable() => _clickAction.performed -= OnClick;
 
         private void OnClick(InputAction.CallbackContext ctx)
         {
@@ -132,7 +177,7 @@ namespace Game.Player.Scripts
             if (hit.collider == null) return;
 
             var newPlat = hit.collider.transform;
-            var newPlatScript = newPlat.GetComponent<MouseSensor>();
+            var newPlatScript = newPlat.GetComponentInChildren<MouseSensor>();
 
             if (newPlat == _lastPlat)
                 return; // Ignore clicking on the same platform
