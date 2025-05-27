@@ -98,15 +98,16 @@ namespace Game.Platforms.Scripts
                 }
                 else if (_direction == -1 && _currentWaypoint == 0)
                 {
+                    // We're back at the start, return to pool before increasing/decreasing _currentWaypoint
                     _isMoving = false;
                     _onFinish?.Invoke(this);
                     return;
                 }
-                
+
                 int nextWaypoint = _currentWaypoint + _direction;
                 if (nextWaypoint >= 0 && nextWaypoint < waypoints.Count)
                 {
-                    Vector3 nextDir = waypoints[nextWaypoint].transform.position - transform.position;
+                    Vector3 nextDir = waypoints[nextWaypoint].transform.position - waypoints[_currentWaypoint].transform.position;
                     UpdateSpriteDirection(nextDir);
                 }
 

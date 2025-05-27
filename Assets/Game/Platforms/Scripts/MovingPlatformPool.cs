@@ -123,8 +123,9 @@ namespace Game.Platforms.Scripts
         private void ReturnToPool(MovingPlatform platform, GameObject route)
         {
             platform.transform.position = spawnPoint.position;
+            platform.gameObject.SetActive(false); 
             pools[platform.platformType].Enqueue(platform);
-            activeRoutes[route] = false; // Route now available
+            activeRoutes[route] = false;
         }
     }
 }
