@@ -25,6 +25,9 @@ namespace Game.Platforms.Scripts
         private bool _waiting = false;
         private float _waitTimer = 0f;
         private MouseSensor mouseSensor;
+        private bool _runAway = false;
+        private float _savedSpeed = 0f;
+        
 
         private System.Action<MovingPlatform> _onFinish; // Callback for pool return
 
@@ -62,27 +65,82 @@ namespace Game.Platforms.Scripts
 
         void Update()
         {
+            if (_runAway)
+            {
+                HandleRunAway();
+                return;
+            }
+
             if (!_isMoving) return;
             if (_currentWaypoint < 0 || _currentWaypoint >= waypoints.Count) return;
-            Transform currentTransform = waypoints[_currentWaypoint].transform;
 
+            if (HandleWaiting()) return;
+
+            UpdateWalkingAnim();
+
+            MoveToWaypoint();
+
+            HandleWaypointArrival();
+        }
+        
+        private void HandleRunAway()
+        {
+            if (animator != null)
+                animator.SetBool("IsWalking", true);
+
+            Vector3 startPos = waypoints[0].transform.position;
+            transform.position = Vector3.MoveTowards(transform.position, startPos, moveSpeed * Time.deltaTime);
+
+            // Flip sprite
+            Vector3 escapeDir = startPos - transform.position;
+            UpdateSpriteDirection(escapeDir);
+
+            if (Vector3.Distance(transform.position, startPos) < 0.01f)
+            {
+                moveSpeed = _savedSpeed;
+                _runAway = false;
+                _isMoving = false;
+                if (animator != null)
+                    animator.SetBool("IsWalking", false);
+                _onFinish?.Invoke(this);
+            }
+        }
+
+        
+        private bool HandleWaiting()
+        {
             if (_waiting)
             {
                 _waitTimer -= Time.deltaTime;
                 if (_waitTimer <= 0f)
                     _waiting = false;
                 else
-                    return;
+                {
+                    if (animator != null)
+                        animator.SetBool("IsWalking", false);
+                    return true; // משאירים את ה-Update כאן
+                }
             }
-            
+            return false;
+        }
+        
+        private void UpdateWalkingAnim()
+        {
             if (animator != null)
-            {
                 animator.SetBool("IsWalking", _isMoving && !_waiting);
-            }
-            
+        }
 
+        private void MoveToWaypoint()
+        {
+            Transform currentTransform = waypoints[_currentWaypoint].transform;
             Vector3 targetPos = currentTransform.position;
             transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
+        }
+
+        private void HandleWaypointArrival()
+        {
+            Transform currentTransform = waypoints[_currentWaypoint].transform;
+            Vector3 targetPos = currentTransform.position;
 
             if (Vector3.Distance(transform.position, targetPos) < 0.01f)
             {
@@ -98,8 +156,9 @@ namespace Game.Platforms.Scripts
                 }
                 else if (_direction == -1 && _currentWaypoint == 0)
                 {
-                    // We're back at the start, return to pool before increasing/decreasing _currentWaypoint
                     _isMoving = false;
+                    if (animator != null)
+                        animator.SetBool("IsWalking", false);
                     _onFinish?.Invoke(this);
                     return;
                 }
@@ -129,23 +188,31 @@ namespace Game.Platforms.Scripts
         {
             if (animator != null)
                 animator.SetBool("IsAfraid", isAfraid);
-            
+
             var polygonCollider = GetComponent<PolygonCollider2D>();
             if (polygonCollider != null)
                 polygonCollider.enabled = !isAfraid;
 
-            // If afraid, immediately return to start and despawn (return to pool)
             if (isAfraid)
             {
-                // Move instantly to start of route
                 if (waypoints != null && waypoints.Count > 0)
-                    transform.position = waypoints[0].transform.position;
-
-                // Deactivate and return to pool
-                _isMoving = false;
-                _onFinish?.Invoke(this); // return to pool immediately
+                {
+                    _savedSpeed = moveSpeed;
+                    moveSpeed *= 2f; // Double speed
+                    
+                    if (_direction != -1)
+                        _direction = -1;
+                }
+            }
+            else
+            {
+                if (_savedSpeed > 0f)
+                    moveSpeed = _savedSpeed;
             }
         }
+
+
+
         
         private void UpdateSpriteDirection(Vector3 direction)
         {
