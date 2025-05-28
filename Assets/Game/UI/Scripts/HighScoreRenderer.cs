@@ -19,14 +19,15 @@ namespace Game.UI.Scripts
         private void PrintHighScores()
         {
             var highScoreManager = GameManager.Instance.HighScoreManager;
-            var table = highScoreManager.GetHighScoreTable();
-            StringBuilder sb = new StringBuilder();
-            sb.AppendLine("High Scores:");
-            foreach (var entry in table)
-            {
-                sb.AppendLine($"{entry.Rank}. {entry.Nickname} - {entry.Score}");
-            }
-            Debug.Log(sb.ToString());
+            highScoreManager.GetHighScoreTable(table => {
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("High Scores:");
+                foreach (var entry in table)
+                {
+                    sb.AppendLine($"{entry.Item1}. {entry.Item3} - {entry.Item2}");
+                }
+                Debug.Log(sb.ToString());
+            });
         }
     }
 } 

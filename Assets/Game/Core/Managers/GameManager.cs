@@ -11,6 +11,8 @@ namespace Game.Core.Managers
     {
         private  GameplayScore _gameplayScore;
         private  HighScoreManager _highScoreManager;
+        private FirebaseInitializer _firebaseIntializer;
+        [SerializeField] private HighScoreLogger highScoreLogger;
 
         public GameplayScore GameplayScore => _gameplayScore;
         public HighScoreManager HighScoreManager => _highScoreManager;
@@ -31,7 +33,8 @@ namespace Game.Core.Managers
         // Private constructor prevents external instantiation
         public void Awake()
         {
-            _highScoreManager = new HighScoreManager();
+            _firebaseIntializer = new FirebaseInitializer(highScoreLogger);
+            _highScoreManager = new HighScoreManager(highScoreLogger);
             int idx = Random.Range(0, _randomNames.Length);
             CurrentNickname = _randomNames[idx];
             _gameplayScore = new GameplayScore();
@@ -52,7 +55,7 @@ namespace Game.Core.Managers
 
         private IEnumerator GameFinishedTimerCoroutine()
         {
-            yield return new WaitForSeconds(60f);
+            yield return new WaitForSeconds(10f);
             GameEvents.GameFinished();
             SceneManager.LoadScene("EndScene");
             yield return null;
