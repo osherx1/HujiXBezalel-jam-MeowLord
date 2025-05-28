@@ -6,12 +6,25 @@ namespace Game.Core.Managers
     {
         public static event Action OnPlayerFall;
         public static event Action OnPlayerMoved;
-        public static event Action OnTimerFinished;
-        public static event Action OnTimerStarted;
+        public static event Action OnGameFinished;
 
         public static event Action OnMouseCatch;
         
         public static event Action<bool> OnAfraidChanged;
+
+        public static event Action<int> OnUpdateScore;
+
+        public static event Action OnGameStarted;
+
+        public static void GameStarted()
+        {
+            OnGameStarted?.Invoke();
+        }
+
+        public static void UpdateScore(int score)
+        {
+            OnUpdateScore?.Invoke(score);
+        }
         
         public static void AfraidChanged(bool value)
         {
@@ -23,16 +36,11 @@ namespace Game.Core.Managers
         }
 
 
-        public static void TimerFinished()
+        public static void GameFinished()
         {
-            OnTimerFinished?.Invoke();
+            OnGameFinished?.Invoke();
         }
-
-        public static void TimerStarted()
-        {
-            OnTimerStarted?.Invoke();
-        }
-
+        
         public static void MouseCatch()
         {
             OnMouseCatch?.Invoke();
