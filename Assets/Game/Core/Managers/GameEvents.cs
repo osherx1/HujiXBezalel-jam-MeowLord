@@ -51,5 +51,12 @@ namespace Game.Core.Managers
         {
             OnPlayerFall?.Invoke();
         }
+
+        public static event Action OnEndSceneStarted;
+
+        public static void EndSceneStarted()
+        {
+            OnEndSceneStarted?.Invoke();
+        }
     }
 }

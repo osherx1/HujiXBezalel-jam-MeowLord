@@ -1,14 +1,21 @@
 using Game.Core.Score;
+using UnityEngine;
+using System.Collections;
+using Game.Core.Generics;
+using Game.Core.Utils;
+using UnityEngine.SceneManagement;
 
 namespace Game.Core.Managers
 {
-    public class GameManager
+    public class GameManager: MonoSingleton<GameManager>
     {
-        private readonly GameplayScore _gameplayScore;
-        private readonly HighScoreManager _highScoreManager;
+        private  GameplayScore _gameplayScore;
+        private  HighScoreManager _highScoreManager;
+
+        public GameplayScore GameplayScore => _gameplayScore;
+        public HighScoreManager HighScoreManager => _highScoreManager;
 
         // The single instance, lazily initialized
-        private static readonly GameManager _instance = new GameManager();
         
         private static readonly string[] _randomNames = new string[]
         {
@@ -19,23 +26,37 @@ namespace Game.Core.Managers
         };
 
         public string CurrentNickname { get; private set; }
+        
 
         // Private constructor prevents external instantiation
-        private GameManager()
+        public void Awake()
         {
             _highScoreManager = new HighScoreManager();
-            int idx = UnityEngine.Random.Range(0, _randomNames.Length);
+            int idx = Random.Range(0, _randomNames.Length);
             CurrentNickname = _randomNames[idx];
             _gameplayScore = new GameplayScore();
+            GameEvents.OnGameFinished += OnGameFinished;
+            GameEvents.OnGameStarted += StartGameFinishedTimer;
+            GameEvents.GameStarted();
         }
 
-        // Public property to access the single instance
-        public static GameManager Instance
+        private void OnGameFinished()
         {
-            get
-            {
-                return _instance;
-            }
+            _highScoreManager.TryAddHighScore(_gameplayScore.Score, CurrentNickname);
+        }
+
+        private void StartGameFinishedTimer()
+        {
+            StartCoroutine(GameFinishedTimerCoroutine());
+        }
+
+        private IEnumerator GameFinishedTimerCoroutine()
+        {
+            yield return new UnityEngine.WaitForSeconds(10f);
+            GameEvents.GameFinished();
+            SceneManager.LoadScene("EndScene");
+            yield return null;
+            GameEvents.EndSceneStarted();
         }
     }
 }

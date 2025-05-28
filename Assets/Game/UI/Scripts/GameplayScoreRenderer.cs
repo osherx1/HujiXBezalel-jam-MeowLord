@@ -13,33 +13,29 @@ namespace Game.UI.Scripts
 
         private GameplayScore _gameplayScore;
 
-        private void Awake()
+        private void Start()
         {
             // Get nickname from GameManager
             string currentNickname = GameManager.Instance.CurrentNickname;
             if (nicknameText != null)
                 nicknameText.text = currentNickname;
 
-            // Get GameplayScore instance from GameManager
-
-            // Subscribe to changes
-            if (_gameplayScore != null)
-                _gameplayScore.OnScoreChanged += UpdateScoreDisplay;
+            // Subscribe to global score update event
+            GameEvents.OnUpdateScore += UpdateScoreDisplay;
 
             // Set initial value
-            UpdateScoreDisplay(_gameplayScore?.Score ?? 0);
+            UpdateScoreDisplay(0);
         }
 
         private void OnDestroy()
         {
-            if (_gameplayScore != null)
-                _gameplayScore.OnScoreChanged -= UpdateScoreDisplay;
+            GameEvents.OnUpdateScore -= UpdateScoreDisplay;
         }
 
         private void UpdateScoreDisplay(int score)
         {
             if (scoreText != null)
-                scoreText.text = $"Score: {score}";
+                scoreText.text = $"{score}";
         }
     }
 }
