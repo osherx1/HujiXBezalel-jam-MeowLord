@@ -323,12 +323,17 @@ namespace Game.Player.Scripts
             }
         }
         
+        // ReSharper disable Unity.PerformanceAnalysis
         private void OnPlatformReturnHandler(Transform platform)
         {
             // Find index in _visited
             int idx = _visited.IndexOf(platform);
             if (idx == -1) return; // Not in list
-
+            if (idx == _visited.Count - 1)
+            {
+                GameEvents.PlayerFall();
+                return;
+            }
             // Unregister from all platforms being removed (from 0 to idx inclusive)
             for (int i = 0; i <= idx; i++)
             {
