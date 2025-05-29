@@ -55,7 +55,7 @@ namespace Game.Core.Managers
 
         private IEnumerator GameFinishedTimerCoroutine()
         {
-            yield return new WaitForSeconds(10f);
+            yield return new WaitForSeconds(60f);
             GameEvents.GameFinished();
             SceneManager.LoadScene("EndScene");
             yield return null;
