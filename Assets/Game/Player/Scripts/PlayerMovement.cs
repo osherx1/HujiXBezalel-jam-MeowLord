@@ -77,6 +77,8 @@ namespace Game.Player.Scripts
 
         private void HandlePlayerFall()
         {
+            animator.SetTrigger(Fall);
+            DOVirtual.DelayedCall(fallDuration, () => {
             // 1. Remove all segment lines
             for (int i = _segments.Count - 1; i >= 0; i--)
             {
@@ -106,8 +108,8 @@ namespace Game.Player.Scripts
             MovePlayerToPlatform(nearest);
 
             // Optionally log or trigger events
-            playerLogger?.Log("Player fell: reset trail and snapped to nearest platform.");
-            animator.SetTrigger(Fall);
+                playerLogger?.Log("Player fell: reset trail and snapped to nearest platform.");
+            });
         }
 
 
@@ -308,6 +310,8 @@ namespace Game.Player.Scripts
         }
         
         private Dictionary<Transform, Action> _platformReturnDelegates = new();
+        [SerializeField] private float fallDuration;
+
 
         private void RegisterMovingPlatformEvent(Transform plat)
         {
@@ -387,6 +391,8 @@ namespace Game.Player.Scripts
             Vector3 worldPos = _mainCam.ScreenToWorldPoint(screenPos);
             var hit = Physics2D.Raycast(worldPos, Vector2.zero, 0f, clickableLayer);
             bool isHovering = hit.collider != null;
+            if(hit.transform == _lastPlat)
+                isHovering = false;
             animator.SetBool(IsHovering, isHovering);
         }
     }
