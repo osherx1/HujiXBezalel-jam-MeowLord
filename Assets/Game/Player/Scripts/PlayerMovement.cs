@@ -65,7 +65,7 @@ namespace Game.Player.Scripts
             RegisterToPlatform(sensor);
             MovePlayerToPlatform(nearest);
             _mainCam = Camera.main;
-            
+            GameEvents.NumberOfSegmentsChanged(leftSegments);
             // Find the nearest platform and its sensor
         }
     
@@ -272,6 +272,7 @@ namespace Game.Player.Scripts
             Destroy(_segments[i].Lr.gameObject);
             _segments.RemoveAt(i);
             leftSegments = maxSegments - _segments.Count;
+            GameEvents.NumberOfSegmentsChanged(leftSegments);
             playerLogger.Log("Removed Segment Line");
         }
 
@@ -280,6 +281,7 @@ namespace Game.Player.Scripts
             _segments.Add(SegmentCreator.CreateSegment(fromPlat.gameObject, toPlat.gameObject,
                 lineWidth, lineMaterial, sortingLayerName));
             leftSegments = maxSegments - _segments.Count;
+            GameEvents.NumberOfSegmentsChanged(leftSegments);
         }
 
         private void DestroyEnemiesInLoop(List<Transform> loopPlatforms)

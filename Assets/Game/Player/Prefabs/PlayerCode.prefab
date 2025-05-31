@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7324275424428632901}
   - component: {fileID: 6816017618577237725}
+  - component: {fileID: 592636455647064314}
   m_Layer: 0
   m_Name: PlayerCode
   m_TagString: Untagged
@@ -45,19 +46,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466d8bd80a334b3890a4492dd71f42af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerLogger: {fileID: 0}
+  playerLogger: {fileID: 592636455647064314}
   clickableLayer:
     serializedVersion: 2
     m_Bits: 64
   enemyLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   lineMaterial: {fileID: 0}
-  delayForSegments: 0.2
+  loopDestructionDelay: 0.2
   lineWidth: 0.1
   sortingLayerName: Trail
-  maxSegments: 1
+  maxSegments: 6
   leftSegments: 0
+  animator: {fileID: 5088570227441705168}
+  moveDuration: 1
+  fallDuration: 0.75
+--- !u!114 &592636455647064314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7588933265451258189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8ef5f0c52de4619a4f84108bdd3b6d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 0
 --- !u!1001 &4429162231053426959
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -134,5 +151,10 @@ PrefabInstance:
 --- !u!4 &3626681563772424038 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1090720206748724841, guid: 34afd6a2157ac48179d87bf6acc5ae24, type: 3}
+  m_PrefabInstance: {fileID: 4429162231053426959}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &5088570227441705168 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8928861509322179039, guid: 34afd6a2157ac48179d87bf6acc5ae24, type: 3}
   m_PrefabInstance: {fileID: 4429162231053426959}
   m_PrefabAsset: {fileID: 0}

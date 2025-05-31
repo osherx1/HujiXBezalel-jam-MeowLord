@@ -16,6 +16,8 @@ namespace Game.Core.Managers
 
         public static event Action OnGameStarted;
 
+        public static event Action<int> OnNumberOfSegmentsChanged;
+
         public static void GameStarted()
         {
             OnGameStarted?.Invoke();
@@ -57,6 +59,11 @@ namespace Game.Core.Managers
         public static void EndSceneStarted()
         {
             OnEndSceneStarted?.Invoke();
+        }
+
+        public static void NumberOfSegmentsChanged(int value)
+        {
+            OnNumberOfSegmentsChanged?.Invoke(value);
         }
     }
 }
