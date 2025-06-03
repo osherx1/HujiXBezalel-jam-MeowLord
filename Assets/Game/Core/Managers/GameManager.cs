@@ -47,7 +47,7 @@ namespace Game.Core.Managers
 
         private void StartGameFinishedTimer()
         {
-            StartCoroutine(GameFinishedTimerCoroutine());
+            // StartCoroutine(GameFinishedTimerCoroutine());
         }
 
         private IEnumerator GameFinishedTimerCoroutine()

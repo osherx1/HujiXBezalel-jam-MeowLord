@@ -17,6 +17,13 @@ namespace Game.Core.Managers
         public static event Action OnGameStarted;
 
         public static event Action<int> OnNumberOfSegmentsChanged;
+        
+        public static event Action OnPlayerLanded;
+
+        public static void PlayerLanded()
+        {
+            OnPlayerLanded?.Invoke();
+        }
 
         public static void GameStarted()
         {

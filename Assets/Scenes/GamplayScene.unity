@@ -726,7 +726,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 18
+  orthographic size: 18.2
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -751,7 +751,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7.283983, y: -0.6321001, z: -1}
+  m_LocalPosition: {x: 7.3710847, y: -1.2225001, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1038,14 +1038,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FramingMode: 2
-  FramingSize: 0.01
+  FramingSize: 0.02
   CenterOffset: {x: 0, y: 0}
   Damping: 1.734
   SizeAdjustment: 2
   LateralAdjustment: 0
   FovRange: {x: 1, y: 100}
   DollyRange: {x: -100, y: 100}
-  OrthoSizeRange: {x: 1, y: 18}
+  OrthoSizeRange: {x: 1, y: 18.2}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -1363,10 +1363,25 @@ MonoBehaviour:
   dontMoveZoneWidthPercent: 0.8
   targetGroup: {fileID: 576777299}
   targetFraming: {fileID: 576777301}
-  startingFrameSize: 0
-  maxPlatformsForFrameShrinking: 10
+  startingFrameSize: 0.1
+  maxPlatformsForFrameShrinking: 5
+  minFrameSize: 0.02
   targetLogger: {fileID: 1216841731}
   backgroundRenderer: {fileID: 1406787728}
+  backgroundCollider2D: {fileID: 1406787730}
+  colliderSizes:
+  - {x: 58.50642, y: 33.89979}
+  - {x: 60.64587, y: 34.898754}
+  - {x: 63.83382, y: 37.1597}
+  - {x: 64.87927, y: 38.28958}
+  - {x: 64.87927, y: 38.28958}
+  colliderSizeOffsets:
+  - {x: -0.044267654, y: -0.1110878}
+  - {x: 0.0166, y: -0.6105}
+  - {x: 0.0871, y: -0.5904}
+  - {x: 0.02719688, y: -0.6425705}
+  - {x: 0.02719, y: -0.6425}
+  cinemachineConfiner: {fileID: 576777295}
   cameraStuckThreshold: 0.3
 --- !u!114 &1216841731
 MonoBehaviour:
@@ -1572,7 +1587,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0871, y: -0.5904}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -1582,7 +1597,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 51.28, y: 28.594608}
+  m_Size: {x: 63.83382, y: 37.1597}
   m_EdgeRadius: 0
 --- !u!1 &1447418058
 GameObject:

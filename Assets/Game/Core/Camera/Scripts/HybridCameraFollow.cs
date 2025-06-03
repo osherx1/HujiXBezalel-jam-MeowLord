@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Attributes;
 using DG.Tweening;
 using Game.Core.Input;
 using Game.Core.Managers;
@@ -25,12 +26,20 @@ namespace Game.Core.Camera.Scripts
         [SerializeField] private CinemachineTargetGroup targetGroup;
         [SerializeField] private CinemachineGroupFraming targetFraming;
         [SerializeField] [Range(0, 11)] private float startingFrameSize;
-        [SerializeField] private int maxPlatformsForFrameShrinking = 5;
+        [SerializeField, ReadOnly] private int maxPlatformsForFrameShrinking = 5;
+        [SerializeField] private float minFrameSize = 0.05f; 
+        
         [SerializeField] private TargetLogger targetLogger;
         
         
-        
+        [Header("Background")]
         [SerializeField] private SpriteRenderer backgroundRenderer;
+        [SerializeField] private BoxCollider2D backgroundCollider2D;
+        // Assign these in the Inspector for full control
+        [SerializeField] private Vector2[] colliderSizes; 
+        [SerializeField] private Vector2[] colliderSizeOffsets; // size 6 for 0-5
+        [SerializeField] private CinemachineConfiner2D cinemachineConfiner;
+
         
         private Tween cameraMoveTween;  
         private bool edgePanning = false;
@@ -40,6 +49,7 @@ namespace Game.Core.Camera.Scripts
         private float _noMovementTime = 0f;
         [SerializeField] private float cameraStuckThreshold = 0.3f;
         private bool _didEdgePan;
+        private int _clampedPlatform = 5;
 
         private List<Transform> CurrentPlayerPlatforms => playerMovement.PlayerPlatforms;
 
@@ -57,22 +67,28 @@ namespace Game.Core.Camera.Scripts
         }
         void OnEnable()
         {
-            // InputSystemSingleton.Instance.InputSystem.PlayerControls.Lock.performed += OnLockPerformed;
+            InputSystemSingleton.Instance.InputSystem.PlayerControls.RightClick.performed += OnRightClickPerformed;
             targetLogger?.Log("Target subscribed to player");
-            GameEvents.OnPlayerMoved += OnPlayerMoved;
+            GameEvents.OnPlayerLanded += MoveTowardsPlayer;
         }
-        //
-        // void OnDisable()
-        // {
-        //     InputSystemSingleton.Instance.InputSystem.PlayerControls.Lock.performed -= OnLockPerformed;
-        //     GameEvents.OnPlayerMoved -= OnPlayerMoved;
-        // }
-        //
+        
+        void OnDisable()
+        {
+            InputSystemSingleton.Instance.InputSystem.PlayerControls.RightClick.performed -= OnRightClickPerformed;
+            GameEvents.OnPlayerLanded -= MoveTowardsPlayer;
+        }
+
+        private void OnRightClickPerformed(InputAction.CallbackContext obj)
+        {
+            MoveTowardsPlayer();
+        }
+
+
         // private void OnLockPerformed(InputAction.CallbackContext ctx)
         // {
         //     isCameraLocked = !isCameraLocked;
         // }
-        private void OnPlayerMoved()
+        private void MoveTowardsPlayer()
         {
             targetLogger?.Log("Target Entered Player moved Function");
             if (player != null)
@@ -87,9 +103,7 @@ namespace Game.Core.Camera.Scripts
 
         void Update()
         {
-            if (isCameraLocked)
-                return;
-
+            
             Vector3 mousePos = UnityEngine.Input.mousePosition;
             Rect dontMoveRect = EladsHelperFunctions.GetCenteredRect(dontMoveZoneWidthPercent, dontMoveZoneHeightPercent);
 
@@ -114,7 +128,7 @@ namespace Game.Core.Camera.Scripts
             }
 
             // Clamp the camera target to background bounds (optional, for safety)
-            transform.position = EladsHelperFunctions.ClampPositionToBounds(backgroundRenderer.bounds, transform.position);
+            // transform.position = EladsHelperFunctions.ClampPositionToBounds(backgroundRenderer.bounds, transform.position);
         }
 
         
@@ -150,12 +164,18 @@ namespace Game.Core.Camera.Scripts
             }
             else
             {
-                // Linear interpolation between startingFrameSize (at 2 platforms)
-                // and 0 (at maxPlatformsForFrameShrinking)
+               
                 float t = Mathf.Clamp01((float)(numPlatforms - 1) / (maxPlatformsForFrameShrinking - 1));
-                targetFraming.FramingSize = Mathf.Lerp(startingFrameSize, 0f, t);
+                targetFraming.FramingSize = Mathf.Lerp(startingFrameSize, minFrameSize, t);
             }
-           
+            int clampedPlatforms = Mathf.Clamp(numPlatforms-1, 0, colliderSizes.Length - 1);
+            if (_clampedPlatform != clampedPlatforms)
+            {
+                backgroundCollider2D.size = colliderSizes[clampedPlatforms];
+                backgroundCollider2D.offset = colliderSizeOffsets[clampedPlatforms];
+                cinemachineConfiner.InvalidateBoundingShapeCache();
+                _clampedPlatform = clampedPlatforms;
+            } 
         }
 
         void OnDrawGizmos()

@@ -154,6 +154,8 @@ namespace Game.Player.Scripts
                     .OnComplete(() => {
                         animator.SetTrigger(Land);
                         isMoving = false;
+                        GameEvents.PlayerLanded();
+                        playerLogger?.Log("Player Activated event PlayerLanded");
                         onMoveComplete?.Invoke();
                         onMoveComplete = null;
                     });
