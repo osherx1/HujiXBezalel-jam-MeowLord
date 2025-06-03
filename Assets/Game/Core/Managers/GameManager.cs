@@ -54,7 +54,7 @@ namespace Game.Core.Managers
         {
             yield return new WaitForSeconds(60f);
             GameEvents.GameFinished();
-            SceneManager.LoadScene("EndScene");
+            SceneManager.LoadScene("end");
             yield return null;
             GameEvents.EndSceneStarted();
         }
