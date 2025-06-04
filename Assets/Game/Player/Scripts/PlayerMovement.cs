@@ -20,6 +20,7 @@ namespace Game.Player.Scripts
         private static readonly int Jump = Animator.StringToHash("Jump");
         private static readonly int Land = Animator.StringToHash("Land");
         [SerializeField] private PlayerLogger playerLogger;
+        [SerializeField] private PlayerStats playerStats;
         [Header("Click Settings")] [SerializeField]
         private LayerMask clickableLayer;
 
@@ -51,10 +52,13 @@ namespace Game.Player.Scripts
         private bool isMoving = false;
         private Action onMoveComplete;
 
+        private PlayerRadar _playerRadar;
+
         void Awake()
         {
             leftSegments = maxSegments;
             _clickAction = InputSystemSingleton.Instance.InputSystem.PlayerControls.Click;
+            _playerRadar = new PlayerRadar(transform, playerStats, playerLogger);
         }
 
         void Start()
@@ -131,7 +135,7 @@ namespace Game.Player.Scripts
                 _lastPlatScript.OnPlatformDown += PlayerFall;
         }
 
-        private void MovePlayerToPlatform(Transform platform)
+        private void MovePlayerToPlatform(Transform platform, bool withDelay = true)
         {
             if (platform != null)
             {
@@ -143,7 +147,7 @@ namespace Game.Player.Scripts
                 else if (_visited[_visited.Count - 1] != platform)
                 {
                     _visited.Add(platform);
-                    RegisterMovingPlatformEvent(platform);
+                    RegisterSensorPlatformEvent(platform);
                     playerLogger.Log($"Player {_visited.Count} moving to {platform.name}");
                 }
                 // Animate movement
@@ -155,6 +159,8 @@ namespace Game.Player.Scripts
                         animator.SetTrigger(Land);
                         isMoving = false;
                         GameEvents.PlayerLanded();
+                        if(platform.GetComponentInChildren<MovingPlatform>() != null)
+                            GameEvents.PlayerMovingPlatform(this);
                         playerLogger?.Log("Player Activated event PlayerLanded");
                         onMoveComplete?.Invoke();
                         onMoveComplete = null;
@@ -202,7 +208,7 @@ namespace Game.Player.Scripts
             Vector3 worldPos = _mainCam.ScreenToWorldPoint(screenPos);
             var hit = Physics2D.Raycast(worldPos, Vector2.zero, 0f, clickableLayer);
             if (hit.collider == null) return;
-
+            if(!_playerRadar.IsPlatformInRange(hit.collider.gameObject)) return;
             var newPlat = hit.collider.transform;
             var newPlatScript = newPlat.GetComponentInChildren<MouseSensor>();
             var prevPlat = _lastPlat;
@@ -317,7 +323,7 @@ namespace Game.Player.Scripts
         [SerializeField] private float fallDuration;
 
 
-        private void RegisterMovingPlatformEvent(Transform plat)
+        private void RegisterSensorPlatformEvent(Transform plat)
         {
             var moving = plat.GetComponentInChildren<MovingPlatform>();
             if (moving != null && !_platformReturnDelegates.ContainsKey(plat))
@@ -397,6 +403,10 @@ namespace Game.Player.Scripts
             bool isHovering = hit.collider != null;
             if(hit.transform == _lastPlat)
                 isHovering = false;
+            if (hit.collider != null && !_playerRadar.IsPlatformInRange(hit.collider.gameObject))
+            {
+                isHovering = false;
+            }
             animator.SetBool(IsHovering, isHovering);
         }
     }

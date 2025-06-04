@@ -1,0 +1,90 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &9210976875638248917
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1289004765097076336}
+  - component: {fileID: 4747746529679566916}
+  - component: {fileID: 7166846718488591654}
+  m_Layer: 0
+  m_Name: CameraTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1289004765097076336
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9210976875638248917}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0, y: -0.7654402, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4747746529679566916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9210976875638248917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 835eabaf1cd1436a944b270c6b0a61d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  playerMovement: {fileID: 0}
+  panSpeed: 10
+  returnSpeed: 15
+  goBackToCenterZoneWidthPercent: 0
+  goBackToCenterZoneHeightPercent: 0
+  dontMoveZoneHeightPercent: 0.7
+  dontMoveZoneWidthPercent: 0.8
+  targetGroup: {fileID: 0}
+  targetFraming: {fileID: 0}
+  startingFrameSize: 0.1
+  maxPlatformsForFrameShrinking: 5
+  minFrameSize: 0.02
+  targetLogger: {fileID: 7166846718488591654}
+  backgroundRenderer: {fileID: 0}
+  backgroundCollider2D: {fileID: 0}
+  colliderSizes:
+  - {x: 58.50642, y: 33.89979}
+  - {x: 60.64587, y: 34.898754}
+  - {x: 63.83382, y: 37.1597}
+  - {x: 64.87927, y: 38.28958}
+  - {x: 64.87927, y: 38.28958}
+  colliderSizeOffsets:
+  - {x: -0.044267654, y: -0.1110878}
+  - {x: 0.0166, y: -0.6105}
+  - {x: 0.0871, y: -0.5904}
+  - {x: 0.02719688, y: -0.6425705}
+  - {x: 0.02719, y: -0.6425}
+  cinemachineConfiner: {fileID: 0}
+  cameraStuckThreshold: 0.3
+--- !u!114 &7166846718488591654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9210976875638248917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43e6d559d8204799a54c13f240bad794, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 0
