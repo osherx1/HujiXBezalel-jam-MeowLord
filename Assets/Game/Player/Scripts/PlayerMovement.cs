@@ -150,24 +150,41 @@ namespace Game.Player.Scripts
                     RegisterSensorPlatformEvent(platform);
                     playerLogger.Log($"Player {_visited.Count} moving to {platform.name}");
                 }
+                // Rotate player towards the platform
+                RotatePlayerTowards(platform);
                 // Animate movement
                 DOTween.Kill(transform); // Kill any previous tweens on this transform
                 isMoving = true;
                 transform.DOMove(platform.position, moveDuration)
                     .SetEase(Ease.Linear)
-                    .OnComplete(() => {
-                        animator.SetTrigger(Land);
-                        isMoving = false;
-                        GameEvents.PlayerLanded();
-                        if(platform.GetComponentInChildren<MovingPlatform>() != null)
-                            GameEvents.PlayerMovingPlatform(this);
-                        playerLogger?.Log("Player Activated event PlayerLanded");
-                        onMoveComplete?.Invoke();
-                        onMoveComplete = null;
-                    });
+                    .OnComplete(() => OnMoveComplete(platform));
                 playerLogger?.Log("Player Activated event PlayerMoved");
                 GameEvents.PlayerMoved();
             }
+        }
+
+        private void RotatePlayerTowards(Transform target)
+        {
+            if (target == null) return;
+            float direction = target.position.x - transform.position.x;
+            if (Mathf.Abs(direction) > 0.01f)
+            {
+                Vector3 scale = transform.localScale;
+                scale.x = Mathf.Sign(direction) * Mathf.Abs(scale.x);
+                transform.localScale = scale;
+            }
+        }
+
+        private void OnMoveComplete(Transform platform)
+        {
+            animator.SetTrigger(Land);
+            isMoving = false;
+            GameEvents.PlayerLanded();
+            if (platform.GetComponentInChildren<MovingPlatform>() != null)
+                GameEvents.PlayerMovingPlatform(this);
+            playerLogger?.Log("Player Activated event PlayerLanded");
+            onMoveComplete?.Invoke();
+            onMoveComplete = null;
         }
 
         private void PlayerFall()
