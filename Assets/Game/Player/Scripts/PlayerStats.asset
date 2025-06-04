@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 230094605234941deb0356028785b2e1, type: 3}
   m_Name: PlayerStats
   m_EditorClassIdentifier: 
-  radarRadius: 15
+  radarRadius: 20
   platformLayer:
     serializedVersion: 2
     m_Bits: 64

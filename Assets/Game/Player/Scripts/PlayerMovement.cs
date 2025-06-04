@@ -233,7 +233,7 @@ namespace Game.Player.Scripts
             {
                 return;
             }
-
+            CreateNewSegment(prevPlat, transform);
             // Case 2: Closing a loop (not immediately previous)
             if (_visited.Contains(newPlat))
             {
@@ -250,8 +250,8 @@ namespace Game.Player.Scripts
                 _visited.RemoveRange(idx + 1, _visited.Count - idx - 1);
 
                 // 3) schedule the segment creation, LineRenderer cleanup, and enemy destruction after movement
+                
                 onMoveComplete = () => {
-                    CreateNewSegment(prevPlat, newPlat);
                     DOVirtual.DelayedCall(loopDestructionDelay, () => {
                         for (int i = _segments.Count - 1; i >= idx; i--)
                         {
@@ -268,7 +268,8 @@ namespace Game.Player.Scripts
             }
 
             // Case 3: Normal move to new platform
-            onMoveComplete = () => CreateNewSegment(prevPlat, newPlat);
+            
+            onMoveComplete = () => _segments[^1].ToT = _lastPlat;
 
             RegisterToPlatform(newPlatScript); // Register before move
             MovePlayerToPlatform(newPlat);
