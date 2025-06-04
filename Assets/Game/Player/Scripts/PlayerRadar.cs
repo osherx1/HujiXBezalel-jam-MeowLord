@@ -17,57 +17,16 @@ namespace Game.Player.Scripts
         private Coroutine movingPlatformCoroutine;
         private MonoBehaviour coroutineRunner;
 
-        public PlayerRadar(Transform playerTransform, PlayerStats playerStats, PlayerLogger playerLogger)
+        public PlayerRadar(Transform playerTransform, PlayerStats playerStats, PlayerLogger playerLogger, MonoBehaviour coroutineRunner)
         {
             this.playerTransform = playerTransform;
             this.playerStats = playerStats;
             this.playerLogger = playerLogger;
-
-            GameEvents.OnPlayerLanded += OnPlayerLanded;
-            GameEvents.OnPlayerMoved += OnPlayerMoved;
-            GameEvents.OnPlayerMovingPlatform += OnPlayerMovingPlatform;
+            
+            coroutineRunner.StartCoroutine(MovingPlatformRoutine());
         }
 
-        private void OnPlayerLanded()
-        {
-            playerLogger?.Log("PlayerRadar: Player landed, updating platforms and lights.");
-            UpdatePlatformsAndLights();
-        }
-
-        private void OnPlayerMoved()
-        {
-            playerLogger?.Log("PlayerRadar: Player moved, disabling platforms and lights, stopping coroutine if running.");
-            // Only disable all light areas
-            foreach (var light in lightAreasInRange)
-            {
-                light.SetActive(false);
-            }
-            platformsInRange.Clear();
-            lightAreasInRange.Clear();
-
-            // Stop moving platform coroutine if running
-            if (movingPlatformCoroutine != null && coroutineRunner != null)
-            {
-                coroutineRunner.StopCoroutine(movingPlatformCoroutine);
-                movingPlatformCoroutine = null;
-                coroutineRunner = null;
-                playerLogger?.Log("PlayerRadar: Stopped moving platform coroutine.");
-            }
-        }
-
-        private void OnPlayerMovingPlatform(MonoBehaviour runner)
-        {
-            playerLogger?.Log("PlayerRadar: Player on moving platform, starting coroutine.");
-            // Stop any previous coroutine
-            if (movingPlatformCoroutine != null && coroutineRunner != null)
-            {
-                coroutineRunner.StopCoroutine(movingPlatformCoroutine);
-                playerLogger?.Log("PlayerRadar: Stopped previous moving platform coroutine.");
-            }
-            coroutineRunner = runner;
-            movingPlatformCoroutine = runner.StartCoroutine(MovingPlatformRoutine());
-        }
-
+        
         private IEnumerator MovingPlatformRoutine()
         {
             while (true)

@@ -58,7 +58,7 @@ namespace Game.Player.Scripts
         {
             leftSegments = maxSegments;
             _clickAction = InputSystemSingleton.Instance.InputSystem.PlayerControls.Click;
-            _playerRadar = new PlayerRadar(transform, playerStats, playerLogger);
+            _playerRadar = new PlayerRadar(transform, playerStats, playerLogger,this);
         }
 
         void Start()
