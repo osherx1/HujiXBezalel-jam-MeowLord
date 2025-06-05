@@ -27,6 +27,13 @@ namespace Game.Core.Managers
 
         public string CurrentNickname { get; private set; }
         
+        public void SetNickname(string nickname)
+        {
+            if (!string.IsNullOrWhiteSpace(nickname))
+                CurrentNickname = nickname;
+        }
+
+        
 
         // Private constructor prevents external instantiation
         public void Awake()
