@@ -70,12 +70,14 @@ namespace Game.Core.Camera.Scripts
             InputSystemSingleton.Instance.InputSystem.PlayerControls.RightClick.performed += OnRightClickPerformed;
             targetLogger?.Log("Target subscribed to player");
             GameEvents.OnPlayerLanded += MoveTowardsPlayer;
+            GameEvents.OnPlayerLanded += AdjustTargetFraming;
         }
         
         void OnDisable()
         {
             InputSystemSingleton.Instance.InputSystem.PlayerControls.RightClick.performed -= OnRightClickPerformed;
             GameEvents.OnPlayerLanded -= MoveTowardsPlayer;
+            GameEvents.OnPlayerLanded -= AdjustTargetFraming;
         }
 
         private void OnRightClickPerformed(InputAction.CallbackContext obj)
@@ -153,6 +155,11 @@ namespace Game.Core.Camera.Scripts
                 _noMovementTime = 0;
             }
             
+            
+        }
+
+        private void AdjustTargetFraming()
+        {
             int numPlatforms = CurrentPlayerPlatforms.Count;
 
             // If 0 or 1, keep the starting frame size
@@ -173,7 +180,7 @@ namespace Game.Core.Camera.Scripts
                 backgroundCollider2D.offset = colliderSizeOffsets[clampedPlatforms];
                 cinemachineConfiner.InvalidateBoundingShapeCache();
                 _clampedPlatform = clampedPlatforms;
-            } 
+            }
         }
 
         void OnDrawGizmos()
