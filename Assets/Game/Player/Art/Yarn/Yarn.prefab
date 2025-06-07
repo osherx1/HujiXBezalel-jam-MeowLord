@@ -82,7 +82,7 @@ LineRenderer:
   - {x: -4.7, y: -7.36, z: 0}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 0.25
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -132,7 +132,7 @@ LineRenderer:
     numCapVertices: 0
     alignment: 0
     textureMode: 1
-    textureScale: {x: 6, y: 0.6}
+    textureScale: {x: 3.5, y: 0.6}
     shadowBias: 0.5
     generateLightingData: 0
   m_MaskInteraction: 0
