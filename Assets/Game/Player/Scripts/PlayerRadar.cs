@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.Core.Managers;
+using Spine.Unity;
 
 namespace Game.Player.Scripts
 {
@@ -13,6 +14,7 @@ namespace Game.Player.Scripts
 
         private List<GameObject> platformsInRange = new List<GameObject>();
         private List<GameObject> lightAreasInRange = new List<GameObject>();
+        private List<SkeletonMecanim> _skeletonMecanimsInRange = new List<SkeletonMecanim>();
 
         private Coroutine movingPlatformCoroutine;
         private MonoBehaviour coroutineRunner;
@@ -31,7 +33,7 @@ namespace Game.Player.Scripts
         {
             while (true)
             {
-                yield return null; // Wait one frame
+                yield return null; 
                 UpdatePlatformsAndLights();
             }
         }
@@ -39,35 +41,75 @@ namespace Game.Player.Scripts
         private void UpdatePlatformsAndLights()
         {
             playerLogger?.Log("PlayerRadar: Updating platforms and lights in range.");
-            // Only disable previous light areas
-            foreach (var light in lightAreasInRange)
-            {
-                light.SetActive(false);
-            }
-            platformsInRange.Clear();
-            lightAreasInRange.Clear();
 
             // Find all platforms in range
             Collider2D[] hits = Physics2D.OverlapCircleAll(playerTransform.position, playerStats.radarRadius);
+
+            // Build new sets for this frame
+            var newPlatformsInRange = new HashSet<GameObject>();
+            var newLightAreasInRange = new HashSet<GameObject>();
+            var newSkeletonsInRange = new HashSet<SkeletonMecanim>();
+
             foreach (var hit in hits)
             {
-                // Check if the hit is in the platform layer from playerStats
                 if (((1 << hit.gameObject.layer) & playerStats.platformLayer) != 0)
                 {
                     var platGO = hit.gameObject;
-                    platformsInRange.Add(platGO);
+                    newPlatformsInRange.Add(platGO);
 
-                    // Find any descendant with tag "LightAreaPlatform"
                     foreach (Transform descendant in platGO.GetComponentsInChildren<Transform>(true))
                     {
                         if (descendant.CompareTag("LightAreaPlatform"))
                         {
-                            descendant.gameObject.SetActive(true);
-                            lightAreasInRange.Add(descendant.gameObject);
+                            newLightAreasInRange.Add(descendant.gameObject);
+                        }
+
+                        var skeleton = descendant.GetComponent<SkeletonMecanim>();
+                        if (skeleton != null)
+                        {
+                            newSkeletonsInRange.Add(skeleton);
                         }
                     }
                 }
             }
+
+            // Disable light areas and skeletons that are no longer in range
+            foreach (var light in lightAreasInRange)
+            {
+                if (!newLightAreasInRange.Contains(light))
+                    light.SetActive(false);
+            }
+            foreach (var skeleton in _skeletonMecanimsInRange)
+            {
+                if (!newSkeletonsInRange.Contains(skeleton))
+                {
+                    skeleton.skeleton.SetSkin("inactive");
+                    skeleton.skeleton.SetSlotsToSetupPose();
+                    skeleton.skeleton.Update(0);
+                }
+            }
+
+            // Enable new light areas and skeletons
+            foreach (var light in newLightAreasInRange)
+            {
+                if (!lightAreasInRange.Contains(light))
+                    light.SetActive(true);
+            }
+            foreach (var skeleton in newSkeletonsInRange)
+            {
+                if (!_skeletonMecanimsInRange.Contains(skeleton))
+                {
+                    skeleton.skeleton.SetSkin("active");
+                    skeleton.skeleton.SetSlotsToSetupPose();
+                    skeleton.skeleton.Update(0);
+                }
+            }
+
+            // Update the lists for next frame
+            platformsInRange = new List<GameObject>(newPlatformsInRange);
+            lightAreasInRange = new List<GameObject>(newLightAreasInRange);
+            _skeletonMecanimsInRange = new List<SkeletonMecanim>(newSkeletonsInRange);
+
             playerLogger?.Log($"PlayerRadar: Enabled {lightAreasInRange.Count} light areas.");
         }
 
