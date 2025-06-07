@@ -249,9 +249,9 @@ namespace Game.Player.Scripts
             if (_visited.Count > 1 && _visited[_visited.Count - 2] == newPlat)
             {
                 // Remove last segment and last platform
-                RemoveSegment(_segments.Count - 1);
+                onMoveCompleteEvent = () => RemoveSegment(_segments.Count - 1);
+                _segments[_segments.Count - 1].ToT = transform;
                 _visited.RemoveAt(_visited.Count - 1);
-
                 RegisterToPlatform(newPlatScript); // Register before move
                 MovePlayerToPlatform(newPlat);
                 animator.SetTrigger(Jump);
