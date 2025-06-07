@@ -58,7 +58,7 @@ namespace Game.Player.Scripts
         {
             leftSegments = maxSegments;
             _clickAction = InputSystemSingleton.Instance.InputSystem.PlayerControls.Click;
-            _playerRadar = new PlayerRadar(transform, playerStats, playerLogger,this);
+            _playerRadar = new PlayerRadar(transform, playerStats, playerLogger,this,PlayerPlatforms);
         }
 
         void Start()
@@ -139,6 +139,7 @@ namespace Game.Player.Scripts
         {
             if (platform != null)
             {
+                
                 _lastPlat = platform;
                 if (_visited.Count == 0)
                 {
@@ -155,9 +156,7 @@ namespace Game.Player.Scripts
                 // Animate movement
                 DOTween.Kill(transform); // Kill any previous tweens on this transform
                 isMoving = true;
-
-                float distance = Vector3.Distance(transform.position, platform.position);
-                float duration = distance / moveSpeed;
+                
                 if (moveCoroutine != null) StopCoroutine(moveCoroutine);
                 moveCoroutine = StartCoroutine(MoveToPlatformCoroutine(platform));
                 playerLogger?.Log("Player Activated event PlayerMoved");
@@ -195,8 +194,6 @@ namespace Game.Player.Scripts
             animator.SetTrigger(Land);
             isMoving = false;
             GameEvents.PlayerLanded();
-            if (platform.GetComponentInChildren<MovingPlatform>() != null)
-                GameEvents.PlayerMovingPlatform(this);
             playerLogger?.Log("Player Activated event PlayerLanded");
             onMoveCompleteEvent?.Invoke();
             onMoveCompleteEvent = null;

@@ -22,17 +22,13 @@ namespace Game.Core.Managers
         
         public static event Action OnPlayerLanded;
 
-        public static event Action<MonoBehaviour> OnPlayerMovingPlatform;
+        
 
         public static void PlayerLanded()
         {
             OnPlayerLanded?.Invoke();
         }
-
-        public static void PlayerMovingPlatform(MonoBehaviour courtineProxy)
-        {
-            OnPlayerMovingPlatform?.Invoke(courtineProxy);
-        }
+        
 
         public static void GameStarted()
         {

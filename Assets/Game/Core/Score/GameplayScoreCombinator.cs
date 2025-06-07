@@ -88,6 +88,7 @@ namespace Game.Core.Score
                     int penalty = 300 + (currentScore / 100);
                     _gameplayScore.AddScore(-penalty);
                     RenderPoints?.Invoke(evt.position, -penalty);
+                    break;
                 }
             }
         }

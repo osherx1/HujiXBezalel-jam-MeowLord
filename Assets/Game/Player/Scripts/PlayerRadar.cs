@@ -18,22 +18,26 @@ namespace Game.Player.Scripts
 
         private Coroutine movingPlatformCoroutine;
         private MonoBehaviour coroutineRunner;
+        private readonly List<Transform> playerPlatforms;
 
-        public PlayerRadar(Transform playerTransform, PlayerStats playerStats, PlayerLogger playerLogger, MonoBehaviour coroutineRunner)
+
+        public PlayerRadar(Transform playerTransform, PlayerStats playerStats, PlayerLogger playerLogger,
+            MonoBehaviour coroutineRunner, List<Transform> playerPlatforms)
         {
             this.playerTransform = playerTransform;
             this.playerStats = playerStats;
             this.playerLogger = playerLogger;
-            
+            this.playerPlatforms = playerPlatforms;
+
             coroutineRunner.StartCoroutine(MovingPlatformRoutine());
         }
 
-        
+
         private IEnumerator MovingPlatformRoutine()
         {
             while (true)
             {
-                yield return null; 
+                yield return null;
                 UpdatePlatformsAndLights();
             }
         }
@@ -50,26 +54,24 @@ namespace Game.Player.Scripts
             var newLightAreasInRange = new HashSet<GameObject>();
             var newSkeletonsInRange = new HashSet<SkeletonMecanim>();
 
+            if (playerPlatforms.Count > 1)
+            {
+                var platGO = playerPlatforms[playerPlatforms.Count - 2].gameObject;
+                UpdatePlatformsAndLightsProcessing(platGO, newLightAreasInRange, newSkeletonsInRange,newPlatformsInRange);
+            }
+            
+            if (playerPlatforms.Count > 0)
+            {
+                var platGO = playerPlatforms[playerPlatforms.Count - 1].gameObject;
+                UpdatePlatformsAndLightsProcessing(platGO, newLightAreasInRange, newSkeletonsInRange,newPlatformsInRange);
+            }
+            
             foreach (var hit in hits)
             {
                 if (((1 << hit.gameObject.layer) & playerStats.platformLayer) != 0)
                 {
                     var platGO = hit.gameObject;
-                    newPlatformsInRange.Add(platGO);
-
-                    foreach (Transform descendant in platGO.GetComponentsInChildren<Transform>(true))
-                    {
-                        if (descendant.CompareTag("LightAreaPlatform"))
-                        {
-                            newLightAreasInRange.Add(descendant.gameObject);
-                        }
-
-                        var skeleton = descendant.GetComponent<SkeletonMecanim>();
-                        if (skeleton != null)
-                        {
-                            newSkeletonsInRange.Add(skeleton);
-                        }
-                    }
+                    UpdatePlatformsAndLightsProcessing(platGO, newLightAreasInRange, newSkeletonsInRange,newPlatformsInRange);
                 }
             }
 
@@ -79,6 +81,7 @@ namespace Game.Player.Scripts
                 if (!newLightAreasInRange.Contains(light))
                     light.SetActive(false);
             }
+
             foreach (var skeleton in _skeletonMecanimsInRange)
             {
                 if (!newSkeletonsInRange.Contains(skeleton))
@@ -95,6 +98,7 @@ namespace Game.Player.Scripts
                 if (!lightAreasInRange.Contains(light))
                     light.SetActive(true);
             }
+
             foreach (var skeleton in newSkeletonsInRange)
             {
                 if (!_skeletonMecanimsInRange.Contains(skeleton))
@@ -111,6 +115,26 @@ namespace Game.Player.Scripts
             _skeletonMecanimsInRange = new List<SkeletonMecanim>(newSkeletonsInRange);
 
             playerLogger?.Log($"PlayerRadar: Enabled {lightAreasInRange.Count} light areas.");
+        }
+
+        private void UpdatePlatformsAndLightsProcessing(GameObject platGO,
+            HashSet<GameObject> newLightAreasInRange,
+            HashSet<SkeletonMecanim> newSkeletonsInRange, HashSet<GameObject> newPlatformsInRange)
+        {
+            newPlatformsInRange.Add(platGO);
+            foreach (Transform descendant in platGO.GetComponentsInChildren<Transform>(true))
+            {
+                if (descendant.CompareTag("LightAreaPlatform"))
+                {
+                    newLightAreasInRange.Add(descendant.gameObject);
+                }
+
+                var skeleton = descendant.GetComponent<SkeletonMecanim>();
+                if (skeleton != null)
+                {
+                    newSkeletonsInRange.Add(skeleton);
+                }
+            }
         }
 
         public bool IsPlatformInRange(GameObject platform)
