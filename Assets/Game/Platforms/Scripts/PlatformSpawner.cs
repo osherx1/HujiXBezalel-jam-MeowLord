@@ -15,7 +15,6 @@ public class PlatformSpawner : MonoBehaviour
 
     [Header("Spawn every N seconds")]
     public float spawnInterval = 5f;
-
     private float timer = 0f;
 
     void Update()

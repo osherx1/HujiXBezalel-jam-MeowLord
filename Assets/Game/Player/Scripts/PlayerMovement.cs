@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Attributes;
@@ -43,12 +44,15 @@ namespace Game.Player.Scripts
 
         [Header("Animation")]
         [SerializeField] private Animator animator;
-        [SerializeField] private float moveDuration = 1.25f;
+        [SerializeField][Range(1F,40F)] private float moveSpeed; 
+        [SerializeField] private float fallDuration;
 
         private bool isMoving = false;
-        private Action onMoveComplete;
+        private Action onMoveCompleteEvent;
 
         private PlayerRadar _playerRadar;
+        private Dictionary<Transform, Action> _platformReturnDelegates = new();
+        private Coroutine moveCoroutine;
 
         void Awake()
         {
@@ -151,12 +155,27 @@ namespace Game.Player.Scripts
                 // Animate movement
                 DOTween.Kill(transform); // Kill any previous tweens on this transform
                 isMoving = true;
-                transform.DOMove(platform.position, moveDuration)
-                    .SetEase(Ease.Linear)
-                    .OnComplete(() => OnMoveComplete(platform));
+
+                float distance = Vector3.Distance(transform.position, platform.position);
+                float duration = distance / moveSpeed;
+                if (moveCoroutine != null) StopCoroutine(moveCoroutine);
+                moveCoroutine = StartCoroutine(MoveToPlatformCoroutine(platform));
                 playerLogger?.Log("Player Activated event PlayerMoved");
                 GameEvents.PlayerMoved();
             }
+        }
+
+        private IEnumerator MoveToPlatformCoroutine(Transform platform)
+        {
+            isMoving = true;
+            while (Vector3.Distance(transform.position, platform.position) > 0.01f)
+            {
+                // Move towards the current platform position
+                transform.position = Vector3.MoveTowards(transform.position, platform.position, moveSpeed * Time.deltaTime);
+                yield return null;
+            }
+            transform.position = platform.position;
+            OnMoveComplete(platform);
         }
 
         private void RotatePlayerTowards(Transform target)
@@ -179,8 +198,8 @@ namespace Game.Player.Scripts
             if (platform.GetComponentInChildren<MovingPlatform>() != null)
                 GameEvents.PlayerMovingPlatform(this);
             playerLogger?.Log("Player Activated event PlayerLanded");
-            onMoveComplete?.Invoke();
-            onMoveComplete = null;
+            onMoveCompleteEvent?.Invoke();
+            onMoveCompleteEvent = null;
         }
 
         private void PlayerFall()
@@ -216,7 +235,7 @@ namespace Game.Player.Scripts
 
         private void OnClick(InputAction.CallbackContext ctx)
         {
-            if (onMoveComplete != null) return;
+            if (onMoveCompleteEvent != null) return;
             Vector2 screenPos = Mouse.current.position.ReadValue();
             Vector3 worldPos = _mainCam.ScreenToWorldPoint(screenPos);
             var hit = Physics2D.Raycast(worldPos, Vector2.zero, 0f, clickableLayer);
@@ -264,7 +283,7 @@ namespace Game.Player.Scripts
 
                 // 3) schedule the segment creation, LineRenderer cleanup, and enemy destruction after movement
                 
-                onMoveComplete = () => {
+                onMoveCompleteEvent = () => {
                     DOVirtual.DelayedCall(loopDestructionDelay, () => {
                         for (int i = _segments.Count - 1; i >= idx; i--)
                         {
@@ -282,7 +301,7 @@ namespace Game.Player.Scripts
 
             // Case 3: Normal move to new platform
             
-            onMoveComplete = () => _segments[^1].ToT = _lastPlat;
+            onMoveCompleteEvent = () => _segments[^1].ToT = _lastPlat;
 
             RegisterToPlatform(newPlatScript); // Register before move
             MovePlayerToPlatform(newPlat);
@@ -332,8 +351,6 @@ namespace Game.Player.Scripts
             }
         }
         
-        private Dictionary<Transform, Action> _platformReturnDelegates = new();
-        [SerializeField] private float fallDuration;
 
 
         private void RegisterSensorPlatformEvent(Transform plat)
@@ -409,7 +426,7 @@ namespace Game.Player.Scripts
 
         private void CheckIfMouseOnPlatform()
         {
-            if (onMoveComplete != null) return;
+            if (onMoveCompleteEvent != null) return;
             Vector2 screenPos = Mouse.current.position.ReadValue();
             Vector3 worldPos = _mainCam.ScreenToWorldPoint(screenPos);
             var hit = Physics2D.Raycast(worldPos, Vector2.zero, 0f, clickableLayer);
