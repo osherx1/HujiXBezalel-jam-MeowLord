@@ -2047,6 +2047,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stopAtPoint: 0
   stopDelay: 3
+--- !u!1 &834619499
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 834619500}
+  m_Layer: 0
+  m_Name: Lines
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &834619500
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 834619499}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 274.64075, y: -25.305313, z: -4.1195383}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &850474980
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5963,6 +5994,14 @@ PrefabInstance:
       propertyPath: playerStats
       value: 
       objectReference: {fileID: 11400000, guid: 56361e77bcb824152aaef6336f8973e0, type: 2}
+    - target: {fileID: 6816017618577237725, guid: 34c5d761c725248db85251910d13bb11, type: 3}
+      propertyPath: trailRenderer
+      value: 
+      objectReference: {fileID: 6940554610047075093, guid: ab8a426df3b314bbfb3359da683f9d06, type: 3}
+    - target: {fileID: 6816017618577237725, guid: 34c5d761c725248db85251910d13bb11, type: 3}
+      propertyPath: segmentsFather
+      value: 
+      objectReference: {fileID: 834619500}
     - target: {fileID: 7324275424428632901, guid: 34c5d761c725248db85251910d13bb11, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -6847,3 +6886,4 @@ SceneRoots:
   - {fileID: 2528511203902797445}
   - {fileID: 7005467232398836925}
   - {fileID: 725430911}
+  - {fileID: 834619500}

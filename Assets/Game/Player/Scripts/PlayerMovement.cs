@@ -26,15 +26,12 @@ namespace Game.Player.Scripts
 
         [SerializeField] private LayerMask enemyLayer;
 
-        [Header("Trail Settings")] [SerializeField]
-        private Material lineMaterial;
-
+        [Header("Trail Settings")] 
+        [SerializeField] GameObject trailRenderer;
         [SerializeField] private float loopDestructionDelay = 0.2f;
-        [SerializeField] private float lineWidth = 0.1f;
-        [SerializeField] private string sortingLayerName;
-
         [SerializeField] [Range(1, 20)] private int maxSegments;
         [SerializeField, ReadOnly] private int leftSegments;
+        [SerializeField] private Transform segmentsFather;
         public int LeftSegments => leftSegments;
         public List<Transform> PlayerPlatforms => _visited;
 
@@ -304,8 +301,7 @@ namespace Game.Player.Scripts
 
         private void CreateNewSegment(Transform fromPlat, Transform toPlat)
         {
-            _segments.Add(SegmentCreator.CreateSegment(fromPlat.gameObject, toPlat.gameObject,
-                lineWidth, lineMaterial, sortingLayerName));
+            _segments.Add(SegmentCreator.CreateSegment(trailRenderer,segmentsFather,fromPlat.gameObject, toPlat.gameObject));
             leftSegments = maxSegments - _segments.Count;
             GameEvents.NumberOfSegmentsChanged(leftSegments);
         }
