@@ -24,6 +24,7 @@ namespace Game.Player.Scripts
         [SerializeField] private PlayerStats playerStats;
         [Header("Click Settings")] [SerializeField]
         private LayerMask clickableLayer;
+        [SerializeField] private float playerLandedTimer;
 
         [SerializeField] private LayerMask enemyLayer;
 
@@ -66,6 +67,7 @@ namespace Game.Player.Scripts
             var (nearest, sensor) = FindNearestPlatformer();
 
             // Register and snap onto it if found
+            onMoveCompleteEvent = GameEvents.PlayerLanded;
             RegisterToPlatform(sensor);
             MovePlayerToPlatform(nearest);
             _mainCam = Camera.main;
@@ -193,8 +195,6 @@ namespace Game.Player.Scripts
         {
             animator.SetTrigger(Land);
             isMoving = false;
-            GameEvents.PlayerLanded();
-            playerLogger?.Log("Player Activated event PlayerLanded");
             onMoveCompleteEvent?.Invoke();
             onMoveCompleteEvent = null;
         }
@@ -288,6 +288,8 @@ namespace Game.Player.Scripts
                         }
                         DestroyEnemiesInLoop(loopPlatforms);
                     });
+                    DOVirtual.DelayedCall(playerLandedTimer, () =>
+                        GameEvents.PlayerLanded());
                 };
 
                 RegisterToPlatform(newPlatScript); // Register before move
@@ -298,7 +300,11 @@ namespace Game.Player.Scripts
 
             // Case 3: Normal move to new platform
             
-            onMoveCompleteEvent = () => _segments[^1].ToT = _lastPlat;
+            onMoveCompleteEvent = () =>
+            {
+                GameEvents.PlayerLanded();
+                _segments[^1].ToT = _lastPlat;
+            };
 
             RegisterToPlatform(newPlatScript); // Register before move
             MovePlayerToPlatform(newPlat);
