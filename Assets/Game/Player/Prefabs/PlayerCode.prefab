@@ -47,20 +47,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerLogger: {fileID: 592636455647064314}
+  playerStats: {fileID: 0}
   clickableLayer:
     serializedVersion: 2
     m_Bits: 64
+  playerLandedTimer: 0
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
-  lineMaterial: {fileID: 0}
+  trailRenderer: {fileID: 0}
   loopDestructionDelay: 0.2
-  lineWidth: 0.1
-  sortingLayerName: Trail
   maxSegments: 6
   leftSegments: 0
+  segmentsFather: {fileID: 0}
   animator: {fileID: 5088570227441705168}
-  moveDuration: 1
+  moveSpeed: 1
   fallDuration: 0.75
 --- !u!114 &592636455647064314
 MonoBehaviour:
