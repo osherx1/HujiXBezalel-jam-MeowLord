@@ -6,13 +6,13 @@ namespace Game.Core.Score
     {
         private int _score;
         public int Score => _score;
-        public GameplayCombinator Combinator { get; }
+        public GameplayScoreCombinator ScoreCombinator { get; }
 
         public GameplayScore()
         {
             _score = 0;
             GameEvents.OnGameStarted += ResetScore;
-            Combinator = new GameplayCombinator(this);
+            ScoreCombinator = new GameplayScoreCombinator(this);
         }
 
         public void ResetScore()

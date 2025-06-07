@@ -32,7 +32,6 @@ namespace Game.Player.Scripts
         [SerializeField] [Range(1, 20)] private int maxSegments;
         [SerializeField, ReadOnly] private int leftSegments;
         [SerializeField] private Transform segmentsFather;
-        public int LeftSegments => leftSegments;
         public List<Transform> PlayerPlatforms => _visited;
 
         private List<SegmentCreator.TrailSegment> _segments = new List<SegmentCreator.TrailSegment>();
@@ -79,6 +78,7 @@ namespace Game.Player.Scripts
         private void HandlePlayerFall()
         {
             animator.SetTrigger(Fall);
+            GameEvents.PlayerFallPointsUpdate(transform.position);
             DOVirtual.DelayedCall(fallDuration, () => {
             // 1. Remove all segment lines
             for (int i = _segments.Count - 1; i >= 0; i--)
@@ -107,7 +107,6 @@ namespace Game.Player.Scripts
             var (nearest, sensor) = FindNearestPlatformer();
             RegisterToPlatform(sensor);
             MovePlayerToPlatform(nearest);
-
             // Optionally log or trigger events
                 playerLogger?.Log("Player fell: reset trail and snapped to nearest platform.");
             });
@@ -405,10 +404,10 @@ namespace Game.Player.Scripts
 
         private void Update()
         {
-            CheckIfClickOnPlatform();
+            CheckIfMouseOnPlatform();
         }
 
-        private void CheckIfClickOnPlatform()
+        private void CheckIfMouseOnPlatform()
         {
             if (onMoveComplete != null) return;
             Vector2 screenPos = Mouse.current.position.ReadValue();

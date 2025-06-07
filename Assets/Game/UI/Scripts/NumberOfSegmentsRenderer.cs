@@ -6,6 +6,7 @@ namespace Game.UI.Scripts
 {
     public class NumberOfSegmentsRenderer : MonoBehaviour
     {
+        private static readonly int Counter = Animator.StringToHash("Counter");
         [SerializeField] private TextMeshProUGUI segmentsText;
         [SerializeField] private Animator segmentsAnimator;
 
@@ -28,7 +29,7 @@ namespace Game.UI.Scripts
         }
         private void UpdateSegmentsAnimator(int value)
         {
-            segmentsAnimator.SetInteger("Counter", value);
+            segmentsAnimator.SetInteger(Counter, value);
         }
     }
 } 

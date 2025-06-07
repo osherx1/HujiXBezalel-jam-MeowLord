@@ -37,7 +37,7 @@ namespace Game.Core.Camera.Scripts
         [SerializeField] private BoxCollider2D backgroundCollider2D;
         // Assign these in the Inspector for full control
         [SerializeField] private Vector2[] colliderSizes; 
-        [SerializeField] private Vector2[] colliderSizeOffsets; // size 6 for 0-5
+        [SerializeField] private Vector2[] colliderSizeOffsets; 
         [SerializeField] private CinemachineConfiner2D cinemachineConfiner;
 
         
@@ -126,9 +126,7 @@ namespace Game.Core.Camera.Scripts
                 _didEdgePan = false;
                 edgePanning = false;
             }
-
-            // Clamp the camera target to background bounds (optional, for safety)
-            // transform.position = EladsHelperFunctions.ClampPositionToBounds(backgroundRenderer.bounds, transform.position);
+            
         }
 
         

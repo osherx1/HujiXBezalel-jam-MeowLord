@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Game.Core.Managers
@@ -9,7 +10,7 @@ namespace Game.Core.Managers
         public static event Action OnPlayerMoved;
         public static event Action OnGameFinished;
 
-        public static event Action OnMouseCatch;
+        public static event Action<Vector3> OnMouseCatch;
         
         public static event Action<bool> OnAfraidChanged;
 
@@ -58,9 +59,9 @@ namespace Game.Core.Managers
             OnGameFinished?.Invoke();
         }
         
-        public static void MouseCatch()
+        public static void MouseCatch(Vector3 mousePosition)
         {
-            OnMouseCatch?.Invoke();
+            OnMouseCatch?.Invoke(mousePosition);
         }
 
 
@@ -79,6 +80,13 @@ namespace Game.Core.Managers
         public static void NumberOfSegmentsChanged(int value)
         {
             OnNumberOfSegmentsChanged?.Invoke(value);
+        }
+
+        public static event Action<Vector3> OnPlayerFallPointsUpdate;
+
+        public static void PlayerFallPointsUpdate(Vector3 playerPosition)
+        {
+            OnPlayerFallPointsUpdate?.Invoke(playerPosition);
         }
     }
 }
