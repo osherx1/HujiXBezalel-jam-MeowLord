@@ -9,10 +9,10 @@ namespace Game.Enemies
 
         [SerializeField] private GameObject ratPrefab;
         [SerializeField] private int poolSize = 20;
-        
-        [SerializeField] private int maxPoolSize = 5;
+        [SerializeField] private int maxActiveRats = 5;
 
         private readonly Queue<GameObject> _ratPool = new Queue<GameObject>();
+        private int _activeRatCount;
 
         private void Awake()
         {
@@ -32,28 +32,25 @@ namespace Game.Enemies
 
         public GameObject GetRat()
         {
-            if (_ratPool.Count >= maxPoolSize)
+            if (_activeRatCount >= maxActiveRats)
             {
                 return null;
             }
-            
-            if (_ratPool.Count > 0)
-            {
-                GameObject rat = _ratPool.Dequeue();
-                rat.SetActive(true);
-                return rat;
-            }
 
-            // Optional: expand pool if needed
-            GameObject newRat = Instantiate(ratPrefab);
-            newRat.SetActive(true);
-            return newRat;
+            var rat = _ratPool.Count > 0 ? _ratPool.Dequeue() : Instantiate(ratPrefab);
+
+            rat.SetActive(true);
+            _activeRatCount++;
+            return rat;
         }
 
         public void ReturnRat(GameObject rat)
         {
             rat.SetActive(false);
             _ratPool.Enqueue(rat);
+            _activeRatCount = Mathf.Max(0, _activeRatCount - 1); // protect against double-return
         }
+
+        public int GetActiveRatCount() => _activeRatCount;
     }
 }
