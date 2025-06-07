@@ -9,6 +9,8 @@ namespace Game.Enemies
 
         [SerializeField] private GameObject ratPrefab;
         [SerializeField] private int poolSize = 20;
+        
+        [SerializeField] private int maxPoolSize = 5;
 
         private readonly Queue<GameObject> _ratPool = new Queue<GameObject>();
 
@@ -30,6 +32,11 @@ namespace Game.Enemies
 
         public GameObject GetRat()
         {
+            if (_ratPool.Count >= maxPoolSize)
+            {
+                return null;
+            }
+            
             if (_ratPool.Count > 0)
             {
                 GameObject rat = _ratPool.Dequeue();
