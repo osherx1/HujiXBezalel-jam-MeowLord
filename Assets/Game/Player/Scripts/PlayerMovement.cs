@@ -92,40 +92,41 @@ namespace Game.Player.Scripts
 
         private void HandlePlayerFall()
         {
+            if (onMoveCompleteEvent != null) return;
             _fall = true;
             animator.SetTrigger(Fall);
             GameEvents.PlayerFallPointsUpdate(transform.position);
+            for (int i = _segments.Count - 1; i >= 0; i--)
+            {
+                RemoveSegment(i);
+            }
+            
+            foreach (var plat in _visited)
+            {
+                UnregisterMovingPlatformEvent(plat);
+            }
+            
+            _platformReturnDelegates.Clear();
+
+            // 3. Unregister from OnPlatformDown of the last platform
+            if (_lastPlatScript != null)
+            {
+                _lastPlatScript.OnPlatformDown -= PlayerFall;
+                _lastPlatScript = null;
+            }
+
+            // 4. Clear the platforms list
+            _visited.Clear();
+            
             DOVirtual.DelayedCall(fallDuration, () =>
             {
-                // 1. Remove all segment lines
-                for (int i = _segments.Count - 1; i >= 0; i--)
+                onMoveCompleteEvent = () =>
                 {
-                    RemoveSegment(i);
-                }
-
-                // 2. Unregister from all MovingPlatform return events
-                foreach (var plat in _visited)
-                {
-                    UnregisterMovingPlatformEvent(plat);
-                }
-
-                _platformReturnDelegates.Clear();
-
-                // 3. Unregister from OnPlatformDown of the last platform
-                if (_lastPlatScript != null)
-                {
-                    _lastPlatScript.OnPlatformDown -= PlayerFall;
-                    _lastPlatScript = null;
-                }
-
-                // 4. Clear the platforms list
-                _visited.Clear();
-
-                // 5. Find nearest platform and restart trail
+                    GameEvents.PlayerLanded();
+                };
                 var (nearest, sensor) = FindNearestPlatformer();
                 RegisterToPlatform(sensor);
                 MovePlayerToPlatform(nearest);
-                // Optionally log or trigger events
                 playerLogger?.Log("Player fell: reset trail and snapped to nearest platform.");
                 _fall = false;
             });
@@ -240,7 +241,7 @@ namespace Game.Player.Scripts
 
         private void OnClick(InputAction.CallbackContext ctx)
         {
-            if (onMoveCompleteEvent != null) return;
+            if (onMoveCompleteEvent != null || _fall) return;
             Vector2 screenPos = Mouse.current.position.ReadValue();
             Vector3 worldPos = _mainCam.ScreenToWorldPoint(screenPos);
             var hit = Physics2D.Raycast(worldPos, Vector2.zero, 0f, clickableLayer);
