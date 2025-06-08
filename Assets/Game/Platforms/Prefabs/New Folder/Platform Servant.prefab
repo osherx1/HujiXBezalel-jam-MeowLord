@@ -104,7 +104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
-  _isMoving: 1
+  _isMoving: 0
   animator: {fileID: 8049382775920395355}
   spriteRoot: {fileID: 7917731241732862186}
   platformType: 2
@@ -269,6 +269,7 @@ MonoBehaviour:
   requiredCount: 4
   mouseTag: Rat
   targetLayerName: Enemy
+  timeUntilPlatformDown: 3.5
 --- !u!60 &8019716929123911415
 PolygonCollider2D:
   m_ObjectHideFlags: 0
