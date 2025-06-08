@@ -17,6 +17,8 @@ public class MouseSensor : MonoBehaviour
     
     public event Action OnPlatformDown;
     
+    public event Action<bool> OnAfraidChanged;
+    
     private void Awake()
     {
         targetLayer = LayerMask.NameToLayer(targetLayerName);
@@ -61,8 +63,9 @@ public class MouseSensor : MonoBehaviour
         {
             IsMouseInRange = newValue;
             Debug.Log("MouseSensor: IsMouseInRange changed Active");
-            Game.Core.Managers.GameEvents.AfraidChanged(IsMouseInRange);
+            OnAfraidChanged?.Invoke(IsMouseInRange);
             DOVirtual.DelayedCall(timeUntilPlatformDown, () => OnPlatformDown?.Invoke());
         }
     }
+
 }

@@ -85,21 +85,22 @@ namespace Game.Platforms.Scripts
                 return;
             }
 
-            GameObject chosenRoute = null;
+            // Build a list of all available (not active) routes for this platform type
+            List<GameObject> candidateRoutes = new List<GameObject>();
             foreach (var route in allowedTypesPerRoute.Keys)
             {
                 if (allowedTypesPerRoute[route].Contains(type) && !activeRoutes[route])
-                {
-                    chosenRoute = route;
-                    break;
-                }
+                    candidateRoutes.Add(route);
             }
 
-            if (chosenRoute == null)
+            if (candidateRoutes.Count == 0)
             {
                 Debug.Log("All routes for type " + type + " are currently active or no route allows this type.");
                 return; // No available route
             }
+
+            // Randomly pick one of the available candidate routes
+            GameObject chosenRoute = candidateRoutes[Random.Range(0, candidateRoutes.Count)];
 
             MovingPlatform platform;
             if (pools[type].Count > 0)
@@ -125,7 +126,10 @@ namespace Game.Platforms.Scripts
                 ReturnToPool(p, chosenRoute);
                 platform.PlatformReturn();
             });
-    }
+        }
+
+        
+        
 
         private void ReturnToPool(MovingPlatform platform, GameObject route)
         {

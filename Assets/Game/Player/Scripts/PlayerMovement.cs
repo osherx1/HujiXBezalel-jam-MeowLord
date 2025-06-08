@@ -461,6 +461,9 @@ namespace Game.Player.Scripts
             }
 
             animator.SetBool(IsHovering, isHovering);
+            GameEvents.PlatformHover(isHovering);
+            Debug.Log($"PlayerMovement: Hovering on platform: {isHovering}");
+
         }
     }
 }

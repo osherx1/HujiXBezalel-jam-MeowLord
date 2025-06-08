@@ -21,8 +21,14 @@ namespace Game.Core.Managers
         public static event Action<int> OnNumberOfSegmentsChanged;
         
         public static event Action OnPlayerLanded;
-
         
+
+        public static event Action<bool> OnPlatformHover;
+        
+        public static void PlatformHover(bool isHovering)
+        {
+            OnPlatformHover?.Invoke(isHovering);
+        }
 
         public static void PlayerLanded()
         {

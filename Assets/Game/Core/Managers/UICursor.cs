@@ -1,3 +1,4 @@
+using Game.Core.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -40,15 +41,43 @@ namespace UI
             if (cursorRect == null) return;
             cursorRect.position = Input.mousePosition;
 
-            SetState(GetCursorState2D());
+            // סומכים רק על הערך שמגיע מהאירוע:
+            if (isHovering)
+            {
+                if (Input.GetMouseButton(0))
+                    SetState(CursorState.Active);
+                else
+                    SetState(CursorState.Hover);
+            }
+            else
+            {
+                SetState(CursorState.Normal);
+            }
         }
+
+        
+
+        private bool isHovering = false;
+
+        private void OnEnable()
+        {
+            GameEvents.OnPlatformHover += HandlePlatformHover;
+        }
+        private void OnDisable()
+        {
+            GameEvents.OnPlatformHover -= HandlePlatformHover;
+        }
+        private void HandlePlatformHover(bool hovering)
+        {
+            isHovering = hovering;
+        }
+
 
         private CursorState GetCursorState2D()
         {
-            // 1. If pointer over UI — check if Button is pressed
+            // בדיקה אם העכבר מעל UI
             if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
             {
-                // Check what UI object is under mouse
                 if (Input.GetMouseButton(0))
                 {
                     var pointerData = new PointerEventData(EventSystem.current)
@@ -66,10 +95,10 @@ namespace UI
                         }
                     }
                 }
-                return CursorState.Normal; // Mouse over UI (not Button, or not pressed)
+                return CursorState.Normal;
             }
 
-            // 2. Otherwise, check world
+            // בדיקה בעולם
             Vector3 mouseScreen = Input.mousePosition;
             Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(mouseScreen);
 
@@ -77,16 +106,18 @@ namespace UI
 
             if (hit.collider != null)
             {
-                if (Input.GetMouseButton(0))
-                    return CursorState.Active; // Mouse pressed on platform
-                else
-                    return CursorState.Hover;  // Hovering over platform
+                var platform = hit.collider.GetComponent<Platform>();
+                if (platform != null ) //&& platform.IsReallyActive())
+                {
+                    if (Input.GetMouseButton(0))
+                        return CursorState.Active;
+                    else
+                        return CursorState.Hover;
+                }
             }
-            else
-            {
-                return CursorState.Normal;
-            }
+            return CursorState.Normal;
         }
+
 
         public void SetState(CursorState state)
         {
