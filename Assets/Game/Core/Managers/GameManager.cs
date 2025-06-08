@@ -43,24 +43,18 @@ namespace Game.Core.Managers
             CurrentNickname = _randomNames[idx];
             _gameplayScore = new GameplayScore();
             GameEvents.OnGameFinished += OnGameFinished;
-            GameEvents.OnGameStarted += StartGameFinishedTimer;
             GameEvents.GameStarted();
         }
 
         private void OnGameFinished()
         {
             _highScoreManager.TryAddHighScore(_gameplayScore.Score, CurrentNickname);
+            StartCoroutine(GameFinishedTimerCoroutine());
         }
 
-        private void StartGameFinishedTimer()
-        {
-            // StartCoroutine(GameFinishedTimerCoroutine());
-        }
-
+        
         private IEnumerator GameFinishedTimerCoroutine()
         {
-            yield return new WaitForSeconds(60f);
-            GameEvents.GameFinished();
             SceneManager.LoadScene("end");
             yield return null;
             GameEvents.EndSceneStarted();

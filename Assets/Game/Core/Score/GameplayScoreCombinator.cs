@@ -110,7 +110,7 @@ namespace Game.Core.Score
             float multiplier = 1f;
             for (int i = 2; i <= mouseCount; i++)
             {
-                multiplier *= 1.1f; // Each additional mouse adds 10% on top of the last
+                multiplier *= 1.5f; // Each additional mouse adds 50% on top of the last
             }
             float pointsPerMouse = basePoints * multiplier;
             int intPointsPerMouse = Mathf.RoundToInt(pointsPerMouse);

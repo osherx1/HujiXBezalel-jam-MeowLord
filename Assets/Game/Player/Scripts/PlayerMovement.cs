@@ -54,6 +54,7 @@ namespace Game.Player.Scripts
         private PlayerRadar _playerRadar;
         private Dictionary<Transform, Action> _platformReturnDelegates = new();
         private Coroutine moveCoroutine;
+        private bool _fall = false;
 
         void Awake()
         {
@@ -83,6 +84,7 @@ namespace Game.Player.Scripts
 
         private void HandlePlayerFall()
         {
+            _fall = true;
             animator.SetTrigger(Fall);
             GameEvents.PlayerFallPointsUpdate(transform.position);
             DOVirtual.DelayedCall(fallDuration, () => {
@@ -116,6 +118,7 @@ namespace Game.Player.Scripts
             // Optionally log or trigger events
                 playerLogger?.Log("Player fell: reset trail and snapped to nearest platform.");
             });
+            _fall = false;
         }
 
 
@@ -249,7 +252,11 @@ namespace Game.Player.Scripts
             if (_visited.Count > 1 && _visited[_visited.Count - 2] == newPlat)
             {
                 // Remove last segment and last platform
-                onMoveCompleteEvent = () => RemoveSegment(_segments.Count - 1);
+                onMoveCompleteEvent = () =>
+                {
+                    RemoveSegment(_segments.Count - 1);
+                    GameEvents.PlayerLanded();
+                };
                 _segments[_segments.Count - 1].ToT = transform;
                 _visited.RemoveAt(_visited.Count - 1);
                 RegisterToPlatform(newPlatScript); // Register before move
@@ -381,7 +388,7 @@ namespace Game.Player.Scripts
         void LateUpdate()
         {
             UpdateSegmentLinePositions();
-            if (_lastPlat != null && !isMoving)
+            if (_lastPlat != null && !isMoving && !_fall)
                 transform.position = _lastPlat.position;
         }
 
