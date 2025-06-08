@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9210976875638248917}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0, y: -0.7654402, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -74,6 +74,12 @@ MonoBehaviour:
   - {x: 0.02719688, y: -0.6425705}
   - {x: 0.02719, y: -0.6425}
   cinemachineConfiner: {fileID: 0}
+  uiExclusionZone:
+    serializedVersion: 2
+    x: 280
+    y: 10
+    width: 200
+    height: 90
   cameraStuckThreshold: 0.3
 --- !u!114 &7166846718488591654
 MonoBehaviour:

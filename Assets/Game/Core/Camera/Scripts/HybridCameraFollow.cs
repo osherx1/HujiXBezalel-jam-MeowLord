@@ -40,6 +40,8 @@ namespace Game.Core.Camera.Scripts
         [SerializeField] private Vector2[] colliderSizeOffsets; 
         [SerializeField] private CinemachineConfiner2D cinemachineConfiner;
 
+        [Header("UI Exclusion Zone")]
+        [SerializeField] private Rect uiExclusionZone = new Rect(20, 20, 180, 60); // Default values, adjust in Inspector
         
         private Tween cameraMoveTween;  
         private bool edgePanning = false;
@@ -105,9 +107,16 @@ namespace Game.Core.Camera.Scripts
 
         void Update()
         {
-            
             Vector3 mousePos = UnityEngine.Input.mousePosition;
             Rect dontMoveRect = EladsHelperFunctions.GetCenteredRect(dontMoveZoneWidthPercent, dontMoveZoneHeightPercent);
+
+            // Check if mouse is inside the UI exclusion zone (screen coordinates)
+            if (uiExclusionZone.Contains(new Vector2(mousePos.x, Screen.height - mousePos.y))) // Y flip for screen coords
+            {
+                _didEdgePan = false;
+                edgePanning = false;
+                return;
+            }
 
             // Calculate camera's current position before moving the target
             _camPosBefore = UnityEngine.Camera.main.transform.position;
@@ -194,6 +203,17 @@ namespace Game.Core.Camera.Scripts
 
             // Draw dontMove zone
             DrawScreenRectGizmo(EladsHelperFunctions.GetCenteredRect(dontMoveZoneWidthPercent, dontMoveZoneHeightPercent), cam, Color.yellow);
+
+            // Draw UI exclusion zone (in screen space, red)
+            Gizmos.color = Color.red;
+            Vector3 p1 = cam.ScreenToWorldPoint(new Vector3(uiExclusionZone.xMin, Screen.height - uiExclusionZone.yMin, cam.nearClipPlane));
+            Vector3 p2 = cam.ScreenToWorldPoint(new Vector3(uiExclusionZone.xMax, Screen.height - uiExclusionZone.yMin, cam.nearClipPlane));
+            Vector3 p3 = cam.ScreenToWorldPoint(new Vector3(uiExclusionZone.xMax, Screen.height - uiExclusionZone.yMax, cam.nearClipPlane));
+            Vector3 p4 = cam.ScreenToWorldPoint(new Vector3(uiExclusionZone.xMin, Screen.height - uiExclusionZone.yMax, cam.nearClipPlane));
+            Gizmos.DrawLine(p1, p2);
+            Gizmos.DrawLine(p2, p3);
+            Gizmos.DrawLine(p3, p4);
+            Gizmos.DrawLine(p4, p1);
         }
 
         private void DrawScreenRectGizmo(Rect rect, UnityEngine.Camera cam, Color color)
