@@ -17,7 +17,7 @@ namespace Game.Core.Score
     }
 
     // Call this when player finishes and wants to submit score
-    public void TryAddHighScore(int score, string nickname)
+    public void TryAddHighScore(int score, string nickname, float timeFinished)
     {
         if (string.IsNullOrEmpty(nickname))
             nickname = "Player";
@@ -40,7 +40,7 @@ namespace Game.Core.Score
         else
         {
             // No existing entry, add new
-            HighScoreEntry entry = new HighScoreEntry(score, nickname);
+            HighScoreEntry entry = new HighScoreEntry(score, nickname, timeFinished);
             _highScoreList.Scores.Add(entry);
         }
 
@@ -75,13 +75,13 @@ namespace Game.Core.Score
     }
 
     // For displaying the high scores (returns list for UI)
-    public List<(int Rank, int Score, string Nickname)> GetHighScoreTable()
+    public List<(int Rank, int Score, string Nickname, float TimeFinished)> GetHighScoreTable()
     {
-        var table = new List<(int, int, string)>();
+        var table = new List<(int, int, string, float)>();
         for (int i = 0; i < _highScoreList.Scores.Count; i++)
         {
             var entry = _highScoreList.Scores[i];
-            table.Add((i + 1, entry.Score, entry.Nickname));
+            table.Add((i + 1, entry.Score, entry.Nickname, entry.TimeFinished));
         }
         return table;
     }
@@ -98,11 +98,13 @@ namespace Game.Core.Score
     {
         public int Score;
         public string Nickname;
+        public float TimeFinished;
 
-        public HighScoreEntry(int score, string nickname)
+        public HighScoreEntry(int score, string nickname, float timeFinished)
         {
             Score = score;
             Nickname = nickname;
+            TimeFinished = timeFinished;
         }
     }
 }

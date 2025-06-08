@@ -11,6 +11,7 @@ namespace Game.Core.Managers
     {
         private  GameplayScore _gameplayScore;
         private  HighScoreManager _highScoreManager;
+        private float _timeStarted;
 
         public GameplayScore GameplayScore => _gameplayScore;
         public HighScoreManager HighScoreManager => _highScoreManager;
@@ -42,13 +43,15 @@ namespace Game.Core.Managers
             int idx = Random.Range(0, _randomNames.Length);
             CurrentNickname = _randomNames[idx];
             _gameplayScore = new GameplayScore();
+            _timeStarted = Time.time;
             GameEvents.OnGameFinished += OnGameFinished;
             GameEvents.GameStarted();
         }
 
         private void OnGameFinished()
         {
-            _highScoreManager.TryAddHighScore(_gameplayScore.Score, CurrentNickname);
+            float finishedTime = Time.time - _timeStarted;
+            _highScoreManager.TryAddHighScore(_gameplayScore.Score, CurrentNickname, finishedTime);
             StartCoroutine(GameFinishedTimerCoroutine());
         }
 
