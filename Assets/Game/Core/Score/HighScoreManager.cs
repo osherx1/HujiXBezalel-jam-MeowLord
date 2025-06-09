@@ -37,8 +37,12 @@ namespace Game.Core.Score
                 {
                     if (score > existing.Score)
                         existing.Score = score;
-                    else
-                        return; // No update needed
+                    else if (pendingFetch != null)
+                    {
+                        var fetch = pendingFetch;
+                        pendingFetch = null;
+                        fetch();
+                    }; // No update needed
                 }
                 else
                 {
