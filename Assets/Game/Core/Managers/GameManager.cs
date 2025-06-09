@@ -49,6 +49,7 @@ namespace Game.Core.Managers
             _timeStarted = Time.time;
             GameEvents.OnGameFinished += OnGameFinished;
             GameEvents.GameStarted();
+            UnityMainThreadDispatcher.Instance.StartObject();
         }
 
         private void OnGameFinished()
