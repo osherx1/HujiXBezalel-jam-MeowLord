@@ -31,6 +31,13 @@ namespace Game.Platforms.Scripts
         private bool _runAway = false;
         private float _savedSpeed = 0f;
         
+        
+        private static readonly Vector2 RIGHT_REF = new Vector2(1, -0.5f).normalized;
+        private static readonly Vector2 LEFT_REF  = new Vector2(-1, 0.5f).normalized;
+        private static readonly Vector2 UP_REF    = new Vector2(1, 0.5f).normalized;
+        private static readonly Vector2 DOWN_REF  = new Vector2(-1, -0.5f).normalized;
+        
+        private enum IsoDirection4 { Right, Left, Up, Down }
 
         private System.Action<MovingPlatform> _onFinish; // Callback for pool return
 
@@ -214,25 +221,61 @@ namespace Game.Platforms.Scripts
             }
         }
 
-
-
-        
         private void UpdateSpriteDirection(Vector3 direction)
         {
-            if (direction.x == 0) return;
+            if (direction == Vector3.zero) return;
 
+            IsoDirection4 dir = GetClosestDirection(new Vector2(direction.x, direction.y));
             Transform flipTarget = spriteRoot != null ? spriteRoot : transform;
 
-            float facing = direction.x > 0 ? 1f : -1f;
-            Vector3 scale = flipTarget.localScale;
-            scale.x = Mathf.Abs(scale.x) * facing;
-            flipTarget.localScale = scale;
+            switch (dir)
+            {
+                case IsoDirection4.Right:
+                    flipTarget.localScale = new Vector3(Mathf.Abs(flipTarget.localScale.x), flipTarget.localScale.y, flipTarget.localScale.z);
+                    // animator.Play("WalkRight");
+                    break;
+                case IsoDirection4.Left:
+                    flipTarget.localScale = new Vector3(-Mathf.Abs(flipTarget.localScale.x), flipTarget.localScale.y, flipTarget.localScale.z);
+                    // animator.Play("WalkLeft");
+                    break;
+                case IsoDirection4.Up:
+                    // animator.Play("WalkUp");
+                    break;
+                case IsoDirection4.Down:
+                    // animator.Play("WalkDown");
+                    break;
+            }
         }
+
+
 
         public void PlatformReturn()
         {
             OnPlatformReturn?.Invoke();
         }
-        
+
+        private IsoDirection4 GetClosestDirection(Vector2 dir)
+        {
+            Vector2 right = IsometricDirectionHelper.RightDirection;
+            Vector2 left  = IsometricDirectionHelper.LeftDirection;
+            Vector2 up    = IsometricDirectionHelper.UpDirection;
+            Vector2 down  = IsometricDirectionHelper.DownDirection;
+
+            float dotRight = Vector2.Dot(dir, right);
+            float dotLeft  = Vector2.Dot(dir, left);
+            float dotUp    = Vector2.Dot(dir, up);
+            float dotDown  = Vector2.Dot(dir, down);
+
+            float maxDot = dotRight;
+            IsoDirection4 best = IsoDirection4.Right;
+
+            if (dotLeft > maxDot)  { maxDot = dotLeft;  best = IsoDirection4.Left; }
+            if (dotUp   > maxDot)  { maxDot = dotUp;    best = IsoDirection4.Up; }
+            if (dotDown > maxDot)  { maxDot = dotDown;  best = IsoDirection4.Down; }
+
+            return best;
+        }
+
+
     }
 }

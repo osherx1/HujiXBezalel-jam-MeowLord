@@ -34,6 +34,11 @@ namespace Game.Platforms.Scripts
 
         [Header("Available routes for each type")]
         public List<RouteGroup> routesSetup;
+        
+        [Header("Limit groups (can overlap and be of any size)")]
+        public List<LimitGroup> limitGroups = new();
+
+        private int[] groupActiveCounts;
 
         // Internal lookup for fast access
         private Dictionary<PlatformType, List<GameObject>> routesByType = new Dictionary<PlatformType, List<GameObject>>();
@@ -57,6 +62,8 @@ namespace Game.Platforms.Scripts
                 }
                 pools[data.type] = queue;
             }
+            
+            groupActiveCounts = new int[limitGroups.Count];
 
             // Build routes lookup and activeRoutes flags
             foreach (var group in routesSetup)
@@ -79,6 +86,16 @@ namespace Game.Platforms.Scripts
 
         public void SpawnPlatform(PlatformType type)
         {
+            
+            for (int i = 0; i < limitGroups.Count; i++)
+            {
+                if (limitGroups[i].types.Contains(type) && groupActiveCounts[i] >= limitGroups[i].maxActive)
+                {
+                    Debug.Log($"Spawn blocked: limit group {i} (types: {string.Join(",", limitGroups[i].types)}) reached {groupActiveCounts[i]}/{limitGroups[i].maxActive}");
+                    return;
+                }
+            }
+            
             if (!pools.ContainsKey(type))
             {
                 Debug.LogError("No pool for type: " + type);
@@ -120,6 +137,12 @@ namespace Game.Platforms.Scripts
             platform.gameObject.SetActive(true);
             platform.transform.position = spawnPoint.position;
 
+            for (int i = 0; i < limitGroups.Count; i++)
+            {
+                if (limitGroups[i].types.Contains(type))
+                    groupActiveCounts[i]++;
+            }
+            
             // Pass the chosen route and a callback that knows which route to release
             platform.Init(chosenRoute, platform.moveSpeed, (p) =>
             {
@@ -134,9 +157,21 @@ namespace Game.Platforms.Scripts
         private void ReturnToPool(MovingPlatform platform, GameObject route)
         {
             platform.transform.position = spawnPoint.position;
-            platform.gameObject.SetActive(false); 
+            platform.gameObject.SetActive(false);
             pools[platform.platformType].Enqueue(platform);
             activeRoutes[route] = false;
+            var collider = platform.GetComponent<Collider2D>();
+            if (collider != null)
+                collider.enabled = true;
+
+            // Decrement all group counters that include this type
+            for (int i = 0; i < limitGroups.Count; i++)
+            {
+                if (limitGroups[i].types.Contains(platform.platformType))
+                    groupActiveCounts[i]--;
+            }
         }
+        
+        
     }
 }
