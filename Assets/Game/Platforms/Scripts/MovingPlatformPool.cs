@@ -16,9 +16,10 @@ namespace Game.Platforms.Scripts
         [System.Serializable]
         public class RouteGroup
         {
-            public PlatformType type;
+            public List<PlatformType> allowedTypes; // List of allowed platform types for these routes
             public List<GameObject> routes;
         }
+
 
         [Header("All platform prefabs")]
         public List<PlatformPrefabData> platformPrefabs;
@@ -39,6 +40,7 @@ namespace Game.Platforms.Scripts
 
         // Track which routes are currently in use
         private Dictionary<GameObject, bool> activeRoutes = new Dictionary<GameObject, bool>();
+        private Dictionary<GameObject, List<PlatformType>> allowedTypesPerRoute = new Dictionary<GameObject, List<PlatformType>>();
 
         void Awake()
         {
@@ -59,9 +61,16 @@ namespace Game.Platforms.Scripts
             // Build routes lookup and activeRoutes flags
             foreach (var group in routesSetup)
             {
-                routesByType[group.type] = group.routes;
                 foreach (var route in group.routes)
                 {
+                    if (!allowedTypesPerRoute.ContainsKey(route))
+                        allowedTypesPerRoute[route] = new List<PlatformType>();
+
+                    foreach (var type in group.allowedTypes)
+                    {
+                        if (!allowedTypesPerRoute[route].Contains(type))
+                            allowedTypesPerRoute[route].Add(type);
+                    }
                     if (!activeRoutes.ContainsKey(route))
                         activeRoutes[route] = false;
                 }
@@ -76,28 +85,22 @@ namespace Game.Platforms.Scripts
                 return;
             }
 
-            // Only choose a route that is currently not in use
-            if (!routesByType.ContainsKey(type) || routesByType[type] == null || routesByType[type].Count == 0)
+            // Build a list of all available (not active) routes for this platform type
+            List<GameObject> candidateRoutes = new List<GameObject>();
+            foreach (var route in allowedTypesPerRoute.Keys)
             {
-                Debug.LogError("No routes set for type: " + type);
-                return;
+                if (allowedTypesPerRoute[route].Contains(type) && !activeRoutes[route])
+                    candidateRoutes.Add(route);
             }
 
-            GameObject chosenRoute = null;
-            foreach (var route in routesByType[type])
+            if (candidateRoutes.Count == 0)
             {
-                if (!activeRoutes[route])
-                {
-                    chosenRoute = route;
-                    break;
-                }
+                Debug.Log("All routes for type " + type + " are currently active or no route allows this type.");
+                return; // No available route
             }
 
-            if (chosenRoute == null)
-            {
-                Debug.Log("All routes for " + type + " are currently active. No spawn.");
-                return; // Don't spawn if all routes are busy
-            }
+            // Randomly pick one of the available candidate routes
+            GameObject chosenRoute = candidateRoutes[Random.Range(0, candidateRoutes.Count)];
 
             MovingPlatform platform;
             if (pools[type].Count > 0)
@@ -123,7 +126,10 @@ namespace Game.Platforms.Scripts
                 ReturnToPool(p, chosenRoute);
                 platform.PlatformReturn();
             });
-    }
+        }
+
+        
+        
 
         private void ReturnToPool(MovingPlatform platform, GameObject route)
         {

@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -16,6 +17,8 @@ public class MouseSensor : MonoBehaviour
     
     public event Action OnPlatformDown;
     
+    public event Action<bool> OnAfraidChanged;
+    
     private void Awake()
     {
         targetLayer = LayerMask.NameToLayer(targetLayerName);
@@ -28,6 +31,7 @@ public class MouseSensor : MonoBehaviour
     public bool IsMouseInRange { get; private set; }
 
     private int currentCount;
+    [SerializeField] private float timeUntilPlatformDown;
 
     // Called when another collider enters the trigger
     // Called when another collider enters the trigger
@@ -59,8 +63,9 @@ public class MouseSensor : MonoBehaviour
         {
             IsMouseInRange = newValue;
             Debug.Log("MouseSensor: IsMouseInRange changed Active");
-            Game.Core.Managers.GameEvents.AfraidChanged(IsMouseInRange);
-            OnPlatformDown?.Invoke();
+            OnAfraidChanged?.Invoke(IsMouseInRange);
+            DOVirtual.DelayedCall(timeUntilPlatformDown, () => OnPlatformDown?.Invoke());
         }
     }
+
 }

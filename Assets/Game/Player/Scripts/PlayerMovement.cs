@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Attributes;
@@ -15,22 +16,27 @@ namespace Game.Player.Scripts
 {
     public class PlayerMovement : MonoBehaviour
     {
+        private static readonly int Fall = Animator.StringToHash("Fall");
+        private static readonly int IsHovering = Animator.StringToHash("IsHovering");
+        private static readonly int Jump = Animator.StringToHash("Jump");
+        private static readonly int Land = Animator.StringToHash("Land");
         [SerializeField] private PlayerLogger playerLogger;
+        [SerializeField] private PlayerStats playerStats;
+
         [Header("Click Settings")] [SerializeField]
         private LayerMask clickableLayer;
+
+        [SerializeField] private float playerLandedTimer;
 
         [SerializeField] private LayerMask enemyLayer;
 
         [Header("Trail Settings")] [SerializeField]
-        private Material lineMaterial;
+        GameObject trailRenderer;
 
-        [SerializeField] private float delayForSegments = 0.2f;
-        [SerializeField] private float lineWidth = 0.1f;
-        [SerializeField] private string sortingLayerName;
-
+        [SerializeField] private float loopDestructionDelay = 0.2f;
         [SerializeField] [Range(1, 20)] private int maxSegments;
         [SerializeField, ReadOnly] private int leftSegments;
-        public int LeftSegments => leftSegments;
+        [SerializeField] private Transform segmentsFather;
         public List<Transform> PlayerPlatforms => _visited;
 
         private List<SegmentCreator.TrailSegment> _segments = new List<SegmentCreator.TrailSegment>();
@@ -40,10 +46,23 @@ namespace Game.Player.Scripts
         private InputAction _clickAction;
         private MouseSensor _lastPlatScript;
 
+        [Header("Animation")] [SerializeField] private Animator animator;
+        [SerializeField] [Range(1F, 40F)] private float moveSpeed;
+        [SerializeField] private float fallDuration;
+
+        private bool isMoving = false;
+        private Action onMoveCompleteEvent;
+
+        private PlayerRadar _playerRadar;
+        private Dictionary<Transform, Action> _platformReturnDelegates = new();
+        private Coroutine moveCoroutine;
+        private bool _fall = false;
+
         void Awake()
         {
             leftSegments = maxSegments;
             _clickAction = InputSystemSingleton.Instance.InputSystem.PlayerControls.Click;
+            _playerRadar = new PlayerRadar(transform, playerStats, playerLogger, this, PlayerPlatforms);
         }
 
         void Start()
@@ -51,32 +70,42 @@ namespace Game.Player.Scripts
             var (nearest, sensor) = FindNearestPlatformer();
 
             // Register and snap onto it if found
+            onMoveCompleteEvent = GameEvents.PlayerLanded;
             RegisterToPlatform(sensor);
             MovePlayerToPlatform(nearest);
             _mainCam = Camera.main;
-            
+            GameEvents.NumberOfSegmentsChanged(leftSegments);
             // Find the nearest platform and its sensor
         }
-    
+
         void OnEnable()
         {
             _clickAction.performed += OnClick;
             GameEvents.OnPlayerFall += HandlePlayerFall;
         }
 
+        void OnDisable()
+        {
+            _clickAction.performed -= OnClick;
+            GameEvents.OnPlayerFall -= HandlePlayerFall;
+        }
+
         private void HandlePlayerFall()
         {
-            // 1. Remove all segment lines
+            if (onMoveCompleteEvent != null) return;
+            _fall = true;
+            animator.SetTrigger(Fall);
+            GameEvents.PlayerFallPointsUpdate(transform.position);
             for (int i = _segments.Count - 1; i >= 0; i--)
             {
                 RemoveSegment(i);
             }
-
-            // 2. Unregister from all MovingPlatform return events
+            
             foreach (var plat in _visited)
             {
                 UnregisterMovingPlatformEvent(plat);
             }
+            
             _platformReturnDelegates.Clear();
 
             // 3. Unregister from OnPlatformDown of the last platform
@@ -88,22 +117,20 @@ namespace Game.Player.Scripts
 
             // 4. Clear the platforms list
             _visited.Clear();
-
-            // 5. Find nearest platform and restart trail
-            var (nearest, sensor) = FindNearestPlatformer();
-            RegisterToPlatform(sensor);
-            MovePlayerToPlatform(nearest);
-
-            // Optionally log or trigger events
-            playerLogger?.Log("Player fell: reset trail and snapped to nearest platform.");
+            
+            DOVirtual.DelayedCall(fallDuration, () =>
+            {
+                onMoveCompleteEvent = () =>
+                {
+                    GameEvents.PlayerLanded();
+                };
+                var (nearest, sensor) = FindNearestPlatformer();
+                RegisterToPlatform(sensor);
+                MovePlayerToPlatform(nearest);
+                playerLogger?.Log("Player fell: reset trail and snapped to nearest platform.");
+                _fall = false;
+            });
         }
-
-
-        void OnDisable()
-        {
-            _clickAction.performed -= OnClick;
-            GameEvents.OnPlayerFall -= HandlePlayerFall;
-        } 
 
         private void RegisterToPlatform(MouseSensor sensor)
         {
@@ -117,7 +144,7 @@ namespace Game.Player.Scripts
                 _lastPlatScript.OnPlatformDown += PlayerFall;
         }
 
-        private void MovePlayerToPlatform(Transform platform)
+        private void MovePlayerToPlatform(Transform platform, bool withDelay = true)
         {
             if (platform != null)
             {
@@ -126,16 +153,59 @@ namespace Game.Player.Scripts
                 {
                     _visited.Add(platform);
                 }
-                else if ( _visited[_visited.Count - 1] != platform)
+                else if (_visited[_visited.Count - 1] != platform)
                 {
                     _visited.Add(platform);
-                    RegisterMovingPlatformEvent(platform);
+                    RegisterSensorPlatformEvent(platform);
                     playerLogger.Log($"Player {_visited.Count} moving to {platform.name}");
                 }
-                transform.position = platform.position;
+
+                // Rotate player towards the platform
+                RotatePlayerTowards(platform);
+                // Animate movement
+                DOTween.Kill(transform); // Kill any previous tweens on this transform
+                isMoving = true;
+
+                if (moveCoroutine != null) StopCoroutine(moveCoroutine);
+                moveCoroutine = StartCoroutine(MoveToPlatformCoroutine(platform));
                 playerLogger?.Log("Player Activated event PlayerMoved");
                 GameEvents.PlayerMoved();
             }
+        }
+
+        private IEnumerator MoveToPlatformCoroutine(Transform platform)
+        {
+            isMoving = true;
+            while (Vector3.Distance(transform.position, platform.position) > 0.01f)
+            {
+                // Move towards the current platform position
+                transform.position =
+                    Vector3.MoveTowards(transform.position, platform.position, moveSpeed * Time.deltaTime);
+                yield return null;
+            }
+
+            transform.position = platform.position;
+            OnMoveComplete(platform);
+        }
+
+        private void RotatePlayerTowards(Transform target)
+        {
+            if (target == null) return;
+            float direction = target.position.x - transform.position.x;
+            if (Mathf.Abs(direction) > 0.01f)
+            {
+                Vector3 scale = transform.localScale;
+                scale.x = Mathf.Sign(direction) * Mathf.Abs(scale.x);
+                transform.localScale = scale;
+            }
+        }
+
+        private void OnMoveComplete(Transform platform)
+        {
+            animator.SetTrigger(Land);
+            isMoving = false;
+            onMoveCompleteEvent?.Invoke();
+            onMoveCompleteEvent = null;
         }
 
         private void PlayerFall()
@@ -171,13 +241,15 @@ namespace Game.Player.Scripts
 
         private void OnClick(InputAction.CallbackContext ctx)
         {
+            if (onMoveCompleteEvent != null || _fall) return;
             Vector2 screenPos = Mouse.current.position.ReadValue();
             Vector3 worldPos = _mainCam.ScreenToWorldPoint(screenPos);
             var hit = Physics2D.Raycast(worldPos, Vector2.zero, 0f, clickableLayer);
             if (hit.collider == null) return;
-
+            if (!_playerRadar.IsPlatformInRange(hit.collider.gameObject)) return;
             var newPlat = hit.collider.transform;
             var newPlatScript = newPlat.GetComponentInChildren<MouseSensor>();
+            var prevPlat = _lastPlat;
 
             if (newPlat == _lastPlat)
                 return; // Ignore clicking on the same platform
@@ -186,11 +258,16 @@ namespace Game.Player.Scripts
             if (_visited.Count > 1 && _visited[_visited.Count - 2] == newPlat)
             {
                 // Remove last segment and last platform
-                RemoveSegment(_segments.Count - 1);
+                onMoveCompleteEvent = () =>
+                {
+                    RemoveSegment(_segments.Count - 1);
+                    GameEvents.PlayerLanded();
+                };
+                _segments[_segments.Count - 1].ToT = transform;
                 _visited.RemoveAt(_visited.Count - 1);
-
                 RegisterToPlatform(newPlatScript); // Register before move
                 MovePlayerToPlatform(newPlat);
+                animator.SetTrigger(Jump);
                 return;
             }
 
@@ -199,11 +276,10 @@ namespace Game.Player.Scripts
                 return;
             }
 
+            CreateNewSegment(prevPlat, transform);
             // Case 2: Closing a loop (not immediately previous)
             if (_visited.Contains(newPlat))
             {
-                CreateNewSegment(newPlat);
-
                 int idx = _visited.IndexOf(newPlat);
 
                 // 1) snapshot exactly the loop of platforms
@@ -214,30 +290,43 @@ namespace Game.Player.Scripts
                 {
                     UnregisterMovingPlatformEvent(_visited[i]);
                 }
+
                 _visited.RemoveRange(idx + 1, _visited.Count - idx - 1);
 
-                // 3) schedule the LineRenderer cleanup
-                DOVirtual.DelayedCall(delayForSegments, () =>
-                {
-                    for (int i = _segments.Count - 1; i >= idx; i--)
-                    {
-                        RemoveSegment(i);
-                    }
-                });
+                // 3) schedule the segment creation, LineRenderer cleanup, and enemy destruction after movement
 
-                // 4) destroy enemies inside that polygon
-                DestroyEnemiesInLoop(loopPlatforms);
+                onMoveCompleteEvent = () =>
+                {
+                    DOVirtual.DelayedCall(loopDestructionDelay, () =>
+                    {
+                        for (int i = _segments.Count - 1; i >= idx; i--)
+                        {
+                            RemoveSegment(i);
+                        }
+
+                        DestroyEnemiesInLoop(loopPlatforms);
+                    });
+                    DOVirtual.DelayedCall(playerLandedTimer, () =>
+                        GameEvents.PlayerLanded());
+                };
 
                 RegisterToPlatform(newPlatScript); // Register before move
                 MovePlayerToPlatform(newPlat);
+                animator.SetTrigger(Jump);
                 return;
             }
 
             // Case 3: Normal move to new platform
-            CreateNewSegment(newPlat);
+
+            onMoveCompleteEvent = () =>
+            {
+                GameEvents.PlayerLanded();
+                _segments[^1].ToT = _lastPlat;
+            };
 
             RegisterToPlatform(newPlatScript); // Register before move
             MovePlayerToPlatform(newPlat);
+            animator.SetTrigger(Jump);
         }
 
         private void RemoveSegment(int i)
@@ -245,15 +334,16 @@ namespace Game.Player.Scripts
             Destroy(_segments[i].Lr.gameObject);
             _segments.RemoveAt(i);
             leftSegments = maxSegments - _segments.Count;
+            GameEvents.NumberOfSegmentsChanged(leftSegments);
             playerLogger.Log("Removed Segment Line");
         }
 
-        private void CreateNewSegment(Transform newPlat)
+        private void CreateNewSegment(Transform fromPlat, Transform toPlat)
         {
-            
-            _segments.Add(SegmentCreator.CreateSegment(_lastPlat.gameObject, newPlat.gameObject,
-                lineWidth, lineMaterial, sortingLayerName));
+            _segments.Add(SegmentCreator.CreateSegment(trailRenderer, segmentsFather, fromPlat.gameObject,
+                toPlat.gameObject));
             leftSegments = maxSegments - _segments.Count;
+            GameEvents.NumberOfSegmentsChanged(leftSegments);
         }
 
         private void DestroyEnemiesInLoop(List<Transform> loopPlatforms)
@@ -282,10 +372,9 @@ namespace Game.Player.Scripts
                 }
             }
         }
-        
-        private Dictionary<Transform, Action> _platformReturnDelegates = new();
 
-        private void RegisterMovingPlatformEvent(Transform plat)
+
+        private void RegisterSensorPlatformEvent(Transform plat)
         {
             var moving = plat.GetComponentInChildren<MovingPlatform>();
             if (moving != null && !_platformReturnDelegates.ContainsKey(plat))
@@ -310,7 +399,7 @@ namespace Game.Player.Scripts
         void LateUpdate()
         {
             UpdateSegmentLinePositions();
-            if (_lastPlat != null)
+            if (_lastPlat != null && !isMoving && !_fall)
                 transform.position = _lastPlat.position;
         }
 
@@ -322,7 +411,7 @@ namespace Game.Player.Scripts
                 seg.Lr.SetPosition(1, seg.ToT.TransformPoint(seg.ToLocalPos));
             }
         }
-        
+
         // ReSharper disable Unity.PerformanceAnalysis
         private void OnPlatformReturnHandler(Transform platform)
         {
@@ -334,6 +423,7 @@ namespace Game.Player.Scripts
                 GameEvents.PlayerFall();
                 return;
             }
+
             // Unregister from all platforms being removed (from 0 to idx inclusive)
             for (int i = 0; i <= idx; i++)
             {
@@ -349,6 +439,31 @@ namespace Game.Player.Scripts
 
             // Remove platforms from 0 to idx inclusive
             _visited.RemoveRange(0, idx + 1);
+        }
+
+        private void Update()
+        {
+            CheckIfMouseOnPlatform();
+        }
+
+        private void CheckIfMouseOnPlatform()
+        {
+            if (onMoveCompleteEvent != null) return;
+            Vector2 screenPos = Mouse.current.position.ReadValue();
+            Vector3 worldPos = _mainCam.ScreenToWorldPoint(screenPos);
+            var hit = Physics2D.Raycast(worldPos, Vector2.zero, 0f, clickableLayer);
+            bool isHovering = hit.collider != null;
+            if (hit.transform == _lastPlat)
+                isHovering = false;
+            if (hit.collider != null && !_playerRadar.IsPlatformInRange(hit.collider.gameObject))
+            {
+                isHovering = false;
+            }
+
+            animator.SetBool(IsHovering, isHovering);
+            GameEvents.PlatformHover(isHovering);
+            Debug.Log($"PlayerMovement: Hovering on platform: {isHovering}");
+
         }
     }
 }

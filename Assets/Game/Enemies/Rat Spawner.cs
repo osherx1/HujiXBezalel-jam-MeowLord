@@ -25,8 +25,11 @@ namespace Game.Enemies
 
                 // Get a rat from the pool
                 GameObject rat = RatPoolManager.Instance.GetRat();
-                rat.transform.position = randomSpawnPoint.position;
-                rat.transform.rotation = randomSpawnPoint.rotation;
+                if (rat != null)
+                {
+                    rat.transform.position = randomSpawnPoint.position;
+                    rat.transform.rotation = randomSpawnPoint.rotation;
+                }
             }
         }
     }

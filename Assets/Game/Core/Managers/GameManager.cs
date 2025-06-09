@@ -13,6 +13,7 @@ namespace Game.Core.Managers
         private  HighScoreManager _highScoreManager;
         private FirebaseInitializer _firebaseIntializer;
         [SerializeField] private HighScoreLogger highScoreLogger;
+        private float _timeStarted;
 
         public GameplayScore GameplayScore => _gameplayScore;
         public HighScoreManager HighScoreManager => _highScoreManager;
@@ -29,6 +30,13 @@ namespace Game.Core.Managers
 
         public string CurrentNickname { get; private set; }
         
+        public void SetNickname(string nickname)
+        {
+            if (!string.IsNullOrWhiteSpace(nickname))
+                CurrentNickname = nickname;
+        }
+
+        
 
         // Private constructor prevents external instantiation
         public void Awake()
@@ -38,26 +46,22 @@ namespace Game.Core.Managers
             int idx = Random.Range(0, _randomNames.Length);
             CurrentNickname = _randomNames[idx];
             _gameplayScore = new GameplayScore();
+            _timeStarted = Time.time;
             GameEvents.OnGameFinished += OnGameFinished;
-            GameEvents.OnGameStarted += StartGameFinishedTimer;
             GameEvents.GameStarted();
         }
 
         private void OnGameFinished()
         {
-            _highScoreManager.TryAddHighScore(_gameplayScore.Score, CurrentNickname);
-        }
-
-        private void StartGameFinishedTimer()
-        {
+            float finishedTime = Time.time - _timeStarted;
+            _highScoreManager.TryAddHighScore(_gameplayScore.Score, CurrentNickname, finishedTime);
             StartCoroutine(GameFinishedTimerCoroutine());
         }
 
+        
         private IEnumerator GameFinishedTimerCoroutine()
         {
-            yield return new WaitForSeconds(60f);
-            GameEvents.GameFinished();
-            SceneManager.LoadScene("EndScene");
+            SceneManager.LoadScene("end");
             yield return null;
             GameEvents.EndSceneStarted();
         }

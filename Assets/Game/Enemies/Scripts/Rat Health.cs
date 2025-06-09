@@ -31,7 +31,7 @@ namespace Game.Enemies.Scripts
 
         private void Die()
         {
-            GameEvents.MouseCatch(); // 🔔 Notify listeners
+            GameEvents.MouseCatch(transform.position); // 🔔 Notify listeners
             RatPoolManager.Instance.ReturnRat(gameObject);
         }
     }

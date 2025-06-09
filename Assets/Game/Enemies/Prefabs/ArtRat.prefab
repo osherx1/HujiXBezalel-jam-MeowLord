@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 5217036066197778178}
   - component: {fileID: 4011398432991543633}
   - component: {fileID: 7353141734061788686}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ArtRat
-  m_TagString: Untagged
+  m_TagString: Rat
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -85,7 +85,7 @@ MeshRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 23459645
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!95 &4011398432991543633

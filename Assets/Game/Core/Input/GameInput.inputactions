@@ -24,7 +24,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Lock",
+                    "name": "RightClick",
                     "type": "Button",
                     "id": "5fc2cefa-1bc4-4e58-a753-d6fbc9b5e602",
                     "expectedControlType": "",
@@ -63,7 +63,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Lock",
+                    "action": "RightClick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

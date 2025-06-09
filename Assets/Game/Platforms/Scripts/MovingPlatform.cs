@@ -64,9 +64,11 @@ namespace Game.Platforms.Scripts
         void Awake()
         {
             animator = GetComponentInChildren<Animator>();
-            
             mouseSensor = GetComponentInChildren<MouseSensor>();
+            if (mouseSensor != null)
+                mouseSensor.OnAfraidChanged += SetAfraid;
         }
+        
 
         void Update()
         {
@@ -86,6 +88,12 @@ namespace Game.Platforms.Scripts
             MoveToWaypoint();
 
             HandleWaypointArrival();
+        }
+        
+        void OnDestroy()
+        {
+            if (mouseSensor != null)
+                mouseSensor.OnAfraidChanged -= SetAfraid;
         }
         
         private void HandleRunAway()
@@ -177,16 +185,6 @@ namespace Game.Platforms.Scripts
 
                 _currentWaypoint += _direction;
             }
-        }
-        
-        void OnEnable()
-        {
-            Game.Core.Managers.GameEvents.OnAfraidChanged += SetAfraid;
-        }
-
-        void OnDisable()
-        {
-            Game.Core.Managers.GameEvents.OnAfraidChanged -= SetAfraid;
         }
         
         public void SetAfraid(bool isAfraid)
