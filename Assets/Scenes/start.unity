@@ -1245,10 +1245,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorRect: {fileID: 1334874273}
-  cursorImage: {fileID: 0}
-  normalSprite: {fileID: 0}
-  hoverSprite: {fileID: 0}
-  activeSprite: {fileID: 0}
+  cursorImage: {fileID: 1334874275}
+  normalSprite: {fileID: 21300000, guid: 102e74ffd49b211449ba67a913ec01ab, type: 3}
+  hoverSprite: {fileID: 21300000, guid: 93f38b83a42ecdf4799a07f50fd7fa69, type: 3}
+  activeSprite: {fileID: 21300000, guid: b588d6408b8ec6f43bee39a37190508c, type: 3}
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 0
