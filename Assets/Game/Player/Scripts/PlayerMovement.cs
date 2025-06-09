@@ -126,13 +126,13 @@ namespace Game.Player.Scripts
 
             // 4. Clear the platforms list
             _visited.Clear();
+            onMoveCompleteEvent = () =>
+            {
+                GameEvents.PlayerLanded();
+            };
             
             DOVirtual.DelayedCall(fallDuration, () =>
             {
-                onMoveCompleteEvent = () =>
-                {
-                    GameEvents.PlayerLanded();
-                };
                 var (nearest, sensor) = FindNearestPlatformer();
                 RegisterToPlatform(sensor);
                 MovePlayerToPlatform(nearest);
