@@ -256,14 +256,15 @@ namespace Game.Platforms.Scripts
                     // animator.Play("WalkLeft");
                     break;
                 case IsoDirection4.Up:
-                    // animator.Play("WalkUp");
-                    break;
                 case IsoDirection4.Down:
-                    // animator.Play("WalkDown");
+                    if (direction.x > 0.01f)
+                        flipTarget.localScale = new Vector3(Mathf.Abs(flipTarget.localScale.x), flipTarget.localScale.y, flipTarget.localScale.z);
+                    else if (direction.x < -0.01f)
+                        flipTarget.localScale = new Vector3(-Mathf.Abs(flipTarget.localScale.x), flipTarget.localScale.y, flipTarget.localScale.z);
+                    // animator.Play(dir == IsoDirection4.Up ? "WalkUp" : "WalkDown");
                     break;
             }
         }
-
 
 
         public void PlatformReturn()
