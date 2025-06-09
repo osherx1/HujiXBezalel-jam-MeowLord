@@ -1,5 +1,3 @@
-
-
 using System;
 using UnityEngine;
 
@@ -11,8 +9,17 @@ namespace Game.Core.Utils
         /// Returns true if p is inside the polygon defined by verts (must be in order).
         /// Uses the ray-crossing algorithm.
         /// </summary>
-        public static bool PointInPolygon(Vector2[] verts, Vector2 p)
+        public static bool PointInPolygon(Vector2[] verts, Vector2 p, float tolerance = 0.1f)
         {
+            // First, check if the point is close to any edge
+            for (int i = 0, j = verts.Length - 1; i < verts.Length; j = i++)
+            {
+                Vector2 vi = verts[i], vj = verts[j];
+                if (DistancePointToSegment(p, vi, vj) <= tolerance)
+                    return true;
+            }
+
+            // Standard ray-casting algorithm
             bool inside = false;
             for (int i = 0, j = verts.Length - 1; i < verts.Length; j = i++)
             {
@@ -22,6 +29,17 @@ namespace Game.Core.Utils
                 if (intersect) inside = !inside;
             }
             return inside;
+        }
+
+        // Helper: Distance from point p to segment ab
+        public static float DistancePointToSegment(Vector2 p, Vector2 a, Vector2 b)
+        {
+            Vector2 ab = b - a;
+            Vector2 ap = p - a;
+            float t = Vector2.Dot(ap, ab) / ab.sqrMagnitude;
+            t = Mathf.Clamp01(t);
+            Vector2 closest = a + t * ab;
+            return Vector2.Distance(p, closest);
         }
         
         

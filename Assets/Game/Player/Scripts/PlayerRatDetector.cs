@@ -19,12 +19,14 @@ namespace Game.Player.Scripts
         private List<Transform> _visited;
         private Transform _segmentsPointsFather;
         private List<GameObject> _intersectionPoints = new List<GameObject>();
+        private readonly PlayerStats _playerStats;
 
-        public PlayerRatDetector(List<SegmentCreator.TrailSegment> segments, List<Transform> visited, Transform segmentsPointsFather)
+        public PlayerRatDetector(List<SegmentCreator.TrailSegment> segments, List<Transform> visited, Transform segmentsPointsFather,PlayerStats playerStats)
         {
             _segments = segments;
             _visited = visited;
             _segmentsPointsFather = segmentsPointsFather;
+            _playerStats = playerStats;
         }
 
         public List<Polygon> CheckForClosedPolygons()
@@ -131,15 +133,18 @@ namespace Game.Player.Scripts
 
         private IEnumerable<Collider2D> CandidatesInPolygon(Collider2D[] candidates, Vector2[] poly)
         {
-            return candidates.Where(c => EladsHelperFunctions.PointInPolygon(poly, c.transform.position));
+            return candidates.Where(c => EladsHelperFunctions.PointInPolygon(poly, c.transform.position,_playerStats.ForgivenceToPlayer));
         }
 
         private Collider2D[] GetCandidateColliders(Vector2[] poly, LayerMask enemyLayer)
         {
             float minX = poly.Min(v => v.x), maxX = poly.Max(v => v.x);
             float minY = poly.Min(v => v.y), maxY = poly.Max(v => v.y);
-            Vector2 min = new Vector2(minX, minY);
-            Vector2 max = new Vector2(maxX, maxY);
+            float tolerance = 0f;
+            if (_playerStats != null)
+                tolerance = _playerStats.ForgivenceToPlayer;
+            Vector2 min = new Vector2(minX - tolerance, minY - tolerance);
+            Vector2 max = new Vector2(maxX + tolerance, maxY + tolerance);
             return Physics2D.OverlapAreaAll(min, max, enemyLayer);
         }
 

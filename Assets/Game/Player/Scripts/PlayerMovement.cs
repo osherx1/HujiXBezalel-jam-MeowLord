@@ -71,7 +71,7 @@ namespace Game.Player.Scripts
             leftSegments = maxSegments;
             _clickAction = InputSystemSingleton.Instance.InputSystem.PlayerControls.Click;
             _playerRadar = new PlayerRadar(transform, playerStats, playerLogger, this, PlayerPlatforms);
-            _playerRatDetector = new PlayerRatDetector(_segments, _visited, segmentsFather);
+            _playerRatDetector = new PlayerRatDetector(_segments, _visited, segmentsFather,playerStats);
         }
 
         void Start()
@@ -428,7 +428,7 @@ namespace Game.Player.Scripts
 
         private void Update()
         {
-            if (onMoveCompleteEvent != null) return;
+            if (onMoveCompleteEvent != null || isMoving) return;
             CheckForClosedPolygons();
             CheckIfMouseOnPlatform();
         }
@@ -460,6 +460,7 @@ namespace Game.Player.Scripts
                 {
                     RemoveVisitedPlatformAt(0);
                 }
+                GameEvents.PlayerLanded();
                 break; // Only process the first polygon with enemies
             }
         }

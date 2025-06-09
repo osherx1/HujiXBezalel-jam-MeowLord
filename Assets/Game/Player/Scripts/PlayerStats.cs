@@ -7,5 +7,6 @@ namespace Game.Player.Scripts
     {
         public float radarRadius;
         public LayerMask platformLayer;
+        public float ForgivenceToPlayer;
     }
 }
