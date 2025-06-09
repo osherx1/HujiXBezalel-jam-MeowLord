@@ -270,13 +270,10 @@ namespace Game.Player.Scripts
                 animator.SetTrigger(Jump);
                 return;
             }
-
-            if (_segments.Count >= maxSegments)
-            {
-                return;
-            }
+            
 
             CreateNewSegment(prevPlat, transform);
+            
             // Case 2: Closing a loop (not immediately previous)
             if (_visited.Contains(newPlat))
             {
@@ -314,6 +311,12 @@ namespace Game.Player.Scripts
                 MovePlayerToPlatform(newPlat);
                 animator.SetTrigger(Jump);
                 return;
+            }
+            
+            if (_segments.Count >= maxSegments)
+            {
+                RemoveSegment(0);
+                RemoveVisitedPlatformAt(0);
             }
 
             // Case 3: Normal move to new platform
@@ -464,6 +467,12 @@ namespace Game.Player.Scripts
             GameEvents.PlatformHover(isHovering);
             Debug.Log($"PlayerMovement: Hovering on platform: {isHovering}");
 
+        }
+
+        private void RemoveVisitedPlatformAt(int index)
+        {
+            UnregisterMovingPlatformEvent(_visited[index]);
+            _visited.RemoveAt(index);
         }
     }
 }
