@@ -140,11 +140,8 @@ namespace Game.Player.Scripts
         {
             float minX = poly.Min(v => v.x), maxX = poly.Max(v => v.x);
             float minY = poly.Min(v => v.y), maxY = poly.Max(v => v.y);
-            float tolerance = 0f;
-            if (_playerStats != null)
-                tolerance = _playerStats.ForgivenceToPlayer;
-            Vector2 min = new Vector2(minX - tolerance, minY - tolerance);
-            Vector2 max = new Vector2(maxX + tolerance, maxY + tolerance);
+            Vector2 min = new Vector2(minX - _playerStats.ForgivenceToPlayer, minY - _playerStats.ForgivenceToPlayer);
+            Vector2 max = new Vector2(maxX + _playerStats.ForgivenceToPlayer, maxY + _playerStats.ForgivenceToPlayer);
             return Physics2D.OverlapAreaAll(min, max, enemyLayer);
         }
 

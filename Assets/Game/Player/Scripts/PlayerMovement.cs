@@ -39,10 +39,7 @@ namespace Game.Player.Scripts
         [SerializeField] private Transform segmentsFather;
         public List<Transform> PlayerPlatforms => _visited;
 
-        public PlayerRatDetector PlayerRatDetector
-        {
-            get { return _playerRatDetector; }
-        }
+        
 
         private List<SegmentCreator.TrailSegment> _segments = new List<SegmentCreator.TrailSegment>();
         private List<Transform> _visited = new List<Transform>();
@@ -63,6 +60,7 @@ namespace Game.Player.Scripts
         private Coroutine moveCoroutine;
         private bool _fall = false;
         private PlayerRatDetector _playerRatDetector;
+        private MovingPlatform _lastMovingPlatform;
 
         
 
@@ -76,11 +74,11 @@ namespace Game.Player.Scripts
 
         void Start()
         {
-            var (nearest, sensor) = FindNearestPlatformer();
+            var (nearest, sensor, movingPlatform) = FindNearestPlatformer();
 
             // Register and snap onto it if found
             onMoveCompleteEvent = GameEvents.PlayerLanded;
-            RegisterToPlatform(sensor);
+            RegisterToPlatform(sensor, movingPlatform);
             MovePlayerToPlatform(nearest);
             _mainCam = Camera.main;
             GameEvents.NumberOfSegmentsChanged(leftSegments);
@@ -133,24 +131,29 @@ namespace Game.Player.Scripts
             
             DOVirtual.DelayedCall(fallDuration, () =>
             {
-                var (nearest, sensor) = FindNearestPlatformer();
-                RegisterToPlatform(sensor);
+                var (nearest, sensor, movingPlatform) = FindNearestPlatformer();
+                RegisterToPlatform(sensor, movingPlatform);
                 MovePlayerToPlatform(nearest);
                 playerLogger?.Log("Player fell: reset trail and snapped to nearest platform.");
                 _fall = false;
             });
         }
 
-        private void RegisterToPlatform(MouseSensor sensor)
+        private void RegisterToPlatform(MouseSensor sensor, MovingPlatform movingPlatform)
         {
             // Unregister from old
             if (_lastPlatScript != null)
                 _lastPlatScript.OnPlatformDown -= PlayerFall;
+            if (_lastMovingPlatform != null)
+                _lastMovingPlatform.hasPlayerOnTop = false;
 
             // Register to new
             _lastPlatScript = sensor;
+            _lastMovingPlatform = movingPlatform;
             if (_lastPlatScript != null)
                 _lastPlatScript.OnPlatformDown += PlayerFall;
+            if (_lastMovingPlatform != null)
+                _lastMovingPlatform.hasPlayerOnTop = true;
         }
 
         private void MovePlayerToPlatform(Transform platform, bool withDelay = true)
@@ -222,7 +225,7 @@ namespace Game.Player.Scripts
             GameEvents.PlayerFall();
         }
 
-        private (Transform, MouseSensor) FindNearestPlatformer()
+        private (Transform, MouseSensor, MovingPlatform) FindNearestPlatformer()
         {
             float searchRadius = 40f;
             Collider2D[] all = Physics2D.OverlapCircleAll(
@@ -233,6 +236,7 @@ namespace Game.Player.Scripts
             float minDist = float.MaxValue;
             Transform nearest = null;
             MouseSensor sensor = null;
+            MovingPlatform movingPlatform = null;
             foreach (var c in all)
             {
                 float d = Vector2.Distance(transform.position, c.transform.position);
@@ -241,10 +245,10 @@ namespace Game.Player.Scripts
                     minDist = d;
                     nearest = c.transform;
                     sensor = c.GetComponentInChildren<MouseSensor>();
+                    movingPlatform = c.GetComponentInChildren<MovingPlatform>();
                 }
             }
-
-            return (nearest, sensor);
+            return (nearest, sensor, movingPlatform);
         }
 
 
@@ -274,7 +278,7 @@ namespace Game.Player.Scripts
                 };
                 _segments[_segments.Count - 1].ToT = transform;
                 _visited.RemoveAt(_visited.Count - 1);
-                RegisterToPlatform(newPlatScript); // Register before move
+                RegisterToPlatform(newPlatScript, _lastMovingPlatform); // Register before move
                 MovePlayerToPlatform(newPlat);
                 animator.SetTrigger(Jump);
                 return;
@@ -310,13 +314,13 @@ namespace Game.Player.Scripts
                             RemoveSegment(i);
                         }
 
-                        PlayerRatDetector.DestroyEnemiesInLoop(loopPlatforms, enemyLayer);
+                        _playerRatDetector.DestroyEnemiesInLoop(loopPlatforms, enemyLayer);
                     });
                     DOVirtual.DelayedCall(playerLandedTimer, () =>
                         GameEvents.PlayerLanded());
                 };
 
-                RegisterToPlatform(newPlatScript); // Register before move
+                RegisterToPlatform(newPlatScript, _lastMovingPlatform); // Register before move
                 MovePlayerToPlatform(newPlat);
                 animator.SetTrigger(Jump);
                 return;
@@ -336,7 +340,7 @@ namespace Game.Player.Scripts
                 _segments[^1].ToT = _lastPlat;
             };
 
-            RegisterToPlatform(newPlatScript); // Register before move
+            RegisterToPlatform(newPlatScript, _lastMovingPlatform); // Register before move
             MovePlayerToPlatform(newPlat);
             animator.SetTrigger(Jump);
         }
@@ -367,6 +371,7 @@ namespace Game.Player.Scripts
                 Action handler = () => OnPlatformReturnHandler(plat);
                 moving.OnPlatformReturn += handler;
                 _platformReturnDelegates[plat] = handler;
+                moving.hasYarnAttached = true;
             }
         }
 
@@ -377,6 +382,7 @@ namespace Game.Player.Scripts
             {
                 moving.OnPlatformReturn -= _platformReturnDelegates[plat];
                 _platformReturnDelegates.Remove(plat);
+                moving.hasYarnAttached = false;
             }
         }
 
@@ -435,17 +441,17 @@ namespace Game.Player.Scripts
 
         private void CheckForClosedPolygons()
         {
-            var polygons = PlayerRatDetector.CheckForClosedPolygons();
+            var polygons = _playerRatDetector.CheckForClosedPolygons();
             if (polygons == null || polygons.Count == 0) return;
 
             foreach (var polygon in polygons)
             {
-                var enemies = PlayerRatDetector.GetEnemiesInLoop(polygon.polygonPoints, enemyLayer);
+                var enemies = _playerRatDetector.GetEnemiesInLoop(polygon.polygonPoints, enemyLayer);
                 if (enemies == null || !enemies.Any())
                     continue;
                 foreach (var enemy in enemies)
                 {
-                    PlayerRatDetector.ApplyDamageToRat(enemy);
+                    _playerRatDetector.ApplyDamageToRat(enemy);
                 }
                 // Remove segments and platforms up to and including the highest index
                 int segRemoveTo = polygon.highestSegmentIndex;
