@@ -26,7 +26,7 @@ namespace Game.Core.Camera.Scripts
         [SerializeField] private CinemachineTargetGroup targetGroup;
         [SerializeField] private CinemachineGroupFraming targetFraming;
         [SerializeField] [Range(0, 11)] private float startingFrameSize;
-        [SerializeField, ReadOnly] private int maxPlatformsForFrameShrinking = 5;
+        [SerializeField] private int maxPlatformsForFrameShrinking = 6;
         [SerializeField] private float minFrameSize = 0.05f; 
         
         [SerializeField] private TargetLogger targetLogger;
