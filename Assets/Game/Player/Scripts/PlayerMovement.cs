@@ -39,6 +39,11 @@ namespace Game.Player.Scripts
         [SerializeField] private Transform segmentsFather;
         public List<Transform> PlayerPlatforms => _visited;
 
+        public PlayerRatDetector PlayerRatDetector
+        {
+            get { return _playerRatDetector; }
+        }
+
         private List<SegmentCreator.TrailSegment> _segments = new List<SegmentCreator.TrailSegment>();
         private List<Transform> _visited = new List<Transform>();
         private Transform _lastPlat;
@@ -57,12 +62,16 @@ namespace Game.Player.Scripts
         private Dictionary<Transform, Action> _platformReturnDelegates = new();
         private Coroutine moveCoroutine;
         private bool _fall = false;
+        private PlayerRatDetector _playerRatDetector;
+
+        
 
         void Awake()
         {
             leftSegments = maxSegments;
             _clickAction = InputSystemSingleton.Instance.InputSystem.PlayerControls.Click;
             _playerRadar = new PlayerRadar(transform, playerStats, playerLogger, this, PlayerPlatforms);
+            _playerRatDetector = new PlayerRatDetector(_segments, _visited, segmentsFather);
         }
 
         void Start()
@@ -301,7 +310,7 @@ namespace Game.Player.Scripts
                             RemoveSegment(i);
                         }
 
-                        DestroyEnemiesInLoop(loopPlatforms);
+                        PlayerRatDetector.DestroyEnemiesInLoop(loopPlatforms, enemyLayer);
                     });
                     DOVirtual.DelayedCall(playerLandedTimer, () =>
                         GameEvents.PlayerLanded());
@@ -347,33 +356,6 @@ namespace Game.Player.Scripts
                 toPlat.gameObject));
             leftSegments = maxSegments - _segments.Count;
             GameEvents.NumberOfSegmentsChanged(leftSegments);
-        }
-
-        private void DestroyEnemiesInLoop(List<Transform> loopPlatforms)
-        {
-            Vector2[] poly = loopPlatforms
-                .Select(t => (Vector2)t.position)
-                .ToArray();
-
-            float minX = poly.Min(v => v.x), maxX = poly.Max(v => v.x);
-            float minY = poly.Min(v => v.y), maxY = poly.Max(v => v.y);
-            Vector2 min = new Vector2(minX, minY);
-            Vector2 max = new Vector2(maxX, maxY);
-
-            Collider2D[] candidates = Physics2D.OverlapAreaAll(min, max, enemyLayer);
-
-            foreach (var c in candidates)
-            {
-                Vector2 pt = c.transform.position;
-                if (EladsHelperFunctions.PointInPolygon(poly, pt))
-                {
-                    RatHealth ratHealth = c.GetComponent<RatHealth>();
-                    if (ratHealth != null)
-                    {
-                        ratHealth.TakeDamage(1); // Or however much damage the cat deals
-                    }
-                }
-            }
         }
 
 
@@ -446,12 +428,44 @@ namespace Game.Player.Scripts
 
         private void Update()
         {
+            if (onMoveCompleteEvent != null) return;
+            CheckForClosedPolygons();
             CheckIfMouseOnPlatform();
+        }
+
+        private void CheckForClosedPolygons()
+        {
+            var polygons = PlayerRatDetector.CheckForClosedPolygons();
+            if (polygons == null || polygons.Count == 0) return;
+
+            foreach (var polygon in polygons)
+            {
+                var enemies = PlayerRatDetector.GetEnemiesInLoop(polygon.polygonPoints, enemyLayer);
+                if (enemies == null || !enemies.Any())
+                    continue;
+                foreach (var enemy in enemies)
+                {
+                    PlayerRatDetector.ApplyDamageToRat(enemy);
+                }
+                // Remove segments and platforms up to and including the highest index
+                int segRemoveTo = polygon.highestSegmentIndex;
+                int platRemoveTo = polygon.highestIndexPlatform;
+                if (platRemoveTo == _visited.Count - 1)
+                    platRemoveTo = platRemoveTo - 1; // Don't remove the platform the player is on
+                for (int i = 0; i <= segRemoveTo && _segments.Count > 0; i++)
+                {
+                    RemoveSegment(0);
+                }
+                for (int i = 0; i <= platRemoveTo && _visited.Count > 1; i++)
+                {
+                    RemoveVisitedPlatformAt(0);
+                }
+                break; // Only process the first polygon with enemies
+            }
         }
 
         private void CheckIfMouseOnPlatform()
         {
-            if (onMoveCompleteEvent != null) return;
             Vector2 screenPos = Mouse.current.position.ReadValue();
             Vector3 worldPos = _mainCam.ScreenToWorldPoint(screenPos);
             var hit = Physics2D.Raycast(worldPos, Vector2.zero, 0f, clickableLayer);

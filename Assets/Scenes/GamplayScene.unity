@@ -6629,6 +6629,10 @@ PrefabInstance:
       value: 9.8
       objectReference: {fileID: 0}
     - target: {fileID: 6816017618577237725, guid: 34c5d761c725248db85251910d13bb11, type: 3}
+      propertyPath: maxSegments
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6816017618577237725, guid: 34c5d761c725248db85251910d13bb11, type: 3}
       propertyPath: playerStats
       value: 
       objectReference: {fileID: 11400000, guid: 56361e77bcb824152aaef6336f8973e0, type: 2}
@@ -7548,6 +7552,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 576777299}
     - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
+      propertyPath: minFrameSize
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
       propertyPath: targetFraming
       value: 
       objectReference: {fileID: 576777301}
@@ -7567,6 +7575,34 @@ PrefabInstance:
       propertyPath: backgroundCollider2D
       value: 
       objectReference: {fileID: 1406787730}
+    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
+      propertyPath: colliderSizes.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
+      propertyPath: colliderSizes.Array.data[5].x
+      value: 64.87927
+      objectReference: {fileID: 0}
+    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
+      propertyPath: colliderSizes.Array.data[5].y
+      value: 38.28958
+      objectReference: {fileID: 0}
+    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
+      propertyPath: maxPlatformsForFrameShrinking
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
+      propertyPath: colliderSizeOffsets.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
+      propertyPath: colliderSizeOffsets.Array.data[5].x
+      value: 0.02719
+      objectReference: {fileID: 0}
+    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
+      propertyPath: colliderSizeOffsets.Array.data[5].y
+      value: -0.6425
+      objectReference: {fileID: 0}
     - target: {fileID: 9210976875638248917, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
       propertyPath: m_Name
       value: CameraTarget

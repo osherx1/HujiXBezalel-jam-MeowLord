@@ -1,0 +1,164 @@
+using System.Collections.Generic;
+using System.Linq;
+using Game.Core.Utils;
+using Game.Enemies.Scripts;
+using UnityEngine;
+
+namespace Game.Player.Scripts
+{
+    public class PlayerRatDetector
+    {
+        public struct Polygon
+        {
+            public int highestIndexPlatform;
+            public int highestSegmentIndex;
+            public List<Transform> polygonPoints;
+        }
+
+        private List<SegmentCreator.TrailSegment> _segments;
+        private List<Transform> _visited;
+        private Transform _segmentsPointsFather;
+        private List<GameObject> _intersectionPoints = new List<GameObject>();
+
+        public PlayerRatDetector(List<SegmentCreator.TrailSegment> segments, List<Transform> visited, Transform segmentsPointsFather)
+        {
+            _segments = segments;
+            _visited = visited;
+            _segmentsPointsFather = segmentsPointsFather;
+        }
+
+        public List<Polygon> CheckForClosedPolygons()
+        {
+            var polygons = new List<Polygon>();
+            ClearAllIntersections();
+            // For each pair of non-adjacent segments, check for intersection
+            for (int i = 0; i < _segments.Count - 2; i++)
+            {
+                var segA = _segments[i];
+                Vector2 a1 = segA.FromT.TransformPoint(segA.FromLocalPos);
+                Vector2 a2 = segA.ToT.TransformPoint(segA.ToLocalPos);
+                for (int j = i + 2; j < _segments.Count; j++)
+                {
+                    // Skip adjacent segments
+                    if (j == i + 1) continue;
+                    var segB = _segments[j];
+                    Vector2 b1 = segB.FromT.TransformPoint(segB.FromLocalPos);
+                    Vector2 b2 = segB.ToT.TransformPoint(segB.ToLocalPos);
+                    if (LineSegmentsIntersect(a1, a2, b1, b2, out Vector2 intersection))
+                    {
+                        // Create intersection point GameObject
+                        var intersectionGO = new GameObject("IntersectionPoint");
+                        intersectionGO.transform.position = intersection;
+                        intersectionGO.transform.parent = _segmentsPointsFather;
+                        _intersectionPoints.Add(intersectionGO);
+                        // Build the polygon: from i+1 to j, plus the intersection points at start and end
+                        var polygonPoints = new List<Transform>();
+                        polygonPoints.Add(_visited[i + 1]); // Start after segA
+                        for (int k = i + 2; k <= j; k++)
+                        {
+                            polygonPoints.Add(_visited[k]);
+                        }
+                        polygonPoints.Add(intersectionGO.transform); // Add intersection point at the end
+                        polygonPoints.Insert(0, intersectionGO.transform); // Add intersection point at the start
+                        // Find highest indices
+                        int highestIndexPlatform = -1;
+                        foreach (var t in polygonPoints)
+                        {
+                            int idx = _visited.IndexOf(t);
+                            if (idx > highestIndexPlatform) highestIndexPlatform = idx;
+                        }
+                        int highestSegmentIndex = j;
+                        polygons.Add(new Polygon
+                        {
+                            highestIndexPlatform = highestIndexPlatform,
+                            highestSegmentIndex = highestSegmentIndex,
+                            polygonPoints = polygonPoints
+                        });
+                    }
+                }
+            }
+            return polygons;
+        }
+
+        public void ClearAllIntersections()
+        {
+            foreach (var go in _intersectionPoints)
+            {
+                if (go != null)
+                    GameObject.Destroy(go);
+            }
+            _intersectionPoints.Clear();
+        }
+
+        // Helper: Check if two line segments intersect and get the intersection point
+        private bool LineSegmentsIntersect(Vector2 p1, Vector2 p2, Vector2 q1, Vector2 q2, out Vector2 intersection)
+        {
+            intersection = Vector2.zero;
+            float s1_x = p2.x - p1.x;
+            float s1_y = p2.y - p1.y;
+            float s2_x = q2.x - q1.x;
+            float s2_y = q2.y - q1.y;
+
+            float denom = (-s2_x * s1_y + s1_x * s2_y);
+            if (Mathf.Abs(denom) < 1e-6f) return false; // Parallel or collinear
+
+            float s = (-s1_y * (p1.x - q1.x) + s1_x * (p1.y - q1.y)) / denom;
+            float t = ( s2_x * (p1.y - q1.y) - s2_y * (p1.x - q1.x)) / denom;
+
+            if (s >= 0 && s <= 1 && t >= 0 && t <= 1)
+            {
+                // Intersection detected
+                intersection = new Vector2(p1.x + (t * s1_x), p1.y + (t * s1_y));
+                return true;
+            }
+            return false;
+        }
+
+        public void DestroyEnemiesInLoop(List<Transform> loopPlatforms, LayerMask enemyLayer)
+        {
+            var inPolygon = GetEnemiesInLoop(loopPlatforms, enemyLayer);
+            foreach (var c in inPolygon){
+                ApplyDamageToRat(c);
+            }
+        }
+
+        public IEnumerable<Collider2D> GetEnemiesInLoop(List<Transform> loopPlatforms, LayerMask enemyLayer)
+        {
+            var poly = GetPolygonPoints(loopPlatforms);
+            var candidates = GetCandidateColliders(poly, enemyLayer);
+            return CandidatesInPolygon(candidates, poly);
+        }
+
+        private IEnumerable<Collider2D> CandidatesInPolygon(Collider2D[] candidates, Vector2[] poly)
+        {
+            return candidates.Where(c => EladsHelperFunctions.PointInPolygon(poly, c.transform.position));
+        }
+
+        private Collider2D[] GetCandidateColliders(Vector2[] poly, LayerMask enemyLayer)
+        {
+            float minX = poly.Min(v => v.x), maxX = poly.Max(v => v.x);
+            float minY = poly.Min(v => v.y), maxY = poly.Max(v => v.y);
+            Vector2 min = new Vector2(minX, minY);
+            Vector2 max = new Vector2(maxX, maxY);
+            return Physics2D.OverlapAreaAll(min, max, enemyLayer);
+        }
+
+    
+
+        public void ApplyDamageToRat(Collider2D collider)
+        {
+            RatHealth ratHealth = collider.GetComponent<RatHealth>();
+            if (ratHealth != null)
+            {
+                ratHealth.TakeDamage(1); // Or however much damage the cat deals
+            }
+        }
+
+        private Vector2[] GetPolygonPoints(List<Transform> loopPlatforms)
+            {
+                return loopPlatforms
+                    .Select(t => (Vector2)t.position)
+                    .ToArray();
+            }
+    }
+}
