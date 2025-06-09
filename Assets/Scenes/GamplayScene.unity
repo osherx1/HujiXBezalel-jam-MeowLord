@@ -6624,10 +6624,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 457390211}
     m_Modifications:
-    - target: {fileID: 547101856513054331, guid: 241f6ef066dbc4a7aa2ba942f37d49c5, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3489501159218058207, guid: 241f6ef066dbc4a7aa2ba942f37d49c5, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.71
@@ -6668,16 +6664,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5070115082720386706, guid: 241f6ef066dbc4a7aa2ba942f37d49c5, type: 3}
-      propertyPath: m_TagString
-      value: LightAreaPlatform
-      objectReference: {fileID: 0}
     - target: {fileID: 6238570682282863682, guid: 241f6ef066dbc4a7aa2ba942f37d49c5, type: 3}
       propertyPath: m_Name
       value: Platform Little Table
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 547101856513054331, guid: 241f6ef066dbc4a7aa2ba942f37d49c5, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

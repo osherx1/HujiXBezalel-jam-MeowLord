@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6932161325347531749}
   m_Layer: 0
   m_Name: 2222222
-  m_TagString: Untagged
+  m_TagString: LightAreaPlatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
