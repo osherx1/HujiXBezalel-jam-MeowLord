@@ -2557,9 +2557,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorRect: {fileID: 1039129585}
   cursorImage: {fileID: 1039129586}
-  normalSprite: {fileID: -7172571801631364281, guid: 102e74ffd49b211449ba67a913ec01ab, type: 3}
-  hoverSprite: {fileID: -5417652920340713632, guid: 93f38b83a42ecdf4799a07f50fd7fa69, type: 3}
-  activeSprite: {fileID: 5325618825111069857, guid: b588d6408b8ec6f43bee39a37190508c, type: 3}
+  normalSprite: {fileID: 21300000, guid: 102e74ffd49b211449ba67a913ec01ab, type: 3}
+  hoverSprite: {fileID: 21300000, guid: 93f38b83a42ecdf4799a07f50fd7fa69, type: 3}
+  activeSprite: {fileID: 21300000, guid: b588d6408b8ec6f43bee39a37190508c, type: 3}
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 64
