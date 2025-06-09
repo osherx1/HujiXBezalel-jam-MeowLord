@@ -14,6 +14,10 @@ namespace Game.Platforms.Scripts
         [Header("Animator")] [SerializeField]
         private Animator animator;
         
+        [Header("Platform state logic")]
+        public bool hasPlayerOnTop = false;  
+        public bool hasYarnAttached = false; 
+        
         [SerializeField] private Transform spriteRoot;
         public bool isMoving => _isMoving;
         public event Action OnPlatformReturn;
@@ -176,6 +180,19 @@ namespace Game.Platforms.Scripts
                 }
                 else if (_direction == -1 && _currentWaypoint == 0)
                 {
+                    // Do not return to pool if player is on top or yarn is attached
+                    if (hasPlayerOnTop || hasYarnAttached)
+                    {
+                        _direction = 1;
+                        if (waypoints.Count > 1)
+                        {
+                            Vector3 nextDir = waypoints[_currentWaypoint + _direction].transform.position - waypoints[_currentWaypoint].transform.position;
+                            UpdateSpriteDirection(nextDir);
+                        }
+                        _isMoving = true;
+                        return;
+                    }
+
                     _isMoving = false;
                     if (animator != null)
                         animator.SetBool("IsWalking", false);
