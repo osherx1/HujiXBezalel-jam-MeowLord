@@ -6598,6 +6598,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LeftWindow
       objectReference: {fileID: 0}
+    - target: {fileID: 6433740470065099943, guid: e09090cbfa4c24be3aaddd137d35e02a, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7013733110607791121, guid: e09090cbfa4c24be3aaddd137d35e02a, type: 3}
       propertyPath: m_Sprite
       value: 
