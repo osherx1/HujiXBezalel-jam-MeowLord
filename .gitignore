@@ -88,7 +88,3 @@ GoogleAarExplodeCache.xml
 web/Development
 web/TemplateData
 web/Release
-
-# Firebase plugins
-Assets/Firebase/
-Assets/Plugins/Firebase/
