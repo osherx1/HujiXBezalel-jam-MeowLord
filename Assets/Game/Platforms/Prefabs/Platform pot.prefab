@@ -135,14 +135,16 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -1.1925964, y: 0.23500812}
-      - {x: -0.96439815, y: 0.076592326}
-      - {x: -0.7970108, y: -0.0519737}
-      - {x: 0.14446211, y: -0.2012881}
-      - {x: 0.705143, y: 0.17150903}
-      - {x: 1.2326927, y: 0.54876184}
-      - {x: 1.1429443, y: 1.0282075}
-      - {x: 0.85287094, y: 1.20897}
+    - - {x: -1.5620637, y: 0.3504666}
+      - {x: -1.033673, y: -0.05041182}
+      - {x: -0.84319437, y: -0.16743219}
+      - {x: -0.58327436, y: -0.24202013}
+      - {x: 0.22528315, y: -0.25901735}
+      - {x: 0.8090558, y: 0.1368711}
+      - {x: 1.567522, y: 0.57185364}
+      - {x: 1.5790682, y: 0.6873121}
+      - {x: 1.4200449, y: 1.2706707}
+      - {x: 0.9914212, y: 1.5322541}
   m_UseDelaunayMesh: 0
 --- !u!1 &5786151134527175758
 GameObject:
@@ -249,7 +251,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 590174658328717416, guid: 7dac5ebd896d56742b0b166108ed64da, type: 3}
       propertyPath: m_SortingOrder
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 590174658328717416, guid: 7dac5ebd896d56742b0b166108ed64da, type: 3}
       propertyPath: m_SortingLayerID

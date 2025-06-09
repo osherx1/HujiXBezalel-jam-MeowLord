@@ -222,14 +222,16 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -2.5470476, y: 1.4257339}
-      - {x: -1.291848, y: 0.7910279}
-      - {x: -0.112344146, y: 0.15640318}
+    - - {x: -2.7553282, y: 1.4396192}
+      - {x: -1.4862411, y: 0.72160137}
+      - {x: -0.26508272, y: 0.059206128}
       - {x: 1.7965941, y: -0.97525966}
-      - {x: 2.223318, y: -0.632231}
-      - {x: 2.61691, y: -0.3889346}
-      - {x: 0.8452635, y: 0.7305262}
-      - {x: -1.4095087, y: 1.9531735}
+      - {x: 2.2519016, y: -0.73449135}
+      - {x: 2.3482857, y: -0.6877723}
+      - {x: 2.4520855, y: -0.66884637}
+      - {x: 2.9362726, y: -0.3611641}
+      - {x: 0.9008055, y: 0.8693793}
+      - {x: -1.4233942, y: 2.1197972}
   m_UseDelaunayMesh: 0
 --- !u!1001 &5799324737404362085
 PrefabInstance:
@@ -249,7 +251,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 590174658328717416, guid: 7dac5ebd896d56742b0b166108ed64da, type: 3}
       propertyPath: m_SortingOrder
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 590174658328717416, guid: 7dac5ebd896d56742b0b166108ed64da, type: 3}
       propertyPath: m_SortingLayerID

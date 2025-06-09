@@ -114,7 +114,7 @@ Transform:
   m_GameObject: {fileID: 6900820168118909321}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 22.51, y: -4.35, z: 0}
+  m_LocalPosition: {x: 22.53, y: -4.33, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -128,7 +128,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6900820168118909321}
-  m_Enabled: 0
+  m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -165,7 +165,7 @@ SpriteRenderer:
   m_SortingLayerID: 251717713
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 4349915267927364619, guid: 42e80f13f55154c37ac7a457bb870566, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 0.1981132, g: 0.15792987, b: 0.15792987, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -173,7 +173,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!60 &247516570570881841
@@ -212,9 +212,9 @@ PolygonCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
+    border: {x: 0.049999997, y: 0.049999997, z: 0.049999997, w: 0.049999997}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.83, y: 5.81}
+    oldSize: {x: 0.16, y: 0.16}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -222,14 +222,14 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: -1.04634, y: 0.48589647}
-      - {x: -1.0038326, y: 0.21499836}
-      - {x: -0.24877298, y: -0.13161123}
-      - {x: 0.068505764, y: -0.27796113}
+    - - {x: -1.193223, y: 0.5278634}
+      - {x: -1.2556331, y: 0.15204823}
+      - {x: -0.5005735, y: -0.13161123}
+      - {x: 0.016047955, y: -0.33041942}
       - {x: 0.4649124, y: -0.14715314}
       - {x: 1.0404081, y: 0.42963338}
-      - {x: 1.1181192, y: 0.68505025}
-      - {x: -0.014910698, y: 1.104288}
+      - {x: 1.2545118, y: 0.7375088}
+      - {x: -0.004418373, y: 1.2196966}
   m_UseDelaunayMesh: 0
 --- !u!1001 &1432494452739411227
 PrefabInstance:
@@ -249,7 +249,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 590174658328717416, guid: 7dac5ebd896d56742b0b166108ed64da, type: 3}
       propertyPath: m_SortingOrder
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 590174658328717416, guid: 7dac5ebd896d56742b0b166108ed64da, type: 3}
       propertyPath: m_SortingLayerID
