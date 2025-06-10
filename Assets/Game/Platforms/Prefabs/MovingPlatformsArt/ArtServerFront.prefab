@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6344448677804106667}
   - component: {fileID: 7379457538811650463}
   m_Layer: 0
-  m_Name: ArtServer
+  m_Name: ArtServerFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
