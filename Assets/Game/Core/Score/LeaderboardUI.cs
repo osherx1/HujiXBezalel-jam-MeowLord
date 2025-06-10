@@ -55,6 +55,11 @@ public class LeaderboardUI : MonoBehaviour
     {
         int min = Mathf.FloorToInt(seconds / 60f);
         int sec = Mathf.CeilToInt(seconds % 60f);
+        if (sec == 60)
+        {
+            min += 1;
+            sec = 0;
+        }
         return $"{min:00}:{sec:00}";
     }
 }
