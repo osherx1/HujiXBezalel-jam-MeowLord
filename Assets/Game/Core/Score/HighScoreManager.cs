@@ -15,6 +15,7 @@ namespace Game.Core.Score
         private bool isWriteInProgress = false;
         private Action pendingFetch = null;
         private HighScoreLogger _logger;
+        private bool isGetHighScoreTableInProgress = false;
 
         public HighScoreManager(HighScoreLogger logger)
         {
@@ -27,7 +28,7 @@ namespace Game.Core.Score
             _logger?.Log($"TryAddHighScore called with score={score}, nickname={nickname}");
             if (string.IsNullOrEmpty(nickname))
                 nickname = "Player";
-
+            
             // Get all scores, update/add, and write back
             GetHighScoreTable(table =>
             {
@@ -42,6 +43,7 @@ namespace Game.Core.Score
                         var fetch = pendingFetch;
                         pendingFetch = null;
                         fetch();
+                        return;
                     }; // No update needed
                 }
                 else
@@ -62,6 +64,7 @@ namespace Game.Core.Score
                     };
                 }
                 _logger?.Log($"Writing high scores to Firebase: {string.Join(", ", list.Select(e => $"{e.Nickname}:{e.Score}"))}");
+                isWriteInProgress = true;
                 db.RootReference.Child(HighScoresPath).SetValueAsync(dict).ContinueWith(task => {
                     isWriteInProgress = false;
                     _logger?.Log($"Write complete. Success: {task.IsCompleted && !task.IsFaulted && !task.IsCanceled}");
@@ -78,14 +81,14 @@ namespace Game.Core.Score
         // For displaying the high scores (returns list for UI)
         public void GetHighScoreTable(Action<List<(int, int, string, float)>> callback)
         {
-            if (isWriteInProgress)
+            if (isWriteInProgress || isGetHighScoreTableInProgress)
             {
                 _logger?.Log("GetHighScoreTable called while write in progress. Queuing fetch.");
                 pendingFetch = () => GetHighScoreTable(callback);
                 return;
             }
             var db = FirebaseDatabase.DefaultInstance;
-            isWriteInProgress = true;
+            isGetHighScoreTableInProgress = true;
             db.RootReference.Child(HighScoresPath).OrderByValue().LimitToLast(MaxHighScores).GetValueAsync().ContinueWith(task =>
             {
                 var result = new List<(int, int, string, float)>();
@@ -121,6 +124,7 @@ namespace Game.Core.Score
                     }
                 }
                 _logger?.Log($"Fetched high scores: {string.Join(", ", result.Select(e => $"{e.Item3}:{e.Item2}"))}");
+                isGetHighScoreTableInProgress = false;
                 callback?.Invoke(result);
             });
         }

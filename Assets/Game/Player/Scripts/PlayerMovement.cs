@@ -467,6 +467,7 @@ namespace Game.Player.Scripts
                 {
                     _playerRatDetector.ApplyDamageToRat(enemy);
                 }
+                GameEvents.ScoreCombinatorReady();
                 for (int i = 0; i <= segRemoveTo && _segments.Count > 0; i++)
                 {
                     RemoveSegment(0);
