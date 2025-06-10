@@ -1,9 +1,11 @@
+using System;
 using Game.Core.Score;
 using UnityEngine;
 using System.Collections;
 using Game.Core.Generics;
 using Game.Core.Utils;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 namespace Game.Core.Managers
 {
@@ -14,11 +16,8 @@ namespace Game.Core.Managers
         private FirebaseInitializer _firebaseIntializer;
         [SerializeField] private HighScoreLogger highScoreLogger;
         private float _timeStarted;
-
-        public GameplayScore GameplayScore => _gameplayScore;
+        
         public HighScoreManager HighScoreManager => _highScoreManager;
-
-        // The single instance, lazily initialized
         
         private static readonly string[] _randomNames = new string[]
         {
@@ -36,22 +35,40 @@ namespace Game.Core.Managers
                 CurrentNickname = nickname;
         }
 
-        
-
-        // Private constructor prevents external instantiation
-        public void Awake()
+        public void OnEnable()
         {
-            _firebaseIntializer = new FirebaseInitializer(highScoreLogger);
-            _highScoreManager = new HighScoreManager(highScoreLogger);
-            int idx = Random.Range(0, _randomNames.Length);
-            CurrentNickname = _randomNames[idx];
-            _gameplayScore = new GameplayScore();
-            _timeStarted = Time.time;
+            GameEvents.OnGameInitialization += InitializeRelevantObjects;
             GameEvents.OnGameFinished += OnGameFinished;
+        }
+        
+        public void OnDisable()
+        {
+            GameEvents.OnGameInitialization -= InitializeRelevantObjects;
+            GameEvents.OnGameFinished -= OnGameFinished;
+        }
+
+        private void InitializeRelevantObjects()
+        {
+            if (highScoreLogger == null)
+            {
+                highScoreLogger = gameObject.AddComponent<HighScoreLogger>();
+            }
+            if (_firebaseIntializer == null)
+            {
+                _firebaseIntializer = new FirebaseInitializer(highScoreLogger);
+            }
+            if(_highScoreManager == null)  _highScoreManager = new HighScoreManager(highScoreLogger);
+            if (_gameplayScore == null) _gameplayScore = new GameplayScore();
+            _timeStarted = Time.time;
+            if (CurrentNickname == null)
+            {
+                int idx = Random.Range(0, _randomNames.Length);
+                CurrentNickname = _randomNames[idx];
+            }
             GameEvents.GameStarted();
             UnityMainThreadDispatcher.Instance.StartObject();
         }
-
+        
         private void OnGameFinished()
         {
             float finishedTime = Time.time - _timeStarted;

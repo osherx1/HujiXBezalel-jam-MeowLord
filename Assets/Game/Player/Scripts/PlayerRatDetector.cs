@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Game.Core.Managers;
 using Game.Core.Utils;
 using Game.Enemies.Scripts;
 using UnityEngine;
@@ -122,18 +123,19 @@ namespace Game.Player.Scripts
             foreach (var c in inPolygon){
                 ApplyDamageToRat(c);
             }
+            GameEvents.ScoreCombinatorReady();
         }
 
-        public IEnumerable<Collider2D> GetEnemiesInLoop(List<Transform> loopPlatforms, LayerMask enemyLayer)
+        public List<Collider2D> GetEnemiesInLoop(List<Transform> loopPlatforms, LayerMask enemyLayer)
         {
             var poly = GetPolygonPoints(loopPlatforms);
             var candidates = GetCandidateColliders(poly, enemyLayer);
             return CandidatesInPolygon(candidates, poly);
         }
 
-        private IEnumerable<Collider2D> CandidatesInPolygon(Collider2D[] candidates, Vector2[] poly)
+        private List<Collider2D> CandidatesInPolygon(Collider2D[] candidates, Vector2[] poly)
         {
-            return candidates.Where(c => EladsHelperFunctions.PointInPolygon(poly, c.transform.position,_playerStats.ForgivenceToPlayer));
+            return candidates.Where(c => c != null && EladsHelperFunctions.PointInPolygon(poly, c.transform.position,_playerStats.ForgivenceToPlayer)).ToList();
         }
 
         private Collider2D[] GetCandidateColliders(Vector2[] poly, LayerMask enemyLayer)

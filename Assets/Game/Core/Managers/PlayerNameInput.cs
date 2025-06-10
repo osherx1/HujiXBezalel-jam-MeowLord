@@ -13,5 +13,12 @@ public class PlayerNameInput : MonoBehaviour
         {
             GameManager.Instance.SetNickname(playerName); // Update the nickname in GameManager
         }
+        else
+        {
+            GameManager.Instance.SetNickname(null);
+        }
+        GameEvents.GameInitialization();
+        
+        
     }
 }

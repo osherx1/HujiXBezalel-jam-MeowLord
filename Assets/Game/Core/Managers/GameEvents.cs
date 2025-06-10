@@ -6,6 +6,7 @@ namespace Game.Core.Managers
 {
     public static class GameEvents
     {
+        public static event Action OnGameInitialization;
         public static event Action OnPlayerFall;
         public static event Action OnPlayerMoved;
         public static event Action OnGameFinished;
@@ -89,6 +90,18 @@ namespace Game.Core.Managers
         public static void PlayerFallPointsUpdate(Vector3 playerPosition)
         {
             OnPlayerFallPointsUpdate?.Invoke(playerPosition);
+        }
+
+        public static void GameInitialization()
+        {
+            OnGameInitialization?.Invoke();
+        }
+
+        public static event Action OnScoreCombinatorReady;
+
+        public static void ScoreCombinatorReady()
+        {
+            OnScoreCombinatorReady?.Invoke();
         }
     }
 }

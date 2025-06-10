@@ -61,8 +61,8 @@ namespace Game.Player.Scripts
         private bool _fall = false;
         private PlayerRatDetector _playerRatDetector;
         private MovingPlatform _lastMovingPlatform;
+        private bool _segmentDelay = false;
 
-        
 
         void Awake()
         {
@@ -89,6 +89,7 @@ namespace Game.Player.Scripts
         {
             _clickAction.performed += OnClick;
             GameEvents.OnPlayerFall += HandlePlayerFall;
+        
         }
 
         void OnDisable()
@@ -188,7 +189,7 @@ namespace Game.Player.Scripts
         private IEnumerator MoveToPlatformCoroutine(Transform platform)
         {
             isMoving = true;
-            while (Vector3.Distance(transform.position, platform.position) > 0.01f)
+            while (Vector3.Distance(transform.position, platform.position) > 0.05f)
             {
                 // Move towards the current platform position
                 transform.position =
@@ -197,7 +198,10 @@ namespace Game.Player.Scripts
             }
 
             transform.position = platform.position;
-            OnMoveComplete(platform);
+            animator.SetTrigger(Land);
+            onMoveCompleteEvent?.Invoke();
+            onMoveCompleteEvent = null;
+            isMoving = false;
         }
 
         private void RotatePlayerTowards(Transform target)
@@ -212,17 +216,10 @@ namespace Game.Player.Scripts
             }
         }
 
-        private void OnMoveComplete(Transform platform)
-        {
-            animator.SetTrigger(Land);
-            isMoving = false;
-            onMoveCompleteEvent?.Invoke();
-            onMoveCompleteEvent = null;
-        }
-
         private void PlayerFall()
         {
             GameEvents.PlayerFall();
+            GameEvents.ScoreCombinatorReady();
         }
 
         private (Transform, MouseSensor, MovingPlatform) FindNearestPlatformer()
@@ -254,7 +251,7 @@ namespace Game.Player.Scripts
 
         private void OnClick(InputAction.CallbackContext ctx)
         {
-            if (onMoveCompleteEvent != null || _fall) return;
+            if (isMoving || _fall) return;
             Vector2 screenPos = Mouse.current.position.ReadValue();
             Vector3 worldPos = _mainCam.ScreenToWorldPoint(screenPos);
             var hit = Physics2D.Raycast(worldPos, Vector2.zero, 0f, clickableLayer);
@@ -307,17 +304,20 @@ namespace Game.Player.Scripts
 
                 onMoveCompleteEvent = () =>
                 {
+                    _segmentDelay = true;
                     DOVirtual.DelayedCall(loopDestructionDelay, () =>
                     {
                         for (int i = _segments.Count - 1; i >= idx; i--)
                         {
                             RemoveSegment(i);
                         }
-
                         _playerRatDetector.DestroyEnemiesInLoop(loopPlatforms, enemyLayer);
+                        _segmentDelay = false;
                     });
                     DOVirtual.DelayedCall(playerLandedTimer, () =>
-                        GameEvents.PlayerLanded());
+                    {
+                        GameEvents.PlayerLanded();
+                    });
                 };
 
                 RegisterToPlatform(newPlatScript, _lastMovingPlatform); // Register before move
@@ -434,30 +434,39 @@ namespace Game.Player.Scripts
 
         private void Update()
         {
-            if (onMoveCompleteEvent != null || isMoving) return;
+            if (isMoving || _fall) return;
             CheckForClosedPolygons();
             CheckIfMouseOnPlatform();
         }
 
         private void CheckForClosedPolygons()
         {
+            if(_segmentDelay) return;
             var polygons = _playerRatDetector.CheckForClosedPolygons();
             if (polygons == null || polygons.Count == 0) return;
-
+            int segRemoveTo = -1;
+            int platRemoveTo = -1;
+            HashSet<Collider2D> totalEnemies = new HashSet<Collider2D>();
             foreach (var polygon in polygons)
             {
                 var enemies = _playerRatDetector.GetEnemiesInLoop(polygon.polygonPoints, enemyLayer);
                 if (enemies == null || !enemies.Any())
                     continue;
-                foreach (var enemy in enemies)
+                totalEnemies.UnionWith(enemies);
+                // Remove segments and platforms up to and including the highest index
+                segRemoveTo = Mathf.Max(polygon.highestSegmentIndex, segRemoveTo);
+                platRemoveTo = Mathf.Max(polygon.highestIndexPlatform,platRemoveTo);
+                if (platRemoveTo == _visited.Count - 1)
+                    platRemoveTo = platRemoveTo - 1; // Don't remove the platform the player is on
+                
+            }
+            
+            if (platRemoveTo != -1 && segRemoveTo != -1 && totalEnemies.Count != 0)
+            {
+                foreach (var enemy in totalEnemies)
                 {
                     _playerRatDetector.ApplyDamageToRat(enemy);
                 }
-                // Remove segments and platforms up to and including the highest index
-                int segRemoveTo = polygon.highestSegmentIndex;
-                int platRemoveTo = polygon.highestIndexPlatform;
-                if (platRemoveTo == _visited.Count - 1)
-                    platRemoveTo = platRemoveTo - 1; // Don't remove the platform the player is on
                 for (int i = 0; i <= segRemoveTo && _segments.Count > 0; i++)
                 {
                     RemoveSegment(0);
@@ -467,7 +476,6 @@ namespace Game.Player.Scripts
                     RemoveVisitedPlatformAt(0);
                 }
                 GameEvents.PlayerLanded();
-                break; // Only process the first polygon with enemies
             }
         }
 
@@ -486,8 +494,6 @@ namespace Game.Player.Scripts
 
             animator.SetBool(IsHovering, isHovering);
             GameEvents.PlatformHover(isHovering);
-            Debug.Log($"PlayerMovement: Hovering on platform: {isHovering}");
-
         }
 
         private void RemoveVisitedPlatformAt(int index)

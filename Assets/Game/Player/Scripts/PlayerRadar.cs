@@ -44,7 +44,7 @@ namespace Game.Player.Scripts
 
         private void UpdatePlatformsAndLights()
         {
-            playerLogger?.Log("PlayerRadar: Updating platforms and lights in range.");
+            
 
             // Find all platforms in range
             Collider2D[] hits = Physics2D.OverlapCircleAll(playerTransform.position, playerStats.radarRadius);
@@ -113,8 +113,7 @@ namespace Game.Player.Scripts
             platformsInRange = new List<GameObject>(newPlatformsInRange);
             lightAreasInRange = new List<GameObject>(newLightAreasInRange);
             _skeletonMecanimsInRange = new List<SkeletonMecanim>(newSkeletonsInRange);
-
-            playerLogger?.Log($"PlayerRadar: Enabled {lightAreasInRange.Count} light areas.");
+            
         }
 
         private void UpdatePlatformsAndLightsProcessing(GameObject platGO,

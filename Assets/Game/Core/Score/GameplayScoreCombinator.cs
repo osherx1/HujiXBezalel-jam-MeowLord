@@ -18,43 +18,15 @@ namespace Game.Core.Score
 
         private readonly GameplayScore _gameplayScore;
         private readonly List<(EventType type, Vector3 position)> _eventsThisFrame = new();
-        private GameObject _updaterGO;
-        private GameplayCombinatorUpdater _updater;
 
         public GameplayScoreCombinator(GameplayScore gameplayScore)
         {
             _gameplayScore = gameplayScore;
-            GameEvents.OnGameStarted += CreateGameplayCombinatorUpdater;
-            GameEvents.OnGameFinished += DestroyGameplayCombinatorUpdater;
-        }
-
-        private void CreateGameplayCombinatorUpdater()
-        {
-            // Subscribe to events
             GameEvents.OnPlayerFallPointsUpdate += OnPlayerFall;
             GameEvents.OnMouseCatch += OnMouseCatch;
-
-            if (_updaterGO == null)
-            {
-                _updaterGO = new GameObject("GameplayCombinatorUpdater");
-                _updater = _updaterGO.AddComponent<GameplayCombinatorUpdater>();
-                _updater.Init(this);
-            }
+            GameEvents.OnScoreCombinatorReady += UpdatePlayerScore;
         }
-
-        private void DestroyGameplayCombinatorUpdater()
-        {
-            // Unsubscribe from events
-            GameEvents.OnPlayerFallPointsUpdate -= OnPlayerFall;
-            GameEvents.OnMouseCatch -= OnMouseCatch;
-
-            if (_updaterGO != null)
-            {
-                Object.Destroy(_updaterGO);
-                _updaterGO = null;
-                _updater = null;
-            }
-        }
+        
 
         private void OnPlayerFall(Vector3 position)
         {
@@ -65,11 +37,7 @@ namespace Game.Core.Score
         {
             _eventsThisFrame.Add((EventType.MouseCatch, position));
         }
-
-        public void LateUpdate()
-        {
-            UpdatePlayerScore();
-        }
+        
 
         private void UpdatePlayerScore()
         {
@@ -127,17 +95,6 @@ namespace Game.Core.Score
         }
 
         // MonoBehaviour proxy for calling LateUpdate
-        private class GameplayCombinatorUpdater : MonoBehaviour
-        {
-            private GameplayScoreCombinator _scoreCombinator;
-            public void Init(GameplayScoreCombinator scoreCombinator)
-            {
-                _scoreCombinator = scoreCombinator;
-            }
-            private void LateUpdate()
-            {
-                _scoreCombinator?.LateUpdate();
-            }
-        }
+        
     }
 } 
