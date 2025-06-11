@@ -112,8 +112,20 @@ namespace Game.Enemies.Scripts
         {
             if (visualTransform == null) return;
 
+            bool isBackActive = backSkeleton.activeSelf;
+
+            // Normally, front faces right, back faces left (or vice versa depending on your art)
+            float flipDirection = xDirection < 0 ? -1f : 1f;
+
+            // If the active skeleton is flipped in design, invert the flip
+            if (isBackActive)
+            {
+                // Invert flip if front skeleton is mirrored in the art
+                flipDirection *= -1f;
+            }
+
             Vector3 scale = visualTransform.localScale;
-            scale.x = xDirection < 0 ? -Mathf.Abs(scale.x) : Mathf.Abs(scale.x);
+            scale.x = Mathf.Abs(scale.x) * flipDirection;
             visualTransform.localScale = scale;
         }
 
