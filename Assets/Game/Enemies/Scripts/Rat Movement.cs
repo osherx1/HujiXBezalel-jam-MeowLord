@@ -1,3 +1,4 @@
+using Game.Core.Managers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -26,7 +27,19 @@ namespace Game.Enemies.Scripts
         [SerializeField] private Transform visualTransform;
         [SerializeField] private GameObject frontSkeleton;
         [SerializeField] private GameObject backSkeleton;
+        private bool _isDead;
 
+
+        private void OnEnable()
+        {
+            GameEvents.OnMouseCatch += OnRatCaught;
+        }
+
+        private void OnDisable()
+        {
+            GameEvents.OnMouseCatch -= OnRatCaught;
+        }
+        
         
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -37,6 +50,7 @@ namespace Game.Enemies.Scripts
         // Update is called once per frame
         void Update()
         {
+            if (_isDead) return;
             _moveTimer += Time.deltaTime;
 
             if (!_isMoving && _moveTimer >= _moveInterval)
@@ -139,6 +153,24 @@ namespace Game.Enemies.Scripts
         {
             RaycastHit2D hit = Physics2D.Raycast(transform.position, _randomDirection, 1f, wallLayer);
             return hit.collider != null;
+        }
+        
+        private void OnRatCaught(Vector3 pos)
+        {
+            // Only affect this rat
+            if (Vector3.Distance(transform.position, pos) > 0.1f) return;
+
+            StopMovementAndShowFront();
+        }
+        
+        private void StopMovementAndShowFront()
+        {
+            _isMoving = false;
+            _isDead = true;
+
+            // Force back skeleton to hide, front to show
+            frontSkeleton.SetActive(true);
+            backSkeleton.SetActive(false);
         }
     }
 }

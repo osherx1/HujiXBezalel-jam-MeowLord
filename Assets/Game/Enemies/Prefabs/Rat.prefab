@@ -128,6 +128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 1
+  animator: {fileID: 863507590429610504}
 --- !u!70 &28706090543579344
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -320,6 +321,11 @@ PrefabInstance:
 --- !u!4 &363345502158777736 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4132702212550098641, guid: aee93848f0f7b409b97dfe465238dc44, type: 3}
+  m_PrefabInstance: {fileID: 4346134216613565273}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &863507590429610504 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 4011398432991543633, guid: aee93848f0f7b409b97dfe465238dc44, type: 3}
   m_PrefabInstance: {fileID: 4346134216613565273}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &2673754158456206790 stripped
