@@ -55,24 +55,26 @@ MonoBehaviour:
   dontMoveZoneWidthPercent: 0.8
   targetGroup: {fileID: 0}
   targetFraming: {fileID: 0}
-  startingFrameSize: 0.1
-  maxPlatformsForFrameShrinking: 5
-  minFrameSize: 0.02
+  startingFrameSize: 0.2
+  maxPlatformsForFrameShrinking: 6
+  minFrameSize: 0.05
   targetLogger: {fileID: 7166846718488591654}
   backgroundRenderer: {fileID: 0}
   backgroundCollider2D: {fileID: 0}
   colliderSizes:
-  - {x: 58.50642, y: 33.89979}
-  - {x: 60.64587, y: 34.898754}
-  - {x: 63.83382, y: 37.1597}
-  - {x: 64.87927, y: 38.28958}
-  - {x: 64.87927, y: 38.28958}
+  - {x: 50.979, y: 29.827}
+  - {x: 51.243, y: 29.895}
+  - {x: 51.481, y: 30.212}
+  - {x: 51.744, y: 30.476}
+  - {x: 52.274, y: 31.139}
+  - {x: 52.801, y: 31.538}
   colliderSizeOffsets:
-  - {x: -0.044267654, y: -0.1110878}
-  - {x: 0.0166, y: -0.6105}
-  - {x: 0.0871, y: -0.5904}
-  - {x: 0.02719688, y: -0.6425705}
-  - {x: 0.02719, y: -0.6425}
+  - {x: -0.438, y: 0.646}
+  - {x: -0.285, y: 0.68}
+  - {x: -0.309, y: 0.839}
+  - {x: -0.309, y: 0.97}
+  - {x: -0.442, y: 1.302}
+  - {x: -0.31, y: 1.501}
   cinemachineConfiner: {fileID: 0}
   uiExclusionZone:
     serializedVersion: 2

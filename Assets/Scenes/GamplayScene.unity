@@ -1285,7 +1285,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1310,7 +1310,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.000000014901161, y: -0.7654402, z: -1}
+  m_LocalPosition: {x: 0, y: -0.7654402, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1556,14 +1556,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FramingMode: 2
-  FramingSize: 0.1
+  FramingSize: 0.2
   CenterOffset: {x: 0, y: 0}
   Damping: 1.734
   SizeAdjustment: 2
   LateralAdjustment: 0
   FovRange: {x: 1, y: 100}
   DollyRange: {x: -100, y: 100}
-  OrthoSizeRange: {x: 1, y: 18.2}
+  OrthoSizeRange: {x: 1, y: 14.8}
 --- !u!1 &619394800
 GameObject:
   m_ObjectHideFlags: 0
@@ -3786,7 +3786,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0871, y: -0.5904}
+  m_Offset: {x: -0.438, y: 0.646}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -3796,7 +3796,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 63.83382, y: 37.1597}
+  m_Size: {x: 50.979, y: 29.827}
   m_EdgeRadius: 0
 --- !u!1 &1447418058
 GameObject:
@@ -8575,10 +8575,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 576777299}
     - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
-      propertyPath: minFrameSize
-      value: 0.05
-      objectReference: {fileID: 0}
-    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
       propertyPath: targetFraming
       value: 
       objectReference: {fileID: 576777301}
@@ -8598,34 +8594,6 @@ PrefabInstance:
       propertyPath: backgroundCollider2D
       value: 
       objectReference: {fileID: 1406787730}
-    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
-      propertyPath: colliderSizes.Array.size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
-      propertyPath: colliderSizes.Array.data[5].x
-      value: 64.87927
-      objectReference: {fileID: 0}
-    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
-      propertyPath: colliderSizes.Array.data[5].y
-      value: 38.28958
-      objectReference: {fileID: 0}
-    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
-      propertyPath: maxPlatformsForFrameShrinking
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
-      propertyPath: colliderSizeOffsets.Array.size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
-      propertyPath: colliderSizeOffsets.Array.data[5].x
-      value: 0.02719
-      objectReference: {fileID: 0}
-    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
-      propertyPath: colliderSizeOffsets.Array.data[5].y
-      value: -0.6425
-      objectReference: {fileID: 0}
     - target: {fileID: 9210976875638248917, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
       propertyPath: m_Name
       value: CameraTarget
