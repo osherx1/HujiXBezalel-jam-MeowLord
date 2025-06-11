@@ -5,6 +5,7 @@ namespace Game.Platforms.Scripts
         King,
         Queen,
         ServantRed,
+        ServantCart,
         ServantChef
     }
 }

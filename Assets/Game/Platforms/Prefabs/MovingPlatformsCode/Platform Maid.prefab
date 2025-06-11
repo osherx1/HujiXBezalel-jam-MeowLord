@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6805153018972890223}
+  - component: {fileID: 6308876668014842229}
   m_Layer: 0
   m_Name: Platform Maid
   m_TagString: Untagged
@@ -33,6 +34,25 @@ Transform:
   - {fileID: 8396271661702136673}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6308876668014842229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6035712934259850929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 554c614d3bea1384d959141b0bcc4945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 4
+  _isMoving: 1
+  animator: {fileID: 0}
+  hasPlayerOnTop: 0
+  hasYarnAttached: 0
+  spriteRoot: {fileID: 8733811148577915218}
+  platformType: 3
 --- !u!1001 &5312343289368258015
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -84,10 +104,6 @@ PrefabInstance:
     - target: {fileID: 8588805641656770609, guid: 843c66f4f39e246ad8aa9ee93fb4ab24, type: 3}
       propertyPath: m_Name
       value: ArtMaidBack
-      objectReference: {fileID: 0}
-    - target: {fileID: 8588805641656770609, guid: 843c66f4f39e246ad8aa9ee93fb4ab24, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

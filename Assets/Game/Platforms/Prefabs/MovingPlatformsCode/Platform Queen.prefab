@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1076850464774849079}
+  - component: {fileID: 1116053366034230601}
   m_Layer: 0
   m_Name: Platform Queen
   m_TagString: Untagged
@@ -33,6 +34,25 @@ Transform:
   - {fileID: 436504606201344136}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1116053366034230601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 423978460103435348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 554c614d3bea1384d959141b0bcc4945, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 3
+  _isMoving: 1
+  animator: {fileID: 0}
+  hasPlayerOnTop: 0
+  hasYarnAttached: 0
+  spriteRoot: {fileID: 8021442461913170467}
+  platformType: 1
 --- !u!1001 &2692108518029773143
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -106,10 +126,6 @@ PrefabInstance:
     - target: {fileID: 525414242354672549, guid: 7a2f7e8a97683407f8a0c5abd8d2fdb4, type: 3}
       propertyPath: m_Name
       value: ArtQueenBack
-      objectReference: {fileID: 0}
-    - target: {fileID: 525414242354672549, guid: 7a2f7e8a97683407f8a0c5abd8d2fdb4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6775725045449845380, guid: 7a2f7e8a97683407f8a0c5abd8d2fdb4, type: 3}
       propertyPath: m_LocalPosition.x
