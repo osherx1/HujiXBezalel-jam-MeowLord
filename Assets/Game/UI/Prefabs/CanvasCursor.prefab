@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 102e74ffd49b211449ba67a913ec01ab, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9cdf28fce3aae4bc8be76a18e3f9221f, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -90,9 +90,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursorRect: {fileID: 6284098214006155331}
   cursorImage: {fileID: 5880627958416807800}
-  normalSprite: {fileID: 21300000, guid: 102e74ffd49b211449ba67a913ec01ab, type: 3}
-  hoverSprite: {fileID: 21300000, guid: 93f38b83a42ecdf4799a07f50fd7fa69, type: 3}
-  activeSprite: {fileID: 21300000, guid: b588d6408b8ec6f43bee39a37190508c, type: 3}
+  normalSprite: {fileID: 21300000, guid: 9cdf28fce3aae4bc8be76a18e3f9221f, type: 3}
+  hoverSprite: {fileID: 21300000, guid: e5ada2950422b4fe79ed12eb0b5bc4d0, type: 3}
+  activeSprite: {fileID: 21300000, guid: 702b264b036724f46a28e746b48da15e, type: 3}
   platformLayerMask:
     serializedVersion: 2
     m_Bits: 64
