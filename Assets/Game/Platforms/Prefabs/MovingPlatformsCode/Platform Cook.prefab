@@ -48,10 +48,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 4
   _isMoving: 1
-  animator: {fileID: 0}
+  animatorForward: {fileID: 0}
+  animatorBackward: {fileID: 0}
+  spriteRootForward: {fileID: 1162055188845293447}
+  spriteRootBackward: {fileID: 5166924881929471841}
   hasPlayerOnTop: 0
   hasYarnAttached: 0
-  spriteRoot: {fileID: 1162055188845293447}
   platformType: 4
 --- !u!1001 &3238035831288911168
 PrefabInstance:
@@ -64,10 +66,6 @@ PrefabInstance:
     - target: {fileID: 1780339612602817405, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
       propertyPath: m_Name
       value: ArtCookBack
-      objectReference: {fileID: 0}
-    - target: {fileID: 1780339612602817405, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7735858849910805025, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -170,10 +168,6 @@ PrefabInstance:
     - target: {fileID: 7580321461049017688, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
       propertyPath: m_Name
       value: ArtCookFront
-      objectReference: {fileID: 0}
-    - target: {fileID: 7580321461049017688, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

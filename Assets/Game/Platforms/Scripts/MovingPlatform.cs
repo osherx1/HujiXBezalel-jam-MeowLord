@@ -6,19 +6,26 @@ namespace Game.Platforms.Scripts
 {
     public class MovingPlatform : MonoBehaviour
     {
-        [Header("Movement Settings")] public float moveSpeed = 2f;
+        [Header("Movement Settings")] 
+        public float moveSpeed = 2f;
 
-        [Header("Platform State")] [SerializeField]
-        private bool _isMoving = false;
+        [Header("Platform State")] 
+        [SerializeField] private bool _isMoving = false;
 
-        [Header("Animator")] [SerializeField]
-        private Animator animator;
-        
+        [Header("Animators & Sprite Roots")]
+        [SerializeField] private Animator animatorForward;
+        [SerializeField] private Animator animatorBackward;
+        [SerializeField] private Transform spriteRootForward;
+        [SerializeField] private Transform spriteRootBackward;
+
+        // Which direction are we facing right now?
+        private bool _isFacingForward = true;
+        public bool IsFacingForward => _isFacingForward;
+
         [Header("Platform state logic")]
-        public bool hasPlayerOnTop = false;  
-        public bool hasYarnAttached = false; 
-        
-        [SerializeField] private Transform spriteRoot;
+        public bool hasPlayerOnTop = false;
+        public bool hasYarnAttached = false;
+
         public bool isMoving => _isMoving;
         public event Action OnPlatformReturn;
 
@@ -34,25 +41,16 @@ namespace Game.Platforms.Scripts
         private MouseSensor mouseSensor;
         private bool _runAway = false;
         private float _savedSpeed = 0f;
-        
-        
-        private static readonly Vector2 RIGHT_REF = new Vector2(1, -0.5f).normalized;
-        private static readonly Vector2 LEFT_REF  = new Vector2(-1, 0.5f).normalized;
-        private static readonly Vector2 UP_REF    = new Vector2(1, 0.5f).normalized;
-        private static readonly Vector2 DOWN_REF  = new Vector2(-1, -0.5f).normalized;
-        
-        private enum IsoDirection4 { Right, Left, Up, Down }
 
-        private System.Action<MovingPlatform> _onFinish; // Callback for pool return
+        private System.Action<MovingPlatform> _onFinish;
 
-        // Init now receives the selected route
+        // ---------- INIT ----------
         public void Init(GameObject route, float speed, System.Action<MovingPlatform> onFinish)
         {
             routeParent = route;
             moveSpeed = speed;
             _onFinish = onFinish;
 
-            // Collect waypoints from routeParent's children
             waypoints.Clear();
             foreach (Transform child in routeParent.transform)
             {
@@ -67,19 +65,22 @@ namespace Game.Platforms.Scripts
             _waiting = false;
             _waitTimer = 0f;
             transform.position = waypoints.Count > 0 ? waypoints[0].transform.position : Vector3.zero;
+
+            // Always start with forward visible, backward hidden
+            SetSpriteRootActive(true);
+
             var polygonCollider = GetComponent<PolygonCollider2D>();
             polygonCollider.enabled = true;
             gameObject.SetActive(true);
         }
-        
+
         void Awake()
         {
-            animator = GetComponentInChildren<Animator>();
+            // You must assign animatorForward, animatorBackward, spriteRootForward, spriteRootBackward from Inspector!
             mouseSensor = GetComponentInChildren<MouseSensor>();
             if (mouseSensor != null)
                 mouseSensor.OnAfraidChanged += SetAfraid;
         }
-        
 
         void Update()
         {
@@ -91,7 +92,6 @@ namespace Game.Platforms.Scripts
 
             if (!_isMoving) return;
             if (_currentWaypoint < 0 || _currentWaypoint >= waypoints.Count) return;
-
             if (HandleWaiting()) return;
 
             UpdateWalkingAnim();
@@ -100,59 +100,14 @@ namespace Game.Platforms.Scripts
 
             HandleWaypointArrival();
         }
-        
+
         void OnDestroy()
         {
             if (mouseSensor != null)
                 mouseSensor.OnAfraidChanged -= SetAfraid;
         }
-        
-        private void HandleRunAway()
-        {
-            if (animator != null)
-                animator.SetBool("IsWalking", true);
 
-            Vector3 startPos = waypoints[0].transform.position;
-            transform.position = Vector3.MoveTowards(transform.position, startPos, moveSpeed * Time.deltaTime);
-
-            // Flip sprite
-            Vector3 escapeDir = startPos - transform.position;
-            UpdateSpriteDirection(escapeDir);
-
-            if (Vector3.Distance(transform.position, startPos) < 0.01f)
-            {
-                moveSpeed = _savedSpeed;
-                _runAway = false;
-                _isMoving = false;
-                if (animator != null)
-                    animator.SetBool("IsWalking", false);
-                _onFinish?.Invoke(this);
-            }
-        }
-
-        
-        private bool HandleWaiting()
-        {
-            if (_waiting)
-            {
-                _waitTimer -= Time.deltaTime;
-                if (_waitTimer <= 0f)
-                    _waiting = false;
-                else
-                {
-                    if (animator != null)
-                        animator.SetBool("IsWalking", false);
-                    return true;
-                }
-            }
-            return false;
-        }
-        
-        private void UpdateWalkingAnim()
-        {
-            if (animator != null)
-                animator.SetBool("IsWalking", _isMoving && !_waiting);
-        }
+        // ---------- Core movement ----------
 
         private void MoveToWaypoint()
         {
@@ -168,19 +123,16 @@ namespace Game.Platforms.Scripts
 
             if (Vector3.Distance(transform.position, targetPos) < 0.01f)
             {
+                
                 if (waypoints[_currentWaypoint].stopAtPoint && waypoints[_currentWaypoint].stopDelay > 0f)
                 {
                     _waiting = true;
                     _waitTimer = waypoints[_currentWaypoint].stopDelay;
                 }
 
-                if (_direction == 1 && _currentWaypoint == waypoints.Count - 1)
+                
+                if (_direction == -1 && _currentWaypoint == 0)
                 {
-                    _direction = -1;
-                }
-                else if (_direction == -1 && _currentWaypoint == 0)
-                {
-                    // Do not return to pool if player is on top or yarn is attached
                     if (hasPlayerOnTop || hasYarnAttached)
                     {
                         _direction = 1;
@@ -192,12 +144,17 @@ namespace Game.Platforms.Scripts
                         _isMoving = true;
                         return;
                     }
-
+                    
                     _isMoving = false;
-                    if (animator != null)
-                        animator.SetBool("IsWalking", false);
+                    SetWalkingAnim(false);
                     _onFinish?.Invoke(this);
                     return;
+                }
+
+                // הפוך לסוף הנתיב קדימה
+                if (_direction == 1 && _currentWaypoint == waypoints.Count - 1)
+                {
+                    _direction = -1;
                 }
 
                 int nextWaypoint = _currentWaypoint + _direction;
@@ -206,15 +163,125 @@ namespace Game.Platforms.Scripts
                     Vector3 nextDir = waypoints[nextWaypoint].transform.position - waypoints[_currentWaypoint].transform.position;
                     UpdateSpriteDirection(nextDir);
                 }
-
                 _currentWaypoint += _direction;
             }
         }
+
+        private bool HandleWaiting()
+        {
+            if (_waiting)
+            {
+                _waitTimer -= Time.deltaTime;
+                if (_waitTimer <= 0f)
+                    _waiting = false;
+                else
+                {
+                    SetWalkingAnim(false);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void UpdateWalkingAnim()
+        {
+            SetWalkingAnim(_isMoving && !_waiting);
+        }
+
+        // ---------- Sprites + Animation Logic ----------
+
+        private void SetWalkingAnim(bool isWalking)
+        {
+            // Only set the relevant animator
+            if (_isFacingForward)
+            {
+                if (animatorForward != null)
+                    animatorForward.SetBool("IsWalking", isWalking);
+            }
+            else
+            {
+                if (animatorBackward != null)
+                    animatorBackward.SetBool("IsWalking", isWalking);
+            }
+        }
         
+        private enum IsoDirection4 { RightDown, RightUp, LeftDown, LeftUp, Left, Up, Down }
+
+        private void UpdateSpriteDirection(Vector3 direction)
+        {
+            if (direction == Vector3.zero) return;
+            Transform flipTarget = transform;
+
+            var isRight = direction.x > 0;
+            var isUp = direction.y > 0;
+
+            SetSpriteRootActive(!isUp);
+            var multiplier = isRight ^ isUp ? 1f : -1f;
+            flipTarget.localScale = new Vector3(Mathf.Abs(flipTarget.localScale.x) * multiplier, flipTarget.localScale.y, flipTarget.localScale.z);
+        }
+
+private void SetSpriteRootActive(bool isForward)
+{
+    spriteRootForward.gameObject.SetActive(isForward);
+    spriteRootBackward.gameObject.SetActive(!isForward);
+}
+
+
+
+
+            
+            public void OnPlayerJumpedOnKingOrQueen()
+            {
+                PolygonCollider2D childCollider = null;
+                if (_isFacingForward && spriteRootForward != null)
+                    childCollider = spriteRootForward.GetComponent<PolygonCollider2D>();
+                else if (!_isFacingForward && spriteRootBackward != null)
+                    childCollider = spriteRootBackward.GetComponent<PolygonCollider2D>();
+                if (childCollider != null)
+                    childCollider.enabled = false;
+                
+                // animatorForward.SetTrigger("KingHurt");
+                // animatorBackward.SetTrigger("KingHurt");
+                
+                GoBackToStart();
+            }
+
+            private void GoBackToStart()
+            {
+                _runAway = true;
+                _savedSpeed = moveSpeed;
+                moveSpeed *= 2f;
+                _direction = -1; 
+                SetWalkingAnim(true);
+            }
+
+            private void HandleRunAway()
+            {
+                Vector3 startPos = waypoints[0].transform.position;
+                transform.position = Vector3.MoveTowards(transform.position, startPos, moveSpeed * Time.deltaTime);
+
+                Vector3 escapeDir = startPos - transform.position;
+                UpdateSpriteDirection(escapeDir);
+
+                if (Vector3.Distance(transform.position, startPos) < 0.01f)
+                {
+                    moveSpeed = _savedSpeed;
+                    _runAway = false;
+                    _isMoving = false;
+                    SetWalkingAnim(false);
+                    _onFinish?.Invoke(this);
+                }
+            }
+            
+
+        // ---------- Afraid/Mouse ----------
+
         public void SetAfraid(bool isAfraid)
         {
-            if (animator != null)
-                animator.SetTrigger("IsAfraid");
+            if (_isFacingForward)
+                animatorForward?.SetTrigger("IsAfraid");
+            else
+                animatorBackward?.SetTrigger("IsAfraid");
 
             var polygonCollider = GetComponent<PolygonCollider2D>();
             if (polygonCollider != null)
@@ -225,10 +292,8 @@ namespace Game.Platforms.Scripts
                 if (waypoints != null && waypoints.Count > 0)
                 {
                     _savedSpeed = moveSpeed;
-                    moveSpeed *= 2f; // Double speed
-                    
-                    if (_direction != -1)
-                        _direction = -1;
+                    moveSpeed *= 2f;
+                    _direction = -1;
                 }
             }
             else
@@ -238,62 +303,8 @@ namespace Game.Platforms.Scripts
             }
         }
 
-        private void UpdateSpriteDirection(Vector3 direction)
-        {
-            if (direction == Vector3.zero) return;
+        // ---------- Utility ----------
 
-            IsoDirection4 dir = GetClosestDirection(new Vector2(direction.x, direction.y));
-            Transform flipTarget = spriteRoot != null ? spriteRoot : transform;
-
-            switch (dir)
-            {
-                case IsoDirection4.Right:
-                    flipTarget.localScale = new Vector3(Mathf.Abs(flipTarget.localScale.x), flipTarget.localScale.y, flipTarget.localScale.z);
-                    // animator.Play("WalkRight");
-                    break;
-                case IsoDirection4.Left:
-                    flipTarget.localScale = new Vector3(-Mathf.Abs(flipTarget.localScale.x), flipTarget.localScale.y, flipTarget.localScale.z);
-                    // animator.Play("WalkLeft");
-                    break;
-                case IsoDirection4.Up:
-                case IsoDirection4.Down:
-                    if (direction.x > 0.01f)
-                        flipTarget.localScale = new Vector3(Mathf.Abs(flipTarget.localScale.x), flipTarget.localScale.y, flipTarget.localScale.z);
-                    else if (direction.x < -0.01f)
-                        flipTarget.localScale = new Vector3(-Mathf.Abs(flipTarget.localScale.x), flipTarget.localScale.y, flipTarget.localScale.z);
-                    // animator.Play(dir == IsoDirection4.Up ? "WalkUp" : "WalkDown");
-                    break;
-            }
-        }
-
-
-        public void PlatformReturn()
-        {
-            OnPlatformReturn?.Invoke();
-        }
-
-        private IsoDirection4 GetClosestDirection(Vector2 dir)
-        {
-            Vector2 right = IsometricDirectionHelper.RightDirection;
-            Vector2 left  = IsometricDirectionHelper.LeftDirection;
-            Vector2 up    = IsometricDirectionHelper.UpDirection;
-            Vector2 down  = IsometricDirectionHelper.DownDirection;
-
-            float dotRight = Vector2.Dot(dir, right);
-            float dotLeft  = Vector2.Dot(dir, left);
-            float dotUp    = Vector2.Dot(dir, up);
-            float dotDown  = Vector2.Dot(dir, down);
-
-            float maxDot = dotRight;
-            IsoDirection4 best = IsoDirection4.Right;
-
-            if (dotLeft > maxDot)  { maxDot = dotLeft;  best = IsoDirection4.Left; }
-            if (dotUp   > maxDot)  { maxDot = dotUp;    best = IsoDirection4.Up; }
-            if (dotDown > maxDot)  { maxDot = dotDown;  best = IsoDirection4.Down; }
-
-            return best;
-        }
-
-
+        public void PlatformReturn() => OnPlatformReturn?.Invoke();
     }
 }
