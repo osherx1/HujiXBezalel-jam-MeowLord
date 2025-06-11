@@ -130,7 +130,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 1
   animator: {fileID: 863507590429610504}
-  visualTransform: {fileID: 0}
+  visualTransform: {fileID: 4403993085036343574}
 --- !u!70 &28706090543579344
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
