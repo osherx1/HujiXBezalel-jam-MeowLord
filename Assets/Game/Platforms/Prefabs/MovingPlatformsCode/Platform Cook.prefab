@@ -48,10 +48,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 4
   _isMoving: 1
-  animator: {fileID: 0}
+  animatorForward: {fileID: 0}
+  animatorBackward: {fileID: 0}
+  spriteRootForward: {fileID: 1162055188845293447}
+  spriteRootBackward: {fileID: 5166924881929471841}
   hasPlayerOnTop: 0
   hasYarnAttached: 0
-  spriteRoot: {fileID: 1162055188845293447}
   platformType: 4
 --- !u!1001 &3238035831288911168
 PrefabInstance:
