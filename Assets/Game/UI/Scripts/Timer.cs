@@ -8,37 +8,40 @@ namespace Game.UI.Scripts
     public class Timer : MonoBehaviour
     {
         [SerializeField] TextMeshProUGUI timerText;
-        [SerializeField] private float _timeLeft = 300;//5 minutes
-        private bool _isFlashing = false;
-        private float _flashTimer = 0f;
-        private bool _isRed = false;
+        [SerializeField] private float timeLeft = 300;//5 minutes
+        [SerializeField] private float blinkTimer = 20f;
+        [SerializeField] private float redTimer = 5f;
+        
+        private bool _isFlashing;
+        private float _flashTimer;
+        private bool _isRed;
 
     
         // Update is called once per frame
         void Update()
         {
-            if (_timeLeft > 0)
+            if (timeLeft > 0)
             {
-                _timeLeft -= Time.deltaTime;
+                timeLeft -= Time.deltaTime;
             }
 
-            if (_timeLeft < 0)
+            if (timeLeft < 0)
             {
-                _timeLeft = 0;
+                timeLeft = 0;
                 GameEvents.GameFinished();
             }
-            int minutes = Mathf.FloorToInt(_timeLeft / 60);
-            int seconds = Mathf.FloorToInt(_timeLeft % 60);
+            int minutes = Mathf.FloorToInt(timeLeft / 60);
+            int seconds = Mathf.FloorToInt(timeLeft % 60);
             timerText.text = $"{minutes:00}:{seconds:00}";
             
             // Handle flashing
-            if (_timeLeft <= 10)
+            if (timeLeft <= redTimer)
             {
                 // Stop flashing and stay red
                 timerText.color = Color.red;
                 _isFlashing = false;
             }
-            else if (_timeLeft <= 30)
+            else if (timeLeft <= blinkTimer)
             {
                 if (!_isFlashing)
                 {

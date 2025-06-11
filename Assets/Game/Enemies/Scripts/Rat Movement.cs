@@ -18,6 +18,15 @@ namespace Game.Enemies.Scripts
         
         private float _moveTimer;
         private readonly float _moveInterval = 1f;
+
+        [SerializeField] private float leftMovement = 45f;
+        [SerializeField] private float rightMovement = 135f;
+        
+        [Header("animations")]
+        [SerializeField] private Transform visualTransform;
+        [SerializeField] private GameObject frontSkeleton;
+        [SerializeField] private GameObject backSkeleton;
+
         
         // Start is called once before the first execution of Update after the MonoBehaviour is created
         void Start()
@@ -56,6 +65,8 @@ namespace Game.Enemies.Scripts
             }
 
             _isMoving = true;
+            UpdateActiveSkeleton(_randomDirection.y);
+            FlipSprite(_randomDirection.x);
         }
         
         private void Move()
@@ -82,9 +93,30 @@ namespace Game.Enemies.Scripts
         
         private Vector2 GetRandomDirection()
         {
-            float angle = Random.Range(0f, 360f);
-            return new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).normalized;
+            float[] allowedAngles = { leftMovement, rightMovement, 180+leftMovement, 180+rightMovement };
+            float angle = allowedAngles[Random.Range(0, allowedAngles.Length)];
+            float radians = angle * Mathf.Deg2Rad;
+            return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)).normalized;
         }
+        
+        private void UpdateActiveSkeleton(float yDirection)
+        {
+            bool isMovingForward = yDirection < 0;
+
+            frontSkeleton.SetActive(isMovingForward);
+            backSkeleton.SetActive(!isMovingForward);
+        }
+
+        
+        private void FlipSprite(float xDirection)
+        {
+            if (visualTransform == null) return;
+
+            Vector3 scale = visualTransform.localScale;
+            scale.x = xDirection < 0 ? -Mathf.Abs(scale.x) : Mathf.Abs(scale.x);
+            visualTransform.localScale = scale;
+        }
+
         
         private float GetRandomDistance()
         {

@@ -104,12 +104,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8d871767137c6a4bb31ff0c91644ae9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
-  maxMovement: 3
+  speed: 2
+  maxMovement: 6
   minMovement: 1
   wallLayer:
     serializedVersion: 2
     m_Bits: 8
+  leftMovement: 45
+  rightMovement: 135
+  visualTransform: {fileID: 4403993085036343574}
+  frontSkeleton: {fileID: 2673754158456206790}
+  backSkeleton: {fileID: 4346376675703900344}
 --- !u!114 &2788262734768422978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,6 +264,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ArtRat
       objectReference: {fileID: 0}
+    - target: {fileID: 1822699142899394207, guid: aee93848f0f7b409b97dfe465238dc44, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4132702212550098641, guid: aee93848f0f7b409b97dfe465238dc44, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -311,5 +320,10 @@ PrefabInstance:
 --- !u!4 &363345502158777736 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4132702212550098641, guid: aee93848f0f7b409b97dfe465238dc44, type: 3}
+  m_PrefabInstance: {fileID: 4346134216613565273}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &2673754158456206790 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1822699142899394207, guid: aee93848f0f7b409b97dfe465238dc44, type: 3}
   m_PrefabInstance: {fileID: 4346134216613565273}
   m_PrefabAsset: {fileID: 0}
