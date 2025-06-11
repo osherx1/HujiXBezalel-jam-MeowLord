@@ -205,64 +205,20 @@ namespace Game.Platforms.Scripts
             }
         }
         
-        
-        private enum IsoDirection4 { Right, Left, Up, Down } 
-private void UpdateSpriteDirection(Vector3 direction)
-{
-    if (direction == Vector3.zero) return;
+        private enum IsoDirection4 { RightDown, RightUp, LeftDown, LeftUp, Left, Up, Down }
 
-    IsoDirection4 dir = GetClosestDirection(new Vector2(direction.x, direction.y));
-    Transform flipTarget = transform;
-    string flipStr = "none";
-    string childStr = "";
+        private void UpdateSpriteDirection(Vector3 direction)
+        {
+            if (direction == Vector3.zero) return;
+            Transform flipTarget = transform;
 
-    float scaleX = 0.43f;
-    float scaleY = 0.43f;
+            var isRight = direction.x > 0;
+            var isUp = direction.y > 0;
 
-    switch (dir)
-    {
-        case IsoDirection4.Right:
-            // Use backward child, flip
-            SetSpriteRootActive(false); // backward
-            childStr = "backward";
-            flipTarget = spriteRootBackward != null ? spriteRootBackward : transform;
-            flipTarget.localScale = new Vector3(-Mathf.Abs(scaleX), scaleY, flipTarget.localScale.z);
-            flipStr = "flip (right, backward)";
-            break;
-        case IsoDirection4.Left:
-            // Use forward child, flip
-            SetSpriteRootActive(true); // forward
-            childStr = "forward";
-            flipTarget = spriteRootForward != null ? spriteRootForward : transform;
-            flipTarget.localScale = new Vector3(-Mathf.Abs(scaleX), scaleY, flipTarget.localScale.z);
-            flipStr = "flip (left, forward)";
-            break;
-        case IsoDirection4.Up:
-            // Use backward child, flip
-            SetSpriteRootActive(false); // backward
-            childStr = "backward";
-            flipTarget = spriteRootBackward != null ? spriteRootBackward : transform;
-            flipTarget.localScale = new Vector3(-Mathf.Abs(scaleX), scaleY, flipTarget.localScale.z);
-            flipStr = "flip (up, backward)";
-            break;
-        case IsoDirection4.Down:
-            SetSpriteRootActive(true); // forward
-            childStr = "forward";
-            flipTarget = spriteRootForward != null ? spriteRootForward : transform;
-            flipTarget.localScale = new Vector3(-Mathf.Abs(scaleX), scaleY, flipTarget.localScale.z);
-            flipStr = "flip (down, forward)";
-            break;
-
-    }
-
-    Debug.Log($"[UpdateSpriteDirection] Direction: {dir}, Flip: {flipStr}, Active Child: {childStr}, scale.x: {flipTarget.localScale.x}, forward.active={spriteRootForward?.gameObject.activeSelf}, backward.active={spriteRootBackward?.gameObject.activeSelf}");
-}
-
-
-
-
-
-
+            SetSpriteRootActive(!isUp);
+            var multiplier = isRight ^ isUp ? 1f : -1f;
+            flipTarget.localScale = new Vector3(Mathf.Abs(flipTarget.localScale.x) * multiplier, flipTarget.localScale.y, flipTarget.localScale.z);
+        }
 
 private void SetSpriteRootActive(bool isForward)
 {
@@ -317,29 +273,6 @@ private void SetSpriteRootActive(bool isForward)
                 }
             }
             
-            private IsoDirection4 GetClosestDirection(Vector2 dir)
-            {
-                // הגדרות דיפולטיביות עבור כיווני isometric, אפשר לשנות לפי איך שהעולם שלך בנוי
-                Vector2 right = new Vector2(1, -0.5f).normalized;
-                Vector2 left  = new Vector2(-1, 0.5f).normalized;
-                Vector2 up    = new Vector2(1, 0.5f).normalized;
-                Vector2 down  = new Vector2(-1, -0.5f).normalized;
-
-                float dotRight = Vector2.Dot(dir, right);
-                float dotLeft  = Vector2.Dot(dir, left);
-                float dotUp    = Vector2.Dot(dir, up);
-                float dotDown  = Vector2.Dot(dir, down);
-
-                float maxDot = dotRight;
-                IsoDirection4 best = IsoDirection4.Right;
-
-                if (dotLeft > maxDot)  { maxDot = dotLeft;  best = IsoDirection4.Left; }
-                if (dotUp   > maxDot)  { maxDot = dotUp;    best = IsoDirection4.Up; }
-                if (dotDown > maxDot)  { maxDot = dotDown;  best = IsoDirection4.Down; }
-
-                return best;
-            }
-
 
         // ---------- Afraid/Mouse ----------
 
