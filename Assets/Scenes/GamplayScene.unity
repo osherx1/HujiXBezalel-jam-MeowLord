@@ -2750,7 +2750,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerText: {fileID: 1833173216}
-  timeLeft: 300
+  timeLeft: 90
   blinkTimer: 20
   redTimer: 5
   edgeFlashes:
