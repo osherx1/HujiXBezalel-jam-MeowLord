@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using Game.Core.Managers;
+using UnityEngine.UI;
 
 
 namespace Game.UI.Scripts
@@ -11,6 +12,8 @@ namespace Game.UI.Scripts
         [SerializeField] private float timeLeft = 300;//5 minutes
         [SerializeField] private float blinkTimer = 20f;
         [SerializeField] private float redTimer = 5f;
+        
+        [SerializeField] private Graphic[] edgeFlashes;
         
         private bool _isFlashing;
         private float _flashTimer;
@@ -39,6 +42,11 @@ namespace Game.UI.Scripts
             {
                 // Stop flashing and stay red
                 timerText.color = Color.red;
+                foreach (var edge in edgeFlashes)
+                {
+                    if (edge != null)
+                        edge.color = Color.red;
+                }
                 _isFlashing = false;
             }
             else if (timeLeft <= blinkTimer)
@@ -55,13 +63,25 @@ namespace Game.UI.Scripts
                 {
                     _flashTimer = 0f;
                     _isRed = !_isRed;
-                    timerText.color = _isRed ? Color.red : Color.white;
+                    Color flashColor = _isRed ? Color.red : Color.white;
+                    timerText.color = flashColor;
+
+                    foreach (var edge in edgeFlashes)
+                    {
+                        if (edge != null)
+                            edge.color = flashColor;
+                    }
                 }
             }
             else
             {
                 // Reset to default
                 timerText.color = Color.white;
+                foreach (var edge in edgeFlashes)
+                {
+                    if (edge != null)
+                        edge.color = Color.white;
+                }
                 _isFlashing = false;
             }
         }
