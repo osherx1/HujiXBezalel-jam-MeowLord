@@ -25,10 +25,12 @@ public class PlatformSpawner : MonoBehaviour
             timer = 0f;
             if (pool != null && spawnTypes != null && spawnTypes.Length > 0)
             {
-                // Clamp the index to make sure it is within array bounds
-                int clampedIndex = Mathf.Clamp(selectedSpawnIndex, 0, spawnTypes.Length - 1);
-                pool.SpawnPlatform(spawnTypes[clampedIndex]);
+                // Randomly choose a type each time
+                int randomIndex = Random.Range(0, spawnTypes.Length);
+                pool.SpawnPlatform(spawnTypes[randomIndex]);
             }
         }
     }
+
+
 }

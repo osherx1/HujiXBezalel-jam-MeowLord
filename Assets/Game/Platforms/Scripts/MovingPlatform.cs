@@ -6,14 +6,14 @@ namespace Game.Platforms.Scripts
 {
     public class MovingPlatform : MonoBehaviour
     {
-        [Header("Movement Settings")] 
-        public float moveSpeed = 2f;
+        [Header("Movement Settings")] public float moveSpeed = 2f;
 
-        [Header("Platform State")] 
-        [SerializeField] private bool _isMoving = false;
+        [Header("Platform State")] [SerializeField]
+        private bool _isMoving = false;
 
-        [Header("Animators & Sprite Roots")]
-        [SerializeField] private Animator animatorForward;
+        [Header("Animators & Sprite Roots")] [SerializeField]
+        private Animator animatorForward;
+
         [SerializeField] private Animator animatorBackward;
         [SerializeField] private Transform spriteRootForward;
         [SerializeField] private Transform spriteRootBackward;
@@ -22,8 +22,7 @@ namespace Game.Platforms.Scripts
         private bool _isFacingForward = true;
         public bool IsFacingForward => _isFacingForward;
 
-        [Header("Platform state logic")]
-        public bool hasPlayerOnTop = false;
+        [Header("Platform state logic")] public bool hasPlayerOnTop = false;
         public bool hasYarnAttached = false;
 
         public bool isMoving => _isMoving;
@@ -76,7 +75,6 @@ namespace Game.Platforms.Scripts
 
         void Awake()
         {
-            // You must assign animatorForward, animatorBackward, spriteRootForward, spriteRootBackward from Inspector!
             mouseSensor = GetComponentInChildren<MouseSensor>();
             if (mouseSensor != null)
                 mouseSensor.OnAfraidChanged += SetAfraid;
@@ -123,14 +121,13 @@ namespace Game.Platforms.Scripts
 
             if (Vector3.Distance(transform.position, targetPos) < 0.01f)
             {
-                
                 if (waypoints[_currentWaypoint].stopAtPoint && waypoints[_currentWaypoint].stopDelay > 0f)
                 {
                     _waiting = true;
                     _waitTimer = waypoints[_currentWaypoint].stopDelay;
                 }
 
-                
+
                 if (_direction == -1 && _currentWaypoint == 0)
                 {
                     if (hasPlayerOnTop || hasYarnAttached)
@@ -138,13 +135,15 @@ namespace Game.Platforms.Scripts
                         _direction = 1;
                         if (waypoints.Count > 1)
                         {
-                            Vector3 nextDir = waypoints[_currentWaypoint + _direction].transform.position - waypoints[_currentWaypoint].transform.position;
+                            Vector3 nextDir = waypoints[_currentWaypoint + _direction].transform.position -
+                                              waypoints[_currentWaypoint].transform.position;
                             UpdateSpriteDirection(nextDir);
                         }
+
                         _isMoving = true;
                         return;
                     }
-                    
+
                     _isMoving = false;
                     SetWalkingAnim(false);
                     _onFinish?.Invoke(this);
@@ -160,9 +159,11 @@ namespace Game.Platforms.Scripts
                 int nextWaypoint = _currentWaypoint + _direction;
                 if (nextWaypoint >= 0 && nextWaypoint < waypoints.Count)
                 {
-                    Vector3 nextDir = waypoints[nextWaypoint].transform.position - waypoints[_currentWaypoint].transform.position;
+                    Vector3 nextDir = waypoints[nextWaypoint].transform.position -
+                                      waypoints[_currentWaypoint].transform.position;
                     UpdateSpriteDirection(nextDir);
                 }
+
                 _currentWaypoint += _direction;
             }
         }
@@ -180,6 +181,7 @@ namespace Game.Platforms.Scripts
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -204,8 +206,17 @@ namespace Game.Platforms.Scripts
                     animatorBackward.SetBool("IsWalking", isWalking);
             }
         }
-        
-        private enum IsoDirection4 { RightDown, RightUp, LeftDown, LeftUp, Left, Up, Down }
+
+        private enum IsoDirection4
+        {
+            RightDown,
+            RightUp,
+            LeftDown,
+            LeftUp,
+            Left,
+            Up,
+            Down
+        }
 
         private void UpdateSpriteDirection(Vector3 direction)
         {
@@ -217,62 +228,59 @@ namespace Game.Platforms.Scripts
 
             SetSpriteRootActive(!isUp);
             var multiplier = isRight ^ isUp ? 1f : -1f;
-            flipTarget.localScale = new Vector3(Mathf.Abs(flipTarget.localScale.x) * multiplier, flipTarget.localScale.y, flipTarget.localScale.z);
+            flipTarget.localScale = new Vector3(Mathf.Abs(flipTarget.localScale.x) * multiplier,
+                flipTarget.localScale.y, flipTarget.localScale.z);
         }
 
-private void SetSpriteRootActive(bool isForward)
-{
-    spriteRootForward.gameObject.SetActive(isForward);
-    spriteRootBackward.gameObject.SetActive(!isForward);
-}
+        private void SetSpriteRootActive(bool isForward)
+        {
+            spriteRootForward.gameObject.SetActive(isForward);
+            spriteRootBackward.gameObject.SetActive(!isForward);
+        }
 
+        public void OnPlayerJumpedOnKingOrQueen()
+        {
+            PolygonCollider2D childCollider = null;
+            if (_isFacingForward && spriteRootForward != null)
+                childCollider = spriteRootForward.GetComponent<PolygonCollider2D>();
+            else if (!_isFacingForward && spriteRootBackward != null)
+                childCollider = spriteRootBackward.GetComponent<PolygonCollider2D>();
+            if (childCollider != null)
+                childCollider.enabled = false;
 
+            // animatorForward.SetTrigger("KingHurt");
+            // animatorBackward.SetTrigger("KingHurt");
 
+            GoBackToStart();
+        }
 
-            
-            public void OnPlayerJumpedOnKingOrQueen()
+        private void GoBackToStart()
+        {
+            _runAway = true;
+            _savedSpeed = moveSpeed;
+            moveSpeed *= 2f;
+            _direction = -1;
+            SetWalkingAnim(true);
+        }
+
+        private void HandleRunAway()
+        {
+            Vector3 startPos = waypoints[0].transform.position;
+            transform.position = Vector3.MoveTowards(transform.position, startPos, moveSpeed * Time.deltaTime);
+
+            Vector3 escapeDir = startPos - transform.position;
+            UpdateSpriteDirection(escapeDir);
+
+            if (Vector3.Distance(transform.position, startPos) < 0.01f)
             {
-                PolygonCollider2D childCollider = null;
-                if (_isFacingForward && spriteRootForward != null)
-                    childCollider = spriteRootForward.GetComponent<PolygonCollider2D>();
-                else if (!_isFacingForward && spriteRootBackward != null)
-                    childCollider = spriteRootBackward.GetComponent<PolygonCollider2D>();
-                if (childCollider != null)
-                    childCollider.enabled = false;
-                
-                // animatorForward.SetTrigger("KingHurt");
-                // animatorBackward.SetTrigger("KingHurt");
-                
-                GoBackToStart();
+                moveSpeed = _savedSpeed;
+                _runAway = false;
+                _isMoving = false;
+                SetWalkingAnim(false);
+                _onFinish?.Invoke(this);
             }
+        }
 
-            private void GoBackToStart()
-            {
-                _runAway = true;
-                _savedSpeed = moveSpeed;
-                moveSpeed *= 2f;
-                _direction = -1; 
-                SetWalkingAnim(true);
-            }
-
-            private void HandleRunAway()
-            {
-                Vector3 startPos = waypoints[0].transform.position;
-                transform.position = Vector3.MoveTowards(transform.position, startPos, moveSpeed * Time.deltaTime);
-
-                Vector3 escapeDir = startPos - transform.position;
-                UpdateSpriteDirection(escapeDir);
-
-                if (Vector3.Distance(transform.position, startPos) < 0.01f)
-                {
-                    moveSpeed = _savedSpeed;
-                    _runAway = false;
-                    _isMoving = false;
-                    SetWalkingAnim(false);
-                    _onFinish?.Invoke(this);
-                }
-            }
-            
 
         // ---------- Afraid/Mouse ----------
 

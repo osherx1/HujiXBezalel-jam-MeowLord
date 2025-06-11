@@ -7303,7 +7303,51 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 712530533}
     - target: {fileID: 3180241267807240156, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
+      propertyPath: platformPrefabs.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3180241267807240156, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
+      propertyPath: platformPrefabs.Array.data[1].type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3180241267807240156, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
+      propertyPath: platformPrefabs.Array.data[2].type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3180241267807240156, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
+      propertyPath: platformPrefabs.Array.data[3].type
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3180241267807240156, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
+      propertyPath: platformPrefabs.Array.data[4].type
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3180241267807240156, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
       propertyPath: limitGroups.Array.data[0].maxActive
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3180241267807240156, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
+      propertyPath: platformPrefabs.Array.data[1].prefab
+      value: 
+      objectReference: {fileID: 8214014457347427242, guid: ce5fa988879b94d19861a56dd7e678f5, type: 3}
+    - target: {fileID: 3180241267807240156, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
+      propertyPath: platformPrefabs.Array.data[2].prefab
+      value: 
+      objectReference: {fileID: 1116053366034230601, guid: 4e94c191bf8704b749b000f84fed0b80, type: 3}
+    - target: {fileID: 3180241267807240156, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
+      propertyPath: platformPrefabs.Array.data[3].prefab
+      value: 
+      objectReference: {fileID: 6308876668014842229, guid: 7633887ea3c364b72a9f7d4d3cce6a4f, type: 3}
+    - target: {fileID: 3180241267807240156, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
+      propertyPath: platformPrefabs.Array.data[4].prefab
+      value: 
+      objectReference: {fileID: 7496325995025864595, guid: 181a009a8c90046d0b7a0bc5e79fa9eb, type: 3}
+    - target: {fileID: 3180241267807240156, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
+      propertyPath: limitGroups.Array.data[0].types.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3180241267807240156, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
+      propertyPath: 'limitGroups.Array.data[0].types.Array.data[2]'
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3180241267807240156, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
@@ -7354,6 +7398,26 @@ PrefabInstance:
       propertyPath: 'routesSetup.Array.data[1].routes.Array.data[4]'
       value: 
       objectReference: {fileID: 2041313480}
+    - target: {fileID: 4496193419839431088, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
+      propertyPath: spawnTypes.Array.size
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4496193419839431088, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
+      propertyPath: 'spawnTypes.Array.data[1]'
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4496193419839431088, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
+      propertyPath: 'spawnTypes.Array.data[2]'
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4496193419839431088, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
+      propertyPath: 'spawnTypes.Array.data[3]'
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4496193419839431088, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
+      propertyPath: 'spawnTypes.Array.data[4]'
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5067812412040677874, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.283643
@@ -7398,7 +7462,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlatformPool
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 417822575998885313, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
