@@ -134,6 +134,17 @@ namespace Game.Player.Scripts
                     newSkeletonsInRange.Add(skeleton);
                 }
             }
+            
+            foreach (Transform descendant in platGO.GetComponentsInParent<Transform>(true))
+            {
+                var skeleton = descendant.GetComponent<SkeletonMecanim>();
+                if (skeleton != null)
+                {
+                    newSkeletonsInRange.Add(skeleton);
+                }
+            }
+            
+            
         }
 
         public bool IsPlatformInRange(GameObject platform)
