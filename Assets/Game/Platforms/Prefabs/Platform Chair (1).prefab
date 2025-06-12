@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9213786926179068922}
   m_Layer: 6
   m_Name: Platform Chair (1)
-  m_TagString: Untagged
+  m_TagString: PlatformHead
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -157,7 +157,7 @@ GameObject:
   - component: {fileID: 7987872190363571351}
   m_Layer: 0
   m_Name: Layer 75
-  m_TagString: Untagged
+  m_TagString: LightAreaPlatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
