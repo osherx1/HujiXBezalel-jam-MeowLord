@@ -74,6 +74,14 @@ namespace Game.Core.Utils
             );
         }
 
+        public static Transform GetRootTransformPlatformHead(Transform t)
+        {
+            if (t == null) return null;
+            while (t.parent != null && !t.CompareTag($"PlatformHead"))
+                t = t.parent;
+            return t;
+        }
+
         
         
 

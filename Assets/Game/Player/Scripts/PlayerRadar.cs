@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Game.Core.Managers;
+using Game.Core.Utils;
 using Spine.Unity;
 
 namespace Game.Player.Scripts
@@ -71,6 +72,8 @@ namespace Game.Player.Scripts
                 if (((1 << hit.gameObject.layer) & playerStats.platformLayer) != 0)
                 {
                     var platGO = hit.gameObject;
+                    var platGOTransform = EladsHelperFunctions.GetRootTransformPlatformHead(platGO.transform);
+                    platGO = platGOTransform.gameObject;
                     UpdatePlatformsAndLightsProcessing(platGO, newLightAreasInRange, newSkeletonsInRange,newPlatformsInRange);
                 }
             }
@@ -135,14 +138,6 @@ namespace Game.Player.Scripts
                 }
             }
             
-            foreach (Transform descendant in platGO.GetComponentsInParent<Transform>(true))
-            {
-                var skeleton = descendant.GetComponent<SkeletonMecanim>();
-                if (skeleton != null)
-                {
-                    newSkeletonsInRange.Add(skeleton);
-                }
-            }
             
             
         }

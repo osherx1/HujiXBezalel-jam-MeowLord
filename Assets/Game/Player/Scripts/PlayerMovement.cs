@@ -241,6 +241,7 @@ namespace Game.Player.Scripts
                 {
                     minDist = d;
                     nearest = c.transform;
+                    nearest = EladsHelperFunctions.GetRootTransformPlatformHead(nearest);
                     sensor = c.GetComponentInChildren<MouseSensor>();
                     movingPlatform = c.GetComponentInChildren<MovingPlatform>();
                 }
@@ -256,8 +257,9 @@ namespace Game.Player.Scripts
             Vector3 worldPos = _mainCam.ScreenToWorldPoint(screenPos);
             var hit = Physics2D.Raycast(worldPos, Vector2.zero, 0f, clickableLayer);
             if (hit.collider == null) return;
-            if (!_playerRadar.IsPlatformInRange(hit.collider.gameObject)) return;
             var newPlat = hit.collider.transform;
+            newPlat = EladsHelperFunctions.GetRootTransformPlatformHead(newPlat);
+            if (!_playerRadar.IsPlatformInRange(newPlat.gameObject)) return;
             var newPlatScript = newPlat.GetComponentInChildren<MouseSensor>();
             var prevPlat = _lastPlat;
 
@@ -486,9 +488,10 @@ namespace Game.Player.Scripts
             Vector3 worldPos = _mainCam.ScreenToWorldPoint(screenPos);
             var hit = Physics2D.Raycast(worldPos, Vector2.zero, 0f, clickableLayer);
             bool isHovering = hit.collider != null;
-            if (hit.transform == _lastPlat)
+            var triggeredPlat = EladsHelperFunctions.GetRootTransformPlatformHead(hit.transform);
+            if (triggeredPlat == _lastPlat)
                 isHovering = false;
-            if (hit.collider != null && !_playerRadar.IsPlatformInRange(hit.collider.gameObject))
+            if (hit.collider != null && !_playerRadar.IsPlatformInRange(triggeredPlat.gameObject))
             {
                 isHovering = false;
             }
@@ -502,5 +505,8 @@ namespace Game.Player.Scripts
             UnregisterMovingPlatformEvent(_visited[index]);
             _visited.RemoveAt(index);
         }
+        
+        
+        
     }
 }

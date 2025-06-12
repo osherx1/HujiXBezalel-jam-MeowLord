@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8510796842520903272}
   m_Layer: 0
   m_Name: Layer 53
-  m_TagString: Untagged
+  m_TagString: LightAreaPlatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 6400772779355471621}
   m_Layer: 6
   m_Name: Platform Little Table (1)
-  m_TagString: Untagged
+  m_TagString: PlatformHead
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

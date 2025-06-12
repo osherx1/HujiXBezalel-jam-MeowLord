@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5570615722763343800}
   m_Layer: 0
   m_Name: Layer 64
-  m_TagString: Untagged
+  m_TagString: LightAreaPlatform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 3937210199711849730}
   m_Layer: 6
   m_Name: Platform Long stool
-  m_TagString: Untagged
+  m_TagString: PlatformHead
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
