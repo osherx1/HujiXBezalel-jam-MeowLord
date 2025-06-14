@@ -133,13 +133,23 @@ namespace Game.Platforms.Scripts
 
             if (Vector3.Distance(transform.position, targetPos) < 0.01f)
             {
+                // ---- NEW: PERMANENT STOP ----
+                if (waypoints[_currentWaypoint].stopForever)
+                {
+                    _isMoving = false;
+                    SetWalkingAnim(false);
+                    Debug.Log(
+                        $"[MovingPlatform] Platform stopped forever at waypoint {_currentWaypoint} ({currentTransform.gameObject.name})");
+                    return; // Don't continue!
+                }
+
+                // Existing stopAtPoint/stopDelay logic:
                 if (waypoints[_currentWaypoint].stopAtPoint && waypoints[_currentWaypoint].stopDelay > 0f)
                 {
                     GameEvents.PlatformStopedMoving();
                     _waiting = true;
                     _waitTimer = waypoints[_currentWaypoint].stopDelay;
                 }
-
 
                 if (_direction == -1 && _currentWaypoint == 0)
                 {
@@ -163,7 +173,6 @@ namespace Game.Platforms.Scripts
                     return;
                 }
 
-                // הפוך לסוף הנתיב קדימה
                 if (_direction == 1 && _currentWaypoint == waypoints.Count - 1)
                 {
                     _direction = -1;
@@ -180,6 +189,7 @@ namespace Game.Platforms.Scripts
                 _currentWaypoint += _direction;
             }
         }
+
 
         private bool HandleWaiting()
         {
