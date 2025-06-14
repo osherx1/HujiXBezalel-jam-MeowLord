@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 1682663261939604234}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.07, y: 2.62, z: 0}
+  m_LocalPosition: {x: 4.49, y: 2.62, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -80,14 +80,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hybridCamera: {fileID: 0}
   cameraTarget: {fileID: 0}
+  playerPosition: {fileID: 0}
   firstPositionOfCamera: {fileID: 8748643034112688992}
   mousePrefab: {fileID: 3212948961436724193, guid: 5b4f9150ccd2c4b779703b9d64e04e90, type: 3}
   startingMouseLocation: {fileID: 104007130580165545}
   tutorialTextRenderer: {fileID: 0}
   firstMouseText: Catch the mouse by moving between the objects!
+  delayPlayerPause: 0.2
   cameraMoveText: Move your mouse pointer to the sides in order to move camera
   cameraWaitTime: 2
-  triggerDistanceCameraMove: 5
+  triggerDistanceCameraMove: 15
+  rightClickText: Click right on your mouse in order to return to cat position
+  servantStopedMovingText: This is a servant! you can jump on it too
+  yarnText: Just be aware of the number of lines in the top right corner!
+  delayServantStoped: 3
 --- !u!1 &8625927863148030137
 GameObject:
   m_ObjectHideFlags: 0
