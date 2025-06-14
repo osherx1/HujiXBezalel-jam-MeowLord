@@ -1,0 +1,858 @@
+fileFormatVersion: 2
+guid: 11dfec01725c248a48c231f99f5d5cd0
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -7424516409739190838
+    second: kingFront_0
+  - first:
+      213: -5975416657234722829
+    second: kingFront_1
+  - first:
+      213: 252466572833617784
+    second: kingFront_2
+  - first:
+      213: 4230508076206805918
+    second: kingFront_3
+  - first:
+      213: -7830883744708091023
+    second: kingFront_4
+  - first:
+      213: -3413164961695960683
+    second: kingFront_5
+  - first:
+      213: -7379038639833140211
+    second: kingFront_6
+  - first:
+      213: 6288738945517948057
+    second: kingFront_7
+  - first:
+      213: -3169482593857580805
+    second: kingFront_8
+  - first:
+      213: -8919624189730939772
+    second: kingFront_9
+  - first:
+      213: -8939916926650032727
+    second: kingFront_10
+  - first:
+      213: 2419283885781155112
+    second: kingFront_11
+  - first:
+      213: -2545716487588996699
+    second: kingFront_12
+  - first:
+      213: -5135683903859499366
+    second: kingFront_13
+  - first:
+      213: 6712039226432519612
+    second: kingFront_14
+  - first:
+      213: -3169043346284183031
+    second: kingFront_15
+  - first:
+      213: -5901749849198407105
+    second: kingFront_16
+  - first:
+      213: -6603206731294704253
+    second: kingFront_17
+  - first:
+      213: 3472929738645409218
+    second: kingFront_18
+  - first:
+      213: 3370075714712025059
+    second: kingFront_19
+  - first:
+      213: -396769164260052305
+    second: kingFront_20
+  - first:
+      213: 6544752092038235260
+    second: kingFront_21
+  - first:
+      213: 7448045667515389439
+    second: kingFront_22
+  - first:
+      213: -2165267573590511313
+    second: kingFront_23
+  - first:
+      213: 7313300530232690970
+    second: kingFront_24
+  - first:
+      213: 842648971107548747
+    second: kingFront_25
+  - first:
+      213: -5236694330632578498
+    second: kingFront_26
+  - first:
+      213: 1668805855843786936
+    second: kingFront_27
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 0
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 0
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 0
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: kingFront_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1
+        width: 241
+        height: 329
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: acddf6089a1d6f890800000000000000
+      internalID: -7424516409739190838
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_1
+      rect:
+        serializedVersion: 2
+        x: 242
+        y: 1
+        width: 316
+        height: 326
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3ff7298953e031da0800000000000000
+      internalID: -5975416657234722829
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_2
+      rect:
+        serializedVersion: 2
+        x: 558
+        y: 293
+        width: 25
+        height: 29
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8777867a201f08300800000000000000
+      internalID: 252466572833617784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_3
+      rect:
+        serializedVersion: 2
+        x: 558
+        y: 1
+        width: 97
+        height: 292
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e935abd5ea8c5ba30800000000000000
+      internalID: 4230508076206805918
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_4
+      rect:
+        serializedVersion: 2
+        x: 583
+        y: 293
+        width: 19
+        height: 23
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1732b4759bc135390800000000000000
+      internalID: -7830883744708091023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_5
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 273
+        width: 52
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5917d421d8002a0d0800000000000000
+      internalID: -3413164961695960683
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_6
+      rect:
+        serializedVersion: 2
+        x: 940
+        y: 273
+        width: 69
+        height: 57
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d043dd0f373689990800000000000000
+      internalID: -7379038639833140211
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_7
+      rect:
+        serializedVersion: 2
+        x: 1009
+        y: 273
+        width: 119
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 99c03c470c6164750800000000000000
+      internalID: 6288738945517948057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_8
+      rect:
+        serializedVersion: 2
+        x: 1128
+        y: 258
+        width: 113
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bf0d55f9f5cb304d0800000000000000
+      internalID: -3169482593857580805
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_9
+      rect:
+        serializedVersion: 2
+        x: 1241
+        y: 258
+        width: 147
+        height: 65
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 48c1b11ce01273480800000000000000
+      internalID: -8919624189730939772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_10
+      rect:
+        serializedVersion: 2
+        x: 1388
+        y: 221
+        width: 184
+        height: 94
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9add581cbe80fe380800000000000000
+      internalID: -8939916926650032727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_11
+      rect:
+        serializedVersion: 2
+        x: 1585
+        y: 169
+        width: 135
+        height: 160
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82dffce40e5039120800000000000000
+      internalID: 2419283885781155112
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_12
+      rect:
+        serializedVersion: 2
+        x: 655
+        y: 8
+        width: 194
+        height: 284
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5a91762a75ccbacd0800000000000000
+      internalID: -2545716487588996699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_13
+      rect:
+        serializedVersion: 2
+        x: 965
+        y: 187
+        width: 60
+        height: 86
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a9e53cf03b26ab8b0800000000000000
+      internalID: -5135683903859499366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_14
+      rect:
+        serializedVersion: 2
+        x: 1030
+        y: 1
+        width: 238
+        height: 257
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cbd7ff15d14f52d50800000000000000
+      internalID: 6712039226432519612
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_15
+      rect:
+        serializedVersion: 2
+        x: 1268
+        y: 1
+        width: 130
+        height: 220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9028aeaeddb4504d0800000000000000
+      internalID: -3169043346284183031
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_16
+      rect:
+        serializedVersion: 2
+        x: 1398
+        y: 1
+        width: 142
+        height: 217
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f32505de7c5c81ea0800000000000000
+      internalID: -5901749849198407105
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_17
+      rect:
+        serializedVersion: 2
+        x: 1540
+        y: 169
+        width: 45
+        height: 50
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38df5b29672bc54a0800000000000000
+      internalID: -6603206731294704253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_18
+      rect:
+        serializedVersion: 2
+        x: 1720
+        y: 147
+        width: 45
+        height: 42
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2cd89d96233523030800000000000000
+      internalID: 3472929738645409218
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_19
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 1
+        width: 74
+        height: 106
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3e7b491d10ae4ce20800000000000000
+      internalID: 3370075714712025059
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_20
+      rect:
+        serializedVersion: 2
+        x: 935
+        y: 85
+        width: 95
+        height: 99
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fa2737a1c846e7af0800000000000000
+      internalID: -396769164260052305
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_21
+      rect:
+        serializedVersion: 2
+        x: 1540
+        y: 94
+        width: 54
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c740fe42a51a3da50800000000000000
+      internalID: 6544752092038235260
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_22
+      rect:
+        serializedVersion: 2
+        x: 1660
+        y: 95
+        width: 43
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ff5542bb216cc5760800000000000000
+      internalID: 7448045667515389439
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_23
+      rect:
+        serializedVersion: 2
+        x: 1703
+        y: 83
+        width: 42
+        height: 47
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f2137782d9c63f1e0800000000000000
+      internalID: -2165267573590511313
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_24
+      rect:
+        serializedVersion: 2
+        x: 1751
+        y: 72
+        width: 40
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a190230b5101e7560800000000000000
+      internalID: 7313300530232690970
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_25
+      rect:
+        serializedVersion: 2
+        x: 814
+        y: 1
+        width: 74
+        height: 30
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b4eb63156c0b1bb00800000000000000
+      internalID: 842648971107548747
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_26
+      rect:
+        serializedVersion: 2
+        x: 1584
+        y: 1
+        width: 76
+        height: 58
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e3ad75160468357b0800000000000000
+      internalID: -5236694330632578498
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kingFront_27
+      rect:
+        serializedVersion: 2
+        x: 1699
+        y: 1
+        width: 62
+        height: 56
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8b029ac851ac82710800000000000000
+      internalID: 1668805855843786936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      kingFront_0: -7424516409739190838
+      kingFront_1: -5975416657234722829
+      kingFront_10: -8939916926650032727
+      kingFront_11: 2419283885781155112
+      kingFront_12: -2545716487588996699
+      kingFront_13: -5135683903859499366
+      kingFront_14: 6712039226432519612
+      kingFront_15: -3169043346284183031
+      kingFront_16: -5901749849198407105
+      kingFront_17: -6603206731294704253
+      kingFront_18: 3472929738645409218
+      kingFront_19: 3370075714712025059
+      kingFront_2: 252466572833617784
+      kingFront_20: -396769164260052305
+      kingFront_21: 6544752092038235260
+      kingFront_22: 7448045667515389439
+      kingFront_23: -2165267573590511313
+      kingFront_24: 7313300530232690970
+      kingFront_25: 842648971107548747
+      kingFront_26: -5236694330632578498
+      kingFront_27: 1668805855843786936
+      kingFront_3: 4230508076206805918
+      kingFront_4: -7830883744708091023
+      kingFront_5: -3413164961695960683
+      kingFront_6: -7379038639833140211
+      kingFront_7: 6288738945517948057
+      kingFront_8: -3169482593857580805
+      kingFront_9: -8919624189730939772
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
