@@ -11,6 +11,7 @@ using Game.Core.Managers;
 using Game.Core.Utils;
 using Game.Enemies.Scripts;
 using Game.Platforms.Scripts;
+using Unity.VisualScripting;
 
 namespace Game.Player.Scripts
 {
@@ -301,7 +302,7 @@ namespace Game.Player.Scripts
 
             CreateNewSegment(prevPlat, transform);
             
-            var lastPlatMovingPlatform = newPlat.GetComponent<MovingPlatform>();
+            var lastPlatMovingPlatform = newPlat.GetComponentInChildren<MovingPlatform>();
             if (lastPlatMovingPlatform != null && (lastPlatMovingPlatform.platformType == PlatformType.Queen ||
                 lastPlatMovingPlatform.platformType == PlatformType.King))
             {

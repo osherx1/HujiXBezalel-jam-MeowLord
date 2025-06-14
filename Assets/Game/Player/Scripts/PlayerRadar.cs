@@ -126,7 +126,7 @@ namespace Game.Player.Scripts
             HashSet<SkeletonMecanim> newSkeletonsInRange, HashSet<GameObject> newPlatformsInRange)
         {
             newPlatformsInRange.Add(platGO);
-            var platGoMoving = platGO.GetComponent<MovingPlatform>();
+            var platGoMoving = platGO.GetComponentInChildren<MovingPlatform>();
             if (platGoMoving != null && (platGoMoving.platformType == PlatformType.King || platGoMoving.platformType == PlatformType.Queen))
             {
                 return;
