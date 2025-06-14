@@ -120,18 +120,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7868228626267716968}
     m_Modifications:
-    - target: {fileID: 986475777002470406, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
-      propertyPath: m_SortingLayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 986475777002470406, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
-      propertyPath: m_SortingOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 986475777002470406, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
-      propertyPath: m_SortingLayerID
-      value: -1640570925
-      objectReference: {fileID: 0}
     - target: {fileID: 1780339612602817405, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
       propertyPath: m_Name
       value: ArtCookBack
@@ -242,18 +230,6 @@ PrefabInstance:
     - target: {fileID: 7580321461049017688, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
       propertyPath: m_Name
       value: ArtCookFront
-      objectReference: {fileID: 0}
-    - target: {fileID: 8587511613315727848, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
-      propertyPath: m_SortingLayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8587511613315727848, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
-      propertyPath: m_SortingOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 8587511613315727848, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
-      propertyPath: m_SortingLayerID
-      value: -1640570925
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
