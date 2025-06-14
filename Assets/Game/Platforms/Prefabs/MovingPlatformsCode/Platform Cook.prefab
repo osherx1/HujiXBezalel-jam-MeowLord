@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7868228626267716968}
   - component: {fileID: 7496325995025864595}
+  - component: {fileID: 7250709269928553649}
   m_Layer: 0
   m_Name: Platform Cook
   m_TagString: Untagged
@@ -52,9 +53,65 @@ MonoBehaviour:
   animatorBackward: {fileID: 0}
   spriteRootForward: {fileID: 1162055188845293447}
   spriteRootBackward: {fileID: 5166924881929471841}
+  forwardSpriteRenderer: {fileID: 4987289046610821735}
+  backwardSpriteRenderer: {fileID: 2404774938905160006}
+  forwardSkeletonMecanim: {fileID: 0}
+  backwardSkeletonMecanim: {fileID: 0}
   hasPlayerOnTop: 0
   hasYarnAttached: 0
   platformType: 4
+--- !u!60 &7250709269928553649
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2215553427471592677}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0.35}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0, y: 1}
+      - {x: -0.95105654, y: 0.30901697}
+      - {x: -0.5877852, y: -0.80901706}
+      - {x: 0.58778536, y: -0.80901694}
+      - {x: 1.7562593, y: -0.277227}
+  m_UseDelaunayMesh: 0
 --- !u!1001 &3238035831288911168
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -63,6 +120,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7868228626267716968}
     m_Modifications:
+    - target: {fileID: 986475777002470406, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 986475777002470406, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 986475777002470406, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1640570925
+      objectReference: {fileID: 0}
     - target: {fileID: 1780339612602817405, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
       propertyPath: m_Name
       value: ArtCookBack
@@ -112,6 +181,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
+--- !u!212 &2404774938905160006 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 986475777002470406, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
+  m_PrefabInstance: {fileID: 3238035831288911168}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5166924881929471841 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7735858849910805025, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
@@ -169,6 +243,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: ArtCookFront
       objectReference: {fileID: 0}
+    - target: {fileID: 8587511613315727848, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8587511613315727848, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8587511613315727848, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1640570925
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -177,5 +263,10 @@ PrefabInstance:
 --- !u!4 &1162055188845293447 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2466534086895954952, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
+  m_PrefabInstance: {fileID: 3610357096603091855}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &4987289046610821735 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 8587511613315727848, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
   m_PrefabInstance: {fileID: 3610357096603091855}
   m_PrefabAsset: {fileID: 0}

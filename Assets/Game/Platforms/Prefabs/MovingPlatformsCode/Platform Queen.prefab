@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1076850464774849079}
   - component: {fileID: 1116053366034230601}
+  - component: {fileID: 7031594916152483693}
   m_Layer: 0
   m_Name: Platform Queen
   m_TagString: Untagged
@@ -52,9 +53,65 @@ MonoBehaviour:
   animatorBackward: {fileID: 0}
   spriteRootForward: {fileID: 8021442461913170467}
   spriteRootBackward: {fileID: 436504606201344136}
+  forwardSpriteRenderer: {fileID: 1740478804688031841}
+  backwardSpriteRenderer: {fileID: 573240861949952877}
+  forwardSkeletonMecanim: {fileID: 0}
+  backwardSkeletonMecanim: {fileID: 0}
   hasPlayerOnTop: 0
   hasYarnAttached: 0
   platformType: 1
+--- !u!60 &7031594916152483693
+PolygonCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 423978460103435348}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0.55}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Points:
+    m_Paths:
+    - - {x: 0, y: 1}
+      - {x: -0.95105654, y: 0.30901697}
+      - {x: -0.5877852, y: -0.80901706}
+      - {x: 0.58778536, y: -0.80901694}
+      - {x: 0.9510565, y: 0.30901712}
+  m_UseDelaunayMesh: 0
 --- !u!1001 &2692108518029773143
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -63,6 +120,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1076850464774849079}
     m_Modifications:
+    - target: {fileID: 4430176643187808566, guid: 6d24f7981a41b492da39369c5d483fc5, type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4430176643187808566, guid: 6d24f7981a41b492da39369c5d483fc5, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4430176643187808566, guid: 6d24f7981a41b492da39369c5d483fc5, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1640570925
+      objectReference: {fileID: 0}
     - target: {fileID: 5336106970185599860, guid: 6d24f7981a41b492da39369c5d483fc5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -112,6 +181,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6d24f7981a41b492da39369c5d483fc5, type: 3}
+--- !u!212 &1740478804688031841 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 4430176643187808566, guid: 6d24f7981a41b492da39369c5d483fc5, type: 3}
+  m_PrefabInstance: {fileID: 2692108518029773143}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8021442461913170467 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5336106970185599860, guid: 6d24f7981a41b492da39369c5d483fc5, type: 3}
@@ -169,6 +243,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6913728158717352289, guid: 7a2f7e8a97683407f8a0c5abd8d2fdb4, type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6913728158717352289, guid: 7a2f7e8a97683407f8a0c5abd8d2fdb4, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6913728158717352289, guid: 7a2f7e8a97683407f8a0c5abd8d2fdb4, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1640570925
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -177,5 +263,10 @@ PrefabInstance:
 --- !u!4 &436504606201344136 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6775725045449845380, guid: 7a2f7e8a97683407f8a0c5abd8d2fdb4, type: 3}
+  m_PrefabInstance: {fileID: 6343021729118591500}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &573240861949952877 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 6913728158717352289, guid: 7a2f7e8a97683407f8a0c5abd8d2fdb4, type: 3}
   m_PrefabInstance: {fileID: 6343021729118591500}
   m_PrefabAsset: {fileID: 0}

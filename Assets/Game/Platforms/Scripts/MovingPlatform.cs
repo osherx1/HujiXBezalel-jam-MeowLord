@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Game.Core.Managers;
+using Spine.Unity;
 using UnityEngine;
 
 namespace Game.Platforms.Scripts
@@ -18,6 +19,14 @@ namespace Game.Platforms.Scripts
         [SerializeField] private Animator animatorBackward;
         [SerializeField] private Transform spriteRootForward;
         [SerializeField] private Transform spriteRootBackward;
+
+        [Header("References for Layer Changing")]
+        public SpriteRenderer forwardSpriteRenderer;
+
+        public SpriteRenderer backwardSpriteRenderer;
+        public SkeletonMecanim forwardSkeletonMecanim;
+        public SkeletonMecanim backwardSkeletonMecanim;
+
 
         // Which direction are we facing right now?
         private bool _isFacingForward = true;
@@ -68,11 +77,11 @@ namespace Game.Platforms.Scripts
 
             // Always start with forward visible, backward hidden
             SetSpriteRootActive(true);
-            
+
             // this line make a bug, there is no polygon collider anymore on the moving platforms.
             // var polygonCollider = GetComponent<PolygonCollider2D>();
             // polygonCollider.enabled = true;
-            
+
             gameObject.SetActive(true);
         }
 
@@ -320,5 +329,69 @@ namespace Game.Platforms.Scripts
         // ---------- Utility ----------
 
         public void PlatformReturn() => OnPlatformReturn?.Invoke();
+
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            Debug.Log(
+                $"[OnTriggerEnter2D] Triggered by: {other.gameObject.name}, Tag: {other.tag}, IsTrigger: {other.isTrigger}");
+
+            if (!other.isTrigger || !other.CompareTag("BackCollider"))
+                return;
+
+            // Forwards SpriteRenderer
+            if (forwardSpriteRenderer != null)
+            {
+                string nextLayer = forwardSpriteRenderer.sortingLayerName != "Platform" ? "Platform" : "Background";
+                Debug.Log(
+                    $"[OnTriggerEnter2D] Changing forwardSpriteRenderer sortingLayerName from {forwardSpriteRenderer.sortingLayerName} to {nextLayer}");
+                forwardSpriteRenderer.sortingLayerName = nextLayer;
+            }
+
+            // Backwards SpriteRenderer
+            if (backwardSpriteRenderer != null)
+            {
+                string nextLayer = backwardSpriteRenderer.sortingLayerName != "Platform" ? "Platform" : "Background";
+                Debug.Log(
+                    $"[OnTriggerEnter2D] Changing backwardSpriteRenderer sortingLayerName from {backwardSpriteRenderer.sortingLayerName} to {nextLayer}");
+                backwardSpriteRenderer.sortingLayerName = nextLayer;
+            }
+
+            // Forwards SkeletonMecanim
+            if (forwardSkeletonMecanim != null)
+            {
+                var meshRenderer = forwardSkeletonMecanim.GetComponent<Renderer>();
+                if (meshRenderer != null)
+                {
+                    string current = meshRenderer.sortingLayerName;
+                    string nextLayer = current != "Platform" ? "Platform" : "Background";
+                    Debug.Log(
+                        $"[OnTriggerEnter2D] Changing forwardSkeletonMecanim (Renderer) sortingLayerName from {current} to {nextLayer}");
+                    meshRenderer.sortingLayerName = nextLayer;
+                }
+                else
+                {
+                    Debug.LogWarning("[OnTriggerEnter2D] forwardSkeletonMecanim has no Renderer attached!");
+                }
+            }
+
+            // Backwards SkeletonMecanim
+            if (backwardSkeletonMecanim != null)
+            {
+                var meshRenderer = backwardSkeletonMecanim.GetComponent<Renderer>();
+                if (meshRenderer != null)
+                {
+                    string current = meshRenderer.sortingLayerName;
+                    string nextLayer = current != "Platform" ? "Platform" : "Background";
+                    Debug.Log(
+                        $"[OnTriggerEnter2D] Changing backwardSkeletonMecanim (Renderer) sortingLayerName from {current} to {nextLayer}");
+                    meshRenderer.sortingLayerName = nextLayer;
+                }
+                else
+                {
+                    Debug.LogWarning("[OnTriggerEnter2D] backwardSkeletonMecanim has no Renderer attached!");
+                }
+            }
+        }
     }
 }
