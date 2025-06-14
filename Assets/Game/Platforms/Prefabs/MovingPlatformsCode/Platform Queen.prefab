@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7031594916152483693}
   m_Layer: 0
   m_Name: Platform Queen
-  m_TagString: Untagged
+  m_TagString: PlatformHead
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

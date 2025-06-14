@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &5023116791512951939
 Transform:
   m_ObjectHideFlags: 0
@@ -134,9 +134,13 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 1.8632164, y: 1.3678422}
+    - - {x: 2.3097894, y: 2.0377016}
+      - {x: -0.47375393, y: 2.4908228}
       - {x: -0.710175, y: 1.9570456}
+      - {x: -1.0899487, y: 1.3138428}
       - {x: -1.0094676, y: 0.71657896}
-      - {x: 0.4509507, y: -0.040397167}
-      - {x: 1.7122431, y: 0.19457364}
+      - {x: -0.56320435, y: -0.05775094}
+      - {x: 0.5067735, y: -0.5800059}
+      - {x: 2.0057414, y: -0.1097312}
+      - {x: 2.1588163, y: 0.2503953}
   m_UseDelaunayMesh: 0
