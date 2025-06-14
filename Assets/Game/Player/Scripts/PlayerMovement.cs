@@ -280,7 +280,7 @@ namespace Game.Player.Scripts
 
             if (newPlat == _lastPlat)
                 return; // Ignore clicking on the same platform
-
+            
             // Case 1: Backtracking to previous platform
             if (_visited.Count > 1 && _visited[_visited.Count - 2] == newPlat)
             {
@@ -300,6 +300,22 @@ namespace Game.Player.Scripts
             
 
             CreateNewSegment(prevPlat, transform);
+            
+            var lastPlatMovingPlatform = newPlat.GetComponent<MovingPlatform>();
+            if (lastPlatMovingPlatform != null && (lastPlatMovingPlatform.platformType == PlatformType.Queen ||
+                lastPlatMovingPlatform.platformType == PlatformType.King))
+            {
+                onMoveCompleteEvent = (() =>
+                {
+                    GameEvents.PlayerLanded();
+                    GameEvents.PlayerFall();
+                });
+                
+                RegisterToPlatform(newPlatScript, _lastMovingPlatform); // Register before move
+                MovePlayerToPlatform(newPlat);
+                animator.SetTrigger(Jump);
+                return;
+            }
             
             // Case 2: Closing a loop (not immediately previous)
             if (_visited.Contains(newPlat))

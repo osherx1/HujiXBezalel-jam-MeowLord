@@ -25,7 +25,7 @@ namespace Game.UI.Scripts
         private void UpdateSegmentsText(int value)
         {
             if (segmentsText != null)
-                segmentsText.text = $"Lines: {value}";
+                segmentsText.text = $"{value}";
         }
         private void UpdateSegmentsAnimator(int value)
         {

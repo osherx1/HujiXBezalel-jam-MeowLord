@@ -139,7 +139,7 @@ MonoBehaviour:
   clickableLayer:
     serializedVersion: 2
     m_Bits: 64
-  playerLandedTimer: 0.5
+  playerLandedTimer: 2
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128

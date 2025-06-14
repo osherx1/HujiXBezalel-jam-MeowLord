@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 using Game.Core.Managers;
 using Game.Core.Utils;
+using Game.Platforms.Scripts;
 using Spine.Unity;
 
 namespace Game.Player.Scripts
@@ -104,7 +106,7 @@ namespace Game.Player.Scripts
 
             foreach (var skeleton in newSkeletonsInRange)
             {
-                if (!_skeletonMecanimsInRange.Contains(skeleton))
+                if (!_skeletonMecanimsInRange.Contains(skeleton) )
                 {
                     skeleton.skeleton.SetSkin("active");
                     skeleton.skeleton.SetSlotsToSetupPose();
@@ -124,6 +126,11 @@ namespace Game.Player.Scripts
             HashSet<SkeletonMecanim> newSkeletonsInRange, HashSet<GameObject> newPlatformsInRange)
         {
             newPlatformsInRange.Add(platGO);
+            var platGoMoving = platGO.GetComponent<MovingPlatform>();
+            if (platGoMoving != null && (platGoMoving.platformType == PlatformType.King || platGoMoving.platformType == PlatformType.Queen))
+            {
+                return;
+            }
             foreach (Transform descendant in platGO.GetComponentsInChildren<Transform>(true))
             {
                 if (descendant.CompareTag("LightAreaPlatform"))
