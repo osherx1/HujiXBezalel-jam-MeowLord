@@ -331,10 +331,9 @@ namespace Game.Player.Scripts
                         _playerRatDetector.DestroyEnemiesInLoop(loopPlatforms, enemyLayer);
                         _segmentDelay = false;
                     });
-                    DOVirtual.DelayedCall(playerLandedTimer, () =>
-                    {
-                        GameEvents.PlayerLanded();
-                    });
+                    
+                    GameEvents.PlayerLanded();
+                    
                 };
 
                 RegisterToPlatform(newPlatScript, _lastMovingPlatform); // Register before move
