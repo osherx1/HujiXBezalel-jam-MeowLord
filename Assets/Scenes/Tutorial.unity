@@ -1504,7 +1504,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1289004765097076336, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 6.07
+      value: 4.49
       objectReference: {fileID: 0}
     - target: {fileID: 1289004765097076336, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2184,7 +2184,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &821544930
 Transform:
   m_ObjectHideFlags: 0
@@ -2418,7 +2418,7 @@ Transform:
   m_GameObject: {fileID: 959848188}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.07, y: 2.62, z: 0}
+  m_LocalPosition: {x: 4.49, y: 2.62, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6079,7 +6079,7 @@ Transform:
   m_GameObject: {fileID: 1946498980}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.07, y: 2.62, z: -1}
+  m_LocalPosition: {x: 4.49, y: 2.62, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6236,7 +6236,7 @@ Transform:
   m_GameObject: {fileID: 2018939329}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.07, y: 2.62, z: 0}
+  m_LocalPosition: {x: 4.49, y: 2.62, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6980,10 +6980,6 @@ PrefabInstance:
       value: TutorialManager
       objectReference: {fileID: 0}
     - target: {fileID: 5754566085166342416, guid: 04c8f2c02ab5641328161543e1b10eb2, type: 3}
-      propertyPath: yarnText
-      value: Just be aware of the number of lines in the top right corner!
-      objectReference: {fileID: 0}
-    - target: {fileID: 5754566085166342416, guid: 04c8f2c02ab5641328161543e1b10eb2, type: 3}
       propertyPath: cameraTarget
       value: 
       objectReference: {fileID: 672015844}
@@ -6992,21 +6988,9 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 672015845}
     - target: {fileID: 5754566085166342416, guid: 04c8f2c02ab5641328161543e1b10eb2, type: 3}
-      propertyPath: rightClickText
-      value: Click right on your mouse in order to return to cat position
-      objectReference: {fileID: 0}
-    - target: {fileID: 5754566085166342416, guid: 04c8f2c02ab5641328161543e1b10eb2, type: 3}
       propertyPath: tutorialTextRenderer
       value: 
       objectReference: {fileID: 80790382}
-    - target: {fileID: 5754566085166342416, guid: 04c8f2c02ab5641328161543e1b10eb2, type: 3}
-      propertyPath: servantStopedMovingText
-      value: This is a servant! you can jump on it too
-      objectReference: {fileID: 0}
-    - target: {fileID: 5754566085166342416, guid: 04c8f2c02ab5641328161543e1b10eb2, type: 3}
-      propertyPath: triggerDistanceCameraMove
-      value: 15
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

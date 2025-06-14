@@ -27,13 +27,13 @@ namespace Game.Core.Managers
                 viImage.enabled = true;
                 startTutorial = true;
             }
-            playerName = PlayerPrefs.GetString("Name", "Name");
+            playerName = PlayerPrefs.GetString("Name", null);
             GameManager.Instance.SetNickname(playerName);
         }
 
         public void Start()
         {
-            nameInputField.text = playerName;
+            nameInputField.text = playerName != null ? playerName : null;
         }
 
         public void OnTutorialButtonPressed()

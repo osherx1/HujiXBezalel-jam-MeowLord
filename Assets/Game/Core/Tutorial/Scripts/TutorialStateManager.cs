@@ -290,6 +290,8 @@ namespace Game.Core.Tutorial
             rat.transform.position = startingMouseLocation.position;
             rat.transform.rotation = startingMouseLocation.rotation;
             GameEvents.PlayerResume();
+            hybridCamera.RegisterCameraToGoBackToPlayer();
+            hybridCamera.RegisterCameraToMoveTowardsPlayer();
             GameEvents.OnMouseCatch += MouseCatch;
             while (true)
             {
@@ -298,6 +300,8 @@ namespace Game.Core.Tutorial
                 {
                     _mouseCatch = false;
                     GameEvents.OnMouseCatch -= MouseCatch;
+                    hybridCamera.RegisterCameraToGoBackToPlayer(false);
+                    hybridCamera.RegisterCameraToMoveTowardsPlayer(false);
                     GameEvents.PlayerPause();
                     break;
                 }
