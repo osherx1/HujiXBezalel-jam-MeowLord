@@ -1141,6 +1141,7 @@ GameObject:
   m_Component:
   - component: {fileID: 481076724}
   - component: {fileID: 481076725}
+  - component: {fileID: 481076726}
   m_Layer: 8
   m_Name: SwitchBacgRoundColliders
   m_TagString: BackCollider
@@ -1209,6 +1210,33 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 55, y: 2}
   m_EdgeRadius: 0
+--- !u!50 &481076726
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 481076723}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &488614581
 GameObject:
   m_ObjectHideFlags: 0
@@ -3402,6 +3430,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1369149476}
   - component: {fileID: 1369149477}
+  - component: {fileID: 1369149478}
   m_Layer: 8
   m_Name: SwitchBacgRoundColliders
   m_TagString: BackCollider
@@ -3478,6 +3507,33 @@ PolygonCollider2D:
       - {x: 0.656849, y: -0.6664548}
       - {x: 1.1764092, y: -0.20478946}
   m_UseDelaunayMesh: 0
+--- !u!50 &1369149478
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1369149475}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1395946176
 GameObject:
   m_ObjectHideFlags: 0
@@ -4255,6 +4311,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1515529415}
   - component: {fileID: 1515529416}
+  - component: {fileID: 1515529417}
   m_Layer: 8
   m_Name: SwitchBacgRoundColliders
   m_TagString: BackCollider
@@ -4323,6 +4380,33 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 2, y: 10}
   m_EdgeRadius: 0
+--- !u!50 &1515529417
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1515529414}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1547291135
 GameObject:
   m_ObjectHideFlags: 0
@@ -4951,6 +5035,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1742172462}
   - component: {fileID: 1742172463}
+  - component: {fileID: 1742172464}
   m_Layer: 8
   m_Name: SwitchBacgRoundColliders
   m_TagString: BackCollider
@@ -5027,6 +5112,33 @@ PolygonCollider2D:
       - {x: 0.39629585, y: -0.5312135}
       - {x: 0.658783, y: -0.35771}
   m_UseDelaunayMesh: 0
+--- !u!50 &1742172464
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1742172461}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1748433906
 GameObject:
   m_ObjectHideFlags: 0
