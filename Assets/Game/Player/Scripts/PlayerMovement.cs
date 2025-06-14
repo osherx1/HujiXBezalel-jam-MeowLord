@@ -62,7 +62,7 @@ namespace Game.Player.Scripts
         private PlayerRatDetector _playerRatDetector;
         private MovingPlatform _lastMovingPlatform;
         private bool _segmentDelay = false;
-
+        private bool _pausedGame = false;
 
         void Awake()
         {
@@ -89,13 +89,26 @@ namespace Game.Player.Scripts
         {
             _clickAction.performed += OnClick;
             GameEvents.OnPlayerFall += HandlePlayerFall;
-        
+            GameEvents.OnPlayerPause += ActivatePauseGame;
+            GameEvents.OnPlayerResume += ActivateResumeGame;
+        }
+
+        private void ActivateResumeGame()
+        {
+            _pausedGame = false;
+        }
+
+        private void ActivatePauseGame()
+        {
+            _pausedGame = true;
         }
 
         void OnDisable()
         {
             _clickAction.performed -= OnClick;
             GameEvents.OnPlayerFall -= HandlePlayerFall;
+            GameEvents.OnGamePause -= ActivatePauseGame;
+            GameEvents.OnGameResume -= ActivateResumeGame;
         }
 
         private void HandlePlayerFall()
@@ -191,6 +204,8 @@ namespace Game.Player.Scripts
             isMoving = true;
             while (Vector3.Distance(transform.position, platform.position) > 0.05f)
             {
+                while (_pausedGame)
+                    yield return null;
                 // Move towards the current platform position
                 transform.position =
                     Vector3.MoveTowards(transform.position, platform.position, moveSpeed * Time.deltaTime);
@@ -252,7 +267,7 @@ namespace Game.Player.Scripts
 
         private void OnClick(InputAction.CallbackContext ctx)
         {
-            if (isMoving || _fall) return;
+            if (isMoving || _fall || _pausedGame) return;
             Vector2 screenPos = Mouse.current.position.ReadValue();
             Vector3 worldPos = _mainCam.ScreenToWorldPoint(screenPos);
             var hit = Physics2D.Raycast(worldPos, Vector2.zero, 0f, clickableLayer);
@@ -436,7 +451,7 @@ namespace Game.Player.Scripts
 
         private void Update()
         {
-            if (isMoving || _fall) return;
+            if (isMoving || _fall || _pausedGame) return;
             CheckForClosedPolygons();
             CheckIfMouseOnPlatform();
         }

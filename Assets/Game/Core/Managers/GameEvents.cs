@@ -25,7 +25,8 @@ namespace Game.Core.Managers
         
 
         public static event Action<bool> OnPlatformHover;
-        
+        public static event Action OnGamePause;
+
         public static void PlatformHover(bool isHovering)
         {
             OnPlatformHover?.Invoke(isHovering);
@@ -102,6 +103,32 @@ namespace Game.Core.Managers
         public static void ScoreCombinatorReady()
         {
             OnScoreCombinatorReady?.Invoke();
+        }
+
+        public static void GamePause()
+        {
+            OnGamePause?.Invoke();
+        }
+
+        public static event Action OnGameResume;
+
+        public static void GameResume()
+        {
+            OnGameResume?.Invoke();
+        }
+
+        public static event Action OnPlayerPause;
+
+        public static void PlayerPause()
+        {
+            OnPlayerPause?.Invoke();
+        }
+
+        public static event Action OnPlayerResume;
+
+        public static void PlayerResume()
+        {
+            OnPlayerResume?.Invoke();
         }
     }
 }

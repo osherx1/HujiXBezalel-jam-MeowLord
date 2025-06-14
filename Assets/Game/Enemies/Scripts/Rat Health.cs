@@ -7,6 +7,8 @@ namespace Game.Enemies.Scripts
 {
     public class RatHealth : MonoBehaviour
     {
+        private static readonly int RandomDeath = Animator.StringToHash("RandomDeath");
+        private static readonly int Death = Animator.StringToHash("Death");
         [SerializeField] public int maxHealth = 1;
         private int _currentHealth;
         
@@ -51,15 +53,15 @@ namespace Game.Enemies.Scripts
         {
             GameEvents.MouseCatch(transform.position); 
             int deathIndex = Random.Range(1, 5);
-            animator.SetInteger("RandomDeath", deathIndex);
-            animator.SetTrigger("Death");
+            animator.SetInteger(RandomDeath, deathIndex);
+            animator.SetTrigger(Death);
 
             
             StartCoroutine(ScaleUpEffect());
             StartCoroutine(DelayedReturn());
         }
         
-        private IEnumerator DelayedReturn()
+        protected virtual IEnumerator DelayedReturn()
         {
             yield return new WaitForSeconds(1.5f);
             RatPoolManager.Instance.ReturnRat(gameObject);

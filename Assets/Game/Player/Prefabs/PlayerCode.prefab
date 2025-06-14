@@ -135,21 +135,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerLogger: {fileID: 592636455647064314}
-  playerStats: {fileID: 0}
+  playerStats: {fileID: 11400000, guid: 56361e77bcb824152aaef6336f8973e0, type: 2}
   clickableLayer:
     serializedVersion: 2
     m_Bits: 64
-  playerLandedTimer: 0
+  playerLandedTimer: 0.5
   enemyLayer:
     serializedVersion: 2
     m_Bits: 128
-  trailRenderer: {fileID: 0}
+  trailRenderer: {fileID: 6940554610047075093, guid: ab8a426df3b314bbfb3359da683f9d06, type: 3}
   loopDestructionDelay: 0.2
-  maxSegments: 6
+  maxSegments: 8
   leftSegments: 0
   segmentsFather: {fileID: 0}
   animator: {fileID: 5088570227441705168}
-  moveSpeed: 1
+  moveSpeed: 9.8
   fallDuration: 0.75
 --- !u!114 &592636455647064314
 MonoBehaviour:
@@ -163,7 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8ef5f0c52de4619a4f84108bdd3b6d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
 --- !u!1001 &4429162231053426959
 PrefabInstance:
   m_ObjectHideFlags: 0

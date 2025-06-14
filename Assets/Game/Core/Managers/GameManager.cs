@@ -14,6 +14,7 @@ namespace Game.Core.Managers
         private  GameplayScore _gameplayScore;
         private  HighScoreManager _highScoreManager;
         private FirebaseInitializer _firebaseIntializer;
+        private PauseController _pauseController;
         [SerializeField] private HighScoreLogger highScoreLogger;
         private float _timeStarted;
         
@@ -49,6 +50,10 @@ namespace Game.Core.Managers
 
         private void InitializeRelevantObjects()
         {
+            if (_pauseController == null)
+            {
+                _pauseController = new PauseController();
+            }
             if (highScoreLogger == null)
             {
                 highScoreLogger = gameObject.AddComponent<HighScoreLogger>();

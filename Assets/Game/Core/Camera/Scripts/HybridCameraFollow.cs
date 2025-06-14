@@ -45,7 +45,11 @@ namespace Game.Core.Camera.Scripts
         
         private Tween cameraMoveTween;  
         private bool edgePanning = false;
-        private bool isCameraLocked = false;
+        [SerializeField] public bool isCameraLocked = false;
+        [SerializeField] public int tutorialModeTargetFrame = 0;
+
+        
+
         private UnityEngine.Camera _cam;
         private Vector3 _camPosBefore;
         private float _noMovementTime = 0f;
@@ -54,11 +58,7 @@ namespace Game.Core.Camera.Scripts
         private int _clampedPlatform = 5;
 
         private List<Transform> CurrentPlayerPlatforms => playerMovement.PlayerPlatforms;
-
-        void Awake()
-        {
-            
-        }
+        
         void Start()
         {
             _cam = UnityEngine.Camera.main;
@@ -69,30 +69,61 @@ namespace Game.Core.Camera.Scripts
         }
         void OnEnable()
         {
-            InputSystemSingleton.Instance.InputSystem.PlayerControls.RightClick.performed += OnRightClickPerformed;
             targetLogger?.Log("Target subscribed to player");
-            GameEvents.OnPlayerLanded += MoveTowardsPlayer;
-            GameEvents.OnPlayerLanded += AdjustTargetFraming;
+            RegisterCameraToGoBackToPlayer();
+            RegisterCameraToMoveTowardsPlayer();
+            RegisterCameraToAdjustFraming();
         }
-        
+
+        public void RegisterCameraToGoBackToPlayer(bool register = true)
+        {
+            if (register)
+            {
+                InputSystemSingleton.Instance.InputSystem.PlayerControls.RightClick.performed += OnRightClickPerformed;
+            }
+            else
+            {
+                InputSystemSingleton.Instance.InputSystem.PlayerControls.RightClick.performed -= OnRightClickPerformed;
+            }
+        }
+
+        public void RegisterCameraToAdjustFraming(bool register = true)
+        {
+            if (register)
+            {
+                GameEvents.OnPlayerLanded += AdjustTargetFraming;
+            }
+            else
+            {
+                GameEvents.OnPlayerLanded -= AdjustTargetFraming;
+            }
+        }
+
+        public void RegisterCameraToMoveTowardsPlayer(bool register = true)
+        {
+            if (register)
+            {
+                GameEvents.OnPlayerLanded += MoveTowardsPlayer;
+            }
+            else
+            {
+                GameEvents.OnPlayerLanded -= MoveTowardsPlayer;
+            }
+        }
+
         void OnDisable()
         {
-            InputSystemSingleton.Instance.InputSystem.PlayerControls.RightClick.performed -= OnRightClickPerformed;
-            GameEvents.OnPlayerLanded -= MoveTowardsPlayer;
-            GameEvents.OnPlayerLanded -= AdjustTargetFraming;
+            RegisterCameraToGoBackToPlayer(false);
+            RegisterCameraToMoveTowardsPlayer(false);
+            RegisterCameraToAdjustFraming(false);
         }
 
         private void OnRightClickPerformed(InputAction.CallbackContext obj)
         {
             MoveTowardsPlayer();
         }
-
-
-        // private void OnLockPerformed(InputAction.CallbackContext ctx)
-        // {
-        //     isCameraLocked = !isCameraLocked;
-        // }
-        private void MoveTowardsPlayer()
+        
+        public void MoveTowardsPlayer()
         {
             targetLogger?.Log("Target Entered Player moved Function");
             if (player != null)
@@ -107,6 +138,7 @@ namespace Game.Core.Camera.Scripts
 
         void Update()
         {
+            if(isCameraLocked) return;
             Vector3 mousePos = UnityEngine.Input.mousePosition;
             Rect dontMoveRect = EladsHelperFunctions.GetCenteredRect(dontMoveZoneWidthPercent, dontMoveZoneHeightPercent);
 
@@ -143,6 +175,7 @@ namespace Game.Core.Camera.Scripts
         
         private void LateUpdate()
         {
+            if(isCameraLocked) return;
             Vector3 camPosAfter = UnityEngine.Camera.main.transform.position;
 
             // Check if edge-panning was attempted and camera didn't move
@@ -167,10 +200,10 @@ namespace Game.Core.Camera.Scripts
             
         }
 
-        private void AdjustTargetFraming()
+        public void AdjustTargetFraming()
         {
-            int numPlatforms = CurrentPlayerPlatforms.Count;
-
+            int numPlatforms =  tutorialModeTargetFrame != 0 ? tutorialModeTargetFrame : CurrentPlayerPlatforms.Count;
+            
             // If 0 or 1, keep the starting frame size
             if (numPlatforms <= 1)
             {
