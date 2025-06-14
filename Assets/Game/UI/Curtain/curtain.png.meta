@@ -1,16 +1,25 @@
 fileFormatVersion: 2
-guid: 1a5327017985248dab834693d39bb428
+guid: b78a08e0a21274d21b41502b64decf35
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2663663259011458935
-    second: vi_0
+      213: -1784205716024546507
+    second: curtain_0
+  - first:
+      213: 3394339077668827979
+    second: curtain_1
+  - first:
+      213: 5752040793646074897
+    second: curtain_2
+  - first:
+      213: -8725478865979233447
+    second: curtain_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
-    sRGBTexture: 1
+    sRGBTexture: 0
     linearTexture: 0
     fadeOut: 0
     borderMipMap: 0
@@ -46,7 +55,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 0
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -55,7 +64,7 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 1
+  alphaIsTransparency: 0
   spriteTessellationDetail: -1
   textureType: 8
   textureShape: 1
@@ -75,7 +84,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,13 +122,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: vi_0
+      name: curtain_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 230
-        height: 219
+        x: 1
+        y: 1083
+        width: 171
+        height: 834
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +137,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 77723a21f9b37f420800000000000000
-      internalID: 2663663259011458935
+      spriteID: 53ba22aba5a3d37e0800000000000000
+      internalID: -1784205716024546507
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: curtain_1
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1
+        width: 1067
+        height: 1082
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b437dab386d1b1f20800000000000000
+      internalID: 3394339077668827979
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: curtain_2
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 1083
+        width: 171
+        height: 813
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 11c84de40aa53df40800000000000000
+      internalID: 5752040793646074897
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: curtain_3
+      rect:
+        serializedVersion: 2
+        x: 343
+        y: 1083
+        width: 181
+        height: 659
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 95b2122733fd8e680800000000000000
+      internalID: -8725478865979233447
       vertices: []
       indices: 
       edges: []
@@ -148,7 +223,10 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      vi_0: 2663663259011458935
+      curtain_0: -1784205716024546507
+      curtain_1: 3394339077668827979
+      curtain_2: 5752040793646074897
+      curtain_3: -8725478865979233447
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
