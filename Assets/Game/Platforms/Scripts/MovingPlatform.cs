@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Game.Core.Managers;
 using UnityEngine;
 
 namespace Game.Platforms.Scripts
@@ -67,9 +68,11 @@ namespace Game.Platforms.Scripts
 
             // Always start with forward visible, backward hidden
             SetSpriteRootActive(true);
-
-            var polygonCollider = GetComponent<PolygonCollider2D>();
-            polygonCollider.enabled = true;
+            
+            // this line make a bug, there is no polygon collider anymore on the moving platforms.
+            // var polygonCollider = GetComponent<PolygonCollider2D>();
+            // polygonCollider.enabled = true;
+            
             gameObject.SetActive(true);
         }
 
@@ -123,6 +126,7 @@ namespace Game.Platforms.Scripts
             {
                 if (waypoints[_currentWaypoint].stopAtPoint && waypoints[_currentWaypoint].stopDelay > 0f)
                 {
+                    GameEvents.PlatformStopedMoving();
                     _waiting = true;
                     _waitTimer = waypoints[_currentWaypoint].stopDelay;
                 }
@@ -174,7 +178,9 @@ namespace Game.Platforms.Scripts
             {
                 _waitTimer -= Time.deltaTime;
                 if (_waitTimer <= 0f)
+                {
                     _waiting = false;
+                }
                 else
                 {
                     SetWalkingAnim(false);

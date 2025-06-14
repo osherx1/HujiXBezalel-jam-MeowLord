@@ -1,4 +1,5 @@
 using System;
+using Game.Platforms.Scripts;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -129,6 +130,25 @@ namespace Game.Core.Managers
         public static void PlayerResume()
         {
             OnPlayerResume?.Invoke();
+        }
+
+        public static event Action<PlatformType> OnSpawnPlatform;
+
+        public static void SpawnPlatform(PlatformType obj)
+        {
+            OnSpawnPlatform?.Invoke(obj);
+        }
+        
+        public static event Action OnPlatformStopedMoving;
+        public static void PlatformStopedMoving()
+        {
+            OnPlatformStopedMoving?.Invoke();
+        }
+        
+        public static event Action OnPlatformContinuedMoving;
+        public static void PlatformContinuedMoving()
+        {
+            OnPlatformContinuedMoving?.Invoke();
         }
     }
 }

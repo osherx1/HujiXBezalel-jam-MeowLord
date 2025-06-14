@@ -1,3 +1,4 @@
+using Game.Core.Managers;
 using UnityEngine;
 using Game.Platforms.Scripts;
 
@@ -17,6 +18,17 @@ public class PlatformSpawner : MonoBehaviour
     public float spawnInterval = 5f;
     private float timer = 0f;
 
+    void OnEnable()
+    {
+        GameEvents.OnSpawnPlatform += SpawnPlatform;
+        
+    }
+    
+    void OnDisable()
+    {
+        GameEvents.OnSpawnPlatform -= SpawnPlatform;
+        
+    }
     void Update()
     {
         timer += Time.deltaTime;
@@ -27,10 +39,13 @@ public class PlatformSpawner : MonoBehaviour
             {
                 // Randomly choose a type each time
                 int randomIndex = Random.Range(0, spawnTypes.Length);
-                pool.SpawnPlatform(spawnTypes[randomIndex]);
+                SpawnPlatform(spawnTypes[randomIndex]);
             }
         }
     }
 
-
+    private void SpawnPlatform(PlatformType spawnType)
+    {
+        pool.SpawnPlatform(spawnType);
+    }
 }

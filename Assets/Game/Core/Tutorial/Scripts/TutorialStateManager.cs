@@ -6,6 +6,7 @@ using DG.Tweening;
 using Game.Core.Input;
 using Game.Core.Managers;
 using Game.Enemies.Scripts;
+using Game.Platforms.Scripts;
 using TMPro;
 using UnityEngine.InputSystem;
 
@@ -20,6 +21,8 @@ namespace Game.Core.Tutorial
         [SerializeField] private GameObject mousePrefab;
         [SerializeField] private Transform startingMouseLocation;
         [SerializeField] private TutorialTextRenderer tutorialTextRenderer;
+        private bool _stopedMoving = false;
+        private bool _mouseCatch = false;
         
         
         
@@ -52,7 +55,19 @@ namespace Game.Core.Tutorial
         {
             InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed -= OnLeftClickPerformed;
             InputSystemSingleton.Instance.InputSystem.PlayerControls.RightClick.performed -= OnRightClickPerformed;
-            GameEvents.OnMouseCatch -= FirstMouseCatch;
+            GameEvents.OnMouseCatch -= MouseCatch;
+            GameEvents.OnPlatformStopedMoving -= PlatformStopedMoving;
+            GameEvents.OnPlatformContinuedMoving -= PlatformContinuedMoving;
+        }
+        
+        public void PlatformStopedMoving()
+        {
+            _stopedMoving = true;
+        }
+        
+        public void PlatformContinuedMoving()
+        {
+            _stopedMoving = false;
         }
 
         #region ClickInput
@@ -136,7 +151,6 @@ namespace Game.Core.Tutorial
         #endregion
 
         #region FirstMouseCatchState
-        private bool _firstMouseCatch = false;
 
         [Header("FirstMouseCatchState")] [SerializeField]
         private float delayPlayerPause = 0.2f;
@@ -144,24 +158,25 @@ namespace Game.Core.Tutorial
 
         private IEnumerator FirstMouseCatchState()
         {
-            GameEvents.OnMouseCatch += FirstMouseCatch;
+            GameEvents.OnMouseCatch += MouseCatch;
             
             while (true)
             {
                 yield return null;
-                if (_firstMouseCatch)
+                if (_mouseCatch)
                 {
+                    _mouseCatch = false;
                     GameEvents.PlayerPause();
-                    GameEvents.OnMouseCatch -= FirstMouseCatch;
+                    GameEvents.OnMouseCatch -= MouseCatch;
                     break;
                 }
             }
             StartCoroutine(CameraMoveToSecondPlacementState());
         }
 
-        public void FirstMouseCatch(Vector3 mousePosition)
+        public void MouseCatch(Vector3 mousePosition)
         {
-            _firstMouseCatch = true;
+            _mouseCatch = true;
         }
         #endregion
 
@@ -231,37 +246,62 @@ namespace Game.Core.Tutorial
                 }
                 yield return null;
             }
-            StartCoroutine(ServantKingAndQueenEnterState());
+            StartCoroutine(ServantEnterState());
         }
         #endregion
         
-        #region ServantKingAndQueenEnterState
-        private IEnumerator ServantKingAndQueenEnterState()
+        #region ServantEnterState
+        
+        private IEnumerator ServantEnterState()
         {
-            // Pre-logic for ServantKingAndQueenEnter
-            // TODO: Add pre-logic here
+            GameEvents.OnPlatformStopedMoving += PlatformStopedMoving;
+            GameEvents.SpawnPlatform(PlatformType.ServantRed);
+            
             while (true)
             {
+                Debug.Log("Enter");
                 yield return null;
-                // TODO: Wait for condition to proceed to SecondMouseEnter
-                if (false) // Replace with actual condition
+                if (_stopedMoving)
+                {
+                    GameEvents.OnPlatformStopedMoving -= PlatformStopedMoving;
                     break;
+                }
             }
-            StartCoroutine(SecondMouseEnterState());
+            StartCoroutine(ServantStopedMovingState());
         }
         #endregion
 
-        #region SecondMouseEnterState
-        private IEnumerator SecondMouseEnterState()
+        #region ServantStopedMovingState
+        [Header("ServantStopedMovingState")]
+        [TextArea(3, 10)]  
+        [SerializeField] private string servantStopedMovingText;
+        [TextArea(3, 10)]  
+        [SerializeField] private string yarnText;
+        [SerializeField] private float delayServantStoped = 3f;
+
+        private IEnumerator ServantStopedMovingState()
         {
-            // Pre-logic for SecondMouseEnter
-            // TODO: Add pre-logic here
+            tutorialTextRenderer.ShowBlurAndText(servantStopedMovingText);
+            yield return new WaitForSeconds(delayServantStoped);
+            tutorialTextRenderer.TransitionText(yarnText);
+            yield return new WaitForSeconds(delayServantStoped);
+            tutorialTextRenderer.HideBlurAndText();
+            var rat = Instantiate(mousePrefab, firstPositionOfCamera.position, Quaternion.identity);
+            rat.transform.position = startingMouseLocation.position;
+            rat.transform.rotation = startingMouseLocation.rotation;
+            GameEvents.PlayerResume();
+            GameEvents.OnMouseCatch += MouseCatch;
             while (true)
             {
                 yield return null;
-                // TODO: Wait for condition to proceed to YarnText
-                if (false) // Replace with actual condition
+                if (_mouseCatch)
+                {
+                    _mouseCatch = false;
+                    GameEvents.OnMouseCatch -= MouseCatch;
+                    GameEvents.PlayerPause();
                     break;
+                }
+                
             }
             StartCoroutine(YarnTextState());
         }
