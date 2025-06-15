@@ -36,6 +36,7 @@ namespace Game.Platforms.Scripts
         public bool hasYarnAttached = false;
 
         public bool isMoving => _isMoving;
+        private bool isAfraid = false;
         public event Action OnPlatformReturn;
 
         public PlatformType platformType;
@@ -94,6 +95,10 @@ namespace Game.Platforms.Scripts
 
         void Update()
         {
+            
+            if (isAfraid) // If afraid, do NOT move!
+                return;
+            
             if (_runAway)
             {
                 HandleRunAway();
@@ -309,32 +314,47 @@ namespace Game.Platforms.Scripts
 
         // ---------- Afraid/Mouse ----------
 
-        public void SetAfraid(bool isAfraid)
+        public void SetAfraid(bool afraid)
         {
+            isAfraid = afraid;
+
             if (_isFacingForward)
                 animatorForward?.SetTrigger("IsAfraid");
             else
                 animatorBackward?.SetTrigger("IsAfraid");
 
-            var polygonCollider = GetComponent<PolygonCollider2D>();
-            if (polygonCollider != null)
-                polygonCollider.enabled = false;
+            // Disable collider only on the active child
+            PolygonCollider2D childCollider = null;
+            if (_isFacingForward && spriteRootForward != null)
+                childCollider = spriteRootForward.GetComponent<PolygonCollider2D>();
+            else if (!_isFacingForward && spriteRootBackward != null)
+                childCollider = spriteRootBackward.GetComponent<PolygonCollider2D>();
 
-            if (isAfraid)
+            if (childCollider != null)
+                childCollider.enabled = false;
+
+            if (afraid)
             {
-                if (waypoints != null && waypoints.Count > 0)
-                {
-                    _savedSpeed = moveSpeed;
-                    moveSpeed *= 2f;
-                    _direction = -1;
-                }
+                _savedSpeed = moveSpeed;
+                moveSpeed *= 2f;      // prepare faster speed for escape
+                _direction = -1;      // set running away
+                // DO NOT set _isMoving = false here!
             }
             else
             {
                 if (_savedSpeed > 0f)
                     moveSpeed = _savedSpeed;
+                // _isMoving will be enabled later (see below)
             }
         }
+        
+        public void OnAfraidAnimationDone()
+        {
+            isAfraid = false; // Now allow movement again
+            moveSpeed = _savedSpeed * 2f; // Or whatever logic you want
+            _isMoving = true; // If you want to resume movement now
+        }
+
 
         // ---------- Utility ----------
 
