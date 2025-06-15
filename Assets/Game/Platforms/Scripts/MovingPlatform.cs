@@ -222,6 +222,17 @@ namespace Game.Platforms.Scripts
 
         // ---------- Sprites + Animation Logic ----------
 
+        
+        public void EnableAllPolygonColliders()
+        {
+            var colliders = GetComponentsInChildren<PolygonCollider2D>(includeInactive: true);
+            foreach (var collider in colliders)
+            {
+                collider.enabled = true;
+            }
+        }
+
+        
         private void SetWalkingAnim(bool isWalking)
         {
             // Only set the relevant animator
