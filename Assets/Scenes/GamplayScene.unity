@@ -170,6 +170,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stopAtPoint: 1
   stopDelay: 3
+  stopForever: 0
 --- !u!1001 &60823211
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1076,7 +1077,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2004531351971095923, guid: b0aa7bfc9fd6a4f1bb6c9fb4e01bb168, type: 3}
       propertyPath: m_SortingOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4554016938563402372, guid: b0aa7bfc9fd6a4f1bb6c9fb4e01bb168, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1121,6 +1122,10 @@ PrefabInstance:
     - target: {fileID: 6900820168118909321, guid: b0aa7bfc9fd6a4f1bb6c9fb4e01bb168, type: 3}
       propertyPath: m_Name
       value: Platform shelf (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8906407207157855967, guid: b0aa7bfc9fd6a4f1bb6c9fb4e01bb168, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9082510076665247986, guid: b0aa7bfc9fd6a4f1bb6c9fb4e01bb168, type: 3}
       propertyPath: m_SortingOrder
@@ -1283,6 +1288,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stopAtPoint: 0
   stopDelay: 3
+  stopForever: 0
 --- !u!1 &497965508
 GameObject:
   m_ObjectHideFlags: 0
@@ -1605,6 +1611,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stopAtPoint: 0
   stopDelay: 0
+  stopForever: 0
 --- !u!1 &576777294
 GameObject:
   m_ObjectHideFlags: 0
@@ -1909,6 +1916,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stopAtPoint: 0
   stopDelay: 3
+  stopForever: 0
 --- !u!1001 &691577054
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2217,7 +2225,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1640570925
   m_SortingLayer: 1
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: 40b804a3e33b045e2a0bda24155c31bc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -2746,6 +2754,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stopAtPoint: 0
   stopDelay: 0
+  stopForever: 0
 --- !u!1 &1019782542
 GameObject:
   m_ObjectHideFlags: 0
@@ -3312,6 +3321,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stopAtPoint: 0
   stopDelay: 3
+  stopForever: 0
 --- !u!1 &1239041114
 GameObject:
   m_ObjectHideFlags: 0
@@ -3420,6 +3430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stopAtPoint: 0
   stopDelay: 0
+  stopForever: 0
 --- !u!1 &1369149475
 GameObject:
   m_ObjectHideFlags: 0
@@ -5185,6 +5196,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stopAtPoint: 0
   stopDelay: 3
+  stopForever: 0
 --- !u!1001 &1808662613
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5792,6 +5804,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stopAtPoint: 0
   stopDelay: 3
+  stopForever: 0
 --- !u!1 &1903908315
 GameObject:
   m_ObjectHideFlags: 0
@@ -6755,6 +6768,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stopAtPoint: 0
   stopDelay: 3
+  stopForever: 0
 --- !u!1 &2101695898
 GameObject:
   m_ObjectHideFlags: 0
@@ -6815,7 +6829,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1640570925
   m_SortingLayer: 1
-  m_SortingOrder: 3
+  m_SortingOrder: 4
   m_Sprite: {fileID: 21300000, guid: 8f27f74bf60634a58859c4cebd2645d0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -6968,6 +6982,10 @@ PrefabInstance:
     - target: {fileID: 1028151068054341313, guid: e63474b6258174b15a046736dd115bb4, type: 3}
       propertyPath: m_SortingOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1273031552055302452, guid: e63474b6258174b15a046736dd115bb4, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3617375921010790858, guid: e63474b6258174b15a046736dd115bb4, type: 3}
       propertyPath: m_Name
@@ -7162,6 +7180,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0.182
       objectReference: {fileID: 0}
+    - target: {fileID: 3728807891396644221, guid: 6a97fe9813b884331922360e938c4144, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4928960651642921238, guid: 6a97fe9813b884331922360e938c4144, type: 3}
       propertyPath: m_Name
       value: Platform Dresser
@@ -7185,7 +7207,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1476381472474969094, guid: 4bf10cb8f7bf5452a98ebbdcdbeea414, type: 3}
       propertyPath: m_SortingOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3067368794254275338, guid: 4bf10cb8f7bf5452a98ebbdcdbeea414, type: 3}
       propertyPath: m_Name
@@ -7619,7 +7641,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8283684215601412183, guid: 66d21cab308b54075a9b1cc630768025, type: 3}
       propertyPath: m_SortingOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8059,11 +8081,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3125750456402952126, guid: 8be89eae10f464bbe9b074865536849c, type: 3}
       propertyPath: m_SortingOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4426705268435667985, guid: 8be89eae10f464bbe9b074865536849c, type: 3}
       propertyPath: m_SortingOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6084483905211732620, guid: 8be89eae10f464bbe9b074865536849c, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7417448222075977607, guid: 8be89eae10f464bbe9b074865536849c, type: 3}
       propertyPath: m_Name
@@ -8992,6 +9018,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Platform Long stool
       objectReference: {fileID: 0}
+    - target: {fileID: 5570615722763343800, guid: cc69951e6f90e4fb2816cd4dae25aaec, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 6362442398307562765, guid: cc69951e6f90e4fb2816cd4dae25aaec, type: 3}
       propertyPath: m_SortingOrder
       value: 2
@@ -9261,6 +9291,10 @@ PrefabInstance:
     - target: {fileID: 3677853832268848867, guid: 72bb6aef08b3c4376b2dc28713461264, type: 3}
       propertyPath: m_SortingOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6441641103713663246, guid: 72bb6aef08b3c4376b2dc28713461264, type: 3}
+      propertyPath: m_SortingOrder
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8823488109909885276, guid: 72bb6aef08b3c4376b2dc28713461264, type: 3}
       propertyPath: m_SortingOrder
