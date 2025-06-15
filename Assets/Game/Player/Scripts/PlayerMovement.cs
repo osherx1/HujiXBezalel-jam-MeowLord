@@ -346,19 +346,29 @@ namespace Game.Player.Scripts
                 onMoveCompleteEvent = () =>
                 {
                     _segmentDelay = true;
+                    if (_playerRatDetector.DestroyEnemiesInLoop(loopPlatforms, enemyLayer))
+                    {
+                        DOVirtual.DelayedCall(playerLandedTimer/4, () =>
+                        {
+                            GameEvents.PlayerLanded();
+                        });
+                    }
+                    else
+                    {
+                        DOVirtual.DelayedCall(playerLandedTimer, () =>
+                        {
+                            GameEvents.PlayerLanded();
+                        });
+                    }
                     DOVirtual.DelayedCall(loopDestructionDelay, () =>
                     {
                         for (int i = _segments.Count - 1; i >= idx; i--)
                         {
                             RemoveSegment(i);
                         }
-                        _playerRatDetector.DestroyEnemiesInLoop(loopPlatforms, enemyLayer);
                         _segmentDelay = false;
                     });
-                    DOVirtual.DelayedCall(playerLandedTimer, () =>
-                    {
-                        GameEvents.PlayerLanded();
-                    });
+                    
                 };
 
                 RegisterToPlatform(newPlatScript, _lastMovingPlatform); // Register before move

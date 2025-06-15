@@ -117,13 +117,15 @@ namespace Game.Player.Scripts
             return false;
         }
 
-        public void DestroyEnemiesInLoop(List<Transform> loopPlatforms, LayerMask enemyLayer)
+        public bool DestroyEnemiesInLoop(List<Transform> loopPlatforms, LayerMask enemyLayer)
         {
             var inPolygon = GetEnemiesInLoop(loopPlatforms, enemyLayer);
+            if (inPolygon == null) return false;
             foreach (var c in inPolygon){
                 ApplyDamageToRat(c);
             }
             GameEvents.ScoreCombinatorReady();
+            return true;
         }
 
         public List<Collider2D> GetEnemiesInLoop(List<Transform> loopPlatforms, LayerMask enemyLayer)
