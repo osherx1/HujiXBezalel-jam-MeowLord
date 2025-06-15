@@ -252,14 +252,19 @@ namespace Game.Player.Scripts
             MovingPlatform movingPlatform = null;
             foreach (var c in all)
             {
-                float d = Vector2.Distance(transform.position, c.transform.position);
+                var father = EladsHelperFunctions.GetRootTransformPlatformHead(c.transform);
+                var movingPlatfomCheck = father.GetComponentInChildren<MovingPlatform>();
+                if (movingPlatfomCheck != null && (movingPlatfomCheck.platformType is PlatformType.King or PlatformType.Queen))
+                {
+                    continue;
+                }
+                float d = Vector2.Distance(transform.position, father.position);
                 if (d < minDist)
                 {
+                    movingPlatform = father.GetComponentInChildren<MovingPlatform>();
                     minDist = d;
-                    nearest = c.transform;
-                    nearest = EladsHelperFunctions.GetRootTransformPlatformHead(nearest);
-                    sensor = c.GetComponentInChildren<MouseSensor>();
-                    movingPlatform = c.GetComponentInChildren<MovingPlatform>();
+                    nearest = father.transform;
+                    sensor = father.GetComponentInChildren<MouseSensor>();
                 }
             }
             return (nearest, sensor, movingPlatform);
@@ -309,7 +314,9 @@ namespace Game.Player.Scripts
                 onMoveCompleteEvent = (() =>
                 {
                     GameEvents.PlayerLanded();
+                    onMoveCompleteEvent = null;
                     GameEvents.PlayerFall();
+                    GameEvents.ScoreCombinatorReady();
                 });
                 
                 RegisterToPlatform(newPlatScript, _lastMovingPlatform); // Register before move
