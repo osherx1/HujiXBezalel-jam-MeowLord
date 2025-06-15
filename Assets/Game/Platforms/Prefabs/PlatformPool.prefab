@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5067812412040677874}
   - component: {fileID: 3180241267807240156}
   - component: {fileID: 4496193419839431088}
-  - component: {fileID: 417822575998885313}
   m_Layer: 0
   m_Name: PlatformPool
   m_TagString: Untagged
@@ -49,10 +48,18 @@ MonoBehaviour:
   platformPrefabs:
   - type: 2
     prefab: {fileID: 7149848837680513071, guid: f99dec0c289e2b6468d4d29f13f3925f, type: 3}
+  - type: 0
+    prefab: {fileID: 8214014457347427242, guid: ce5fa988879b94d19861a56dd7e678f5, type: 3}
+  - type: 1
+    prefab: {fileID: 1116053366034230601, guid: 4e94c191bf8704b749b000f84fed0b80, type: 3}
+  - type: 3
+    prefab: {fileID: 6308876668014842229, guid: 7633887ea3c364b72a9f7d4d3cce6a4f, type: 3}
+  - type: 4
+    prefab: {fileID: 7496325995025864595, guid: 181a009a8c90046d0b7a0bc5e79fa9eb, type: 3}
   initialPoolSize: 5
   spawnPoint: {fileID: 0}
   routesSetup:
-  - allowedTypes: 02000000
+  - allowedTypes: 020000000300000004000000
     routes:
     - {fileID: 0}
     - {fileID: 0}
@@ -69,10 +76,10 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
   limitGroups:
-  - types: 0300000002000000
-    maxActive: 4
+  - types: 030000000200000004000000
+    maxActive: 5
   - types: 0000000001000000
-    maxActive: 2
+    maxActive: 1
 --- !u!114 &4496193419839431088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,26 +93,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pool: {fileID: 3180241267807240156}
-  spawnTypes: 02000000
+  spawnTypes: 0200000000000000010000000300000004000000
   selectedSpawnIndex: 0
   spawnInterval: 5
---- !u!114 &417822575998885313
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6364854380310217726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 324ca8874a967a84e87f1563821a8966, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rightStart: {fileID: 0}
-  rightEnd: {fileID: 0}
-  upStart: {fileID: 0}
-  upEnd: {fileID: 0}
-  rightDir: {x: -0.829239, y: -0.55889404}
-  leftDir: {x: 0.829239, y: 0.55889404}
-  upDir: {x: 0.7941059, y: -0.60777944}
-  downDir: {x: -0.7941059, y: 0.60777944}
