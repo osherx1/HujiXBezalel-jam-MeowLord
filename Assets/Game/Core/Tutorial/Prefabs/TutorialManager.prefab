@@ -91,9 +91,16 @@ MonoBehaviour:
   cameraWaitTime: 2
   triggerDistanceCameraMove: 15
   rightClickText: Click right on your mouse in order to return to cat position
+  waypointPointServantEnter: {fileID: 0}
   servantStopedMovingText: This is a servant! you can jump on it too
-  yarnText: Just be aware of the number of lines in the top right corner!
-  delayServantStoped: 3
+  yarnText: Just be aware of the number of yarns in the top right corner!
+  yarnAddedText: "Great job! You\u2019ve earned an extra yarn for your high score!"
+  queenText: Meet the Queen. Jump on her and face the consequences!
+  finalText: "You\u2019re almost ready! Let\u2019s see if you can catch this mouse"
+  greatJobText: "Awesome! It\u2019s time for the real challenge."
+  waypointPointServantEnd: {fileID: 0}
+  wayPointQueen: {fileID: 0}
+  mouseTutorial2: {fileID: 3212948961436724193, guid: 83c199dafb5b1421ab827d238420ffd4, type: 3}
 --- !u!1 &8625927863148030137
 GameObject:
   m_ObjectHideFlags: 0

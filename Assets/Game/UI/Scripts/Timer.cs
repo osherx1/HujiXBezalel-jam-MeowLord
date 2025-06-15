@@ -18,11 +18,18 @@ namespace Game.UI.Scripts
         private bool _isFlashing;
         private float _flashTimer;
         private bool _isRed;
+        [SerializeField] private bool active = true;
 
-    
+        void Start()
+        {
+            int minutes = Mathf.FloorToInt(timeLeft / 60);
+            int seconds = Mathf.FloorToInt(timeLeft % 60);
+            timerText.text = $"{minutes:00}:{seconds:00}";
+        }
         // Update is called once per frame
         void Update()
         {
+            if (!active) return;
             if (timeLeft > 0)
             {
                 timeLeft -= Time.deltaTime;

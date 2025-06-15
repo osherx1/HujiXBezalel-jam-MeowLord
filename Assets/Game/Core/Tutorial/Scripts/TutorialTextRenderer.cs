@@ -59,9 +59,14 @@ namespace Game.Core.Tutorial
 
         public void HideBlurAndText()
         {
+            HideBlurAndText(null);
+        }
+
+        public void HideBlurAndText(System.Action onComplete)
+        {
             if (blurCoroutine != null) StopCoroutine(blurCoroutine);
             if (textCoroutine != null) StopCoroutine(textCoroutine);
-            StartCoroutine(BlurOutAndHideTextCoroutine());
+            StartCoroutine(BlurOutAndHideTextCoroutine(onComplete));
         }
 
         public void TransitionText(string newMessage, System.Action onComplete = null)
@@ -107,7 +112,7 @@ namespace Game.Core.Tutorial
             onComplete?.Invoke();
         }
 
-        private IEnumerator BlurOutAndHideTextCoroutine()
+        private IEnumerator BlurOutAndHideTextCoroutine(System.Action onComplete = null)
         {
             // Fade out text
             Color c = tutorialText.color;
@@ -137,6 +142,7 @@ namespace Game.Core.Tutorial
             }
             SetPanelAlpha(0f);
             blurPanel.gameObject.SetActive(false);
+            onComplete?.Invoke();
         }
 
         private IEnumerator TransitionTextCoroutine(string newMessage, float duration, System.Action onComplete = null)

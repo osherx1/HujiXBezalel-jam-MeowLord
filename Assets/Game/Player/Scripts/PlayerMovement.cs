@@ -65,6 +65,9 @@ namespace Game.Player.Scripts
         private bool _segmentDelay = false;
         private bool _pausedGame = false;
 
+        [SerializeField] private int[] yarnThresholds = { 200, 1000, 2500, 10000 };
+        private int _yarnThresholdIndex = 0;
+
         void Awake()
         {
             leftSegments = maxSegments;
@@ -92,6 +95,19 @@ namespace Game.Player.Scripts
             GameEvents.OnPlayerFall += HandlePlayerFall;
             GameEvents.OnPlayerPause += ActivatePauseGame;
             GameEvents.OnPlayerResume += ActivateResumeGame;
+            GameEvents.OnUpdateScore += CheckYarn;
+        }
+        
+        private void CheckYarn(int score)
+        {
+            // Increase maxSegments by one for each threshold passed, only once per threshold
+            if (_yarnThresholdIndex < yarnThresholds.Length && score >= yarnThresholds[_yarnThresholdIndex])
+            {
+                maxSegments++;
+                leftSegments = maxSegments - _segments.Count;
+                GameEvents.NumberOfSegmentsChanged(leftSegments);
+                _yarnThresholdIndex++;
+            }
         }
 
         private void ActivateResumeGame()
