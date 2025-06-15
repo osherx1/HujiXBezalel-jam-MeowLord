@@ -9,6 +9,6 @@ namespace Game.Platforms.Scripts
         
         [Tooltip("If true, the platform will stop forever at this point.")]
         public bool stopForever = false;
-        
+        public bool pointOcuupied  = false;
     }
 }

@@ -138,6 +138,8 @@ namespace Game.Platforms.Scripts
 
             if (Vector3.Distance(transform.position, targetPos) < 0.01f)
             {
+                // the waypoint is occupied
+                waypoints[_currentWaypoint].pointOcuupied = true;
                 // ---- NEW: PERMANENT STOP ----
                 if (waypoints[_currentWaypoint].stopForever)
                 {
@@ -151,13 +153,15 @@ namespace Game.Platforms.Scripts
                 // Existing stopAtPoint/stopDelay logic:
                 if (waypoints[_currentWaypoint].stopAtPoint && waypoints[_currentWaypoint].stopDelay > 0f)
                 {
-                    GameEvents.PlatformStopedMoving();
                     _waiting = true;
                     _waitTimer = waypoints[_currentWaypoint].stopDelay;
                 }
-
+                
+                
+                
                 if (_direction == -1 && _currentWaypoint == 0)
                 {
+                    
                     if (hasPlayerOnTop || hasYarnAttached)
                     {
                         _direction = 1;
@@ -182,7 +186,6 @@ namespace Game.Platforms.Scripts
                 {
                     _direction = -1;
                 }
-
                 int nextWaypoint = _currentWaypoint + _direction;
                 if (nextWaypoint >= 0 && nextWaypoint < waypoints.Count)
                 {
@@ -190,8 +193,12 @@ namespace Game.Platforms.Scripts
                                       waypoints[_currentWaypoint].transform.position;
                     UpdateSpriteDirection(nextDir);
                 }
-
+                
+                
+                // exiting way point
+                waypoints[_currentWaypoint].pointOcuupied = false;
                 _currentWaypoint += _direction;
+                
             }
         }
 
