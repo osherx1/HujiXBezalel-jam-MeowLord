@@ -335,14 +335,12 @@ namespace Game.Platforms.Scripts
                 animatorBackward?.SetTrigger("IsAfraid");
 
             // Disable collider only on the active child
-            PolygonCollider2D childCollider = null;
-            if (_isFacingForward && spriteRootForward != null)
-                childCollider = spriteRootForward.GetComponent<PolygonCollider2D>();
-            else if (!_isFacingForward && spriteRootBackward != null)
-                childCollider = spriteRootBackward.GetComponent<PolygonCollider2D>();
+            // Disable all PolygonCollider2D components in all children (recursively)
+            foreach (var collider in GetComponentsInChildren<PolygonCollider2D>(includeInactive: true))
+            {
+                collider.enabled = false;
+            }
 
-            if (childCollider != null)
-                childCollider.enabled = false;
 
             if (afraid)
             {

@@ -178,19 +178,23 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 485642113991319701, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
       propertyPath: requiredCount
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6902140902893706995, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
       propertyPath: m_Name
       value: ArtServerBack
       objectReference: {fileID: 0}
-    - target: {fileID: 7974540978787812126, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
-      propertyPath: m_LocalPosition.x
+    - target: {fileID: 6902140902893706995, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7974540978787812126, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 7974540978787812126, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.35
       objectReference: {fileID: 0}
     - target: {fileID: 7974540978787812126, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
       propertyPath: m_LocalPosition.z
@@ -224,6 +228,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8829605694688894461, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -253,11 +261,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2446032705185734580, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.98
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 2446032705185734580, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.957
+      value: -0.6070001
       objectReference: {fileID: 0}
     - target: {fileID: 2446032705185734580, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -295,9 +303,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: ArtServerFront
       objectReference: {fileID: 0}
+    - target: {fileID: 5186205747028021582, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5484655398663331023, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
       propertyPath: requiredCount
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5484655398663331023, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
       propertyPath: timeUntilPlatformDown
