@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -96,27 +96,69 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Untitled_Artwork 201_0
+      name: Untitled_Artwork 201_l
       rect:
         serializedVersion: 2
         x: 3433
-        y: 1196
-        width: 1014
-        height: 1661
+        y: 1898
+        width: 592
+        height: 959
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
       spriteID: 63ec9a944806b8250800000000000000
       internalID: 5947953854160686646
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Untitled_Artwork 201_r
+      rect:
+        serializedVersion: 2
+        x: 3638
+        y: 1147
+        width: 974
+        height: 1710
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape:
+      - - {x: 389, y: 855}
+        - {x: -149, y: 855}
+        - {x: -172, y: -67}
+        - {x: -467, y: -39}
+        - {x: -466.80463, y: -451.76825}
+        - {x: 161.43071, y: -807.3283}
+        - {x: 226.50688, y: -807.3283}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 447c9ce427be94e00898622f9eaece73
+      internalID: -1683928417
       vertices: []
       indices: 
       edges: []
@@ -135,7 +177,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Untitled_Artwork 201_0: 5947953854160686646
+      Untitled_Artwork 201_l: 5947953854160686646
+      Untitled_Artwork 201_r: -1683928417
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
