@@ -258,6 +258,7 @@ MonoBehaviour:
   stopAtPoint: 1
   stopDelay: 3
   stopForever: 0
+  pointOcuupied: 0
 --- !u!1001 &60823211
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1491,6 +1492,7 @@ MonoBehaviour:
   stopAtPoint: 0
   stopDelay: 3
   stopForever: 0
+  pointOcuupied: 0
 --- !u!1 &497965508
 GameObject:
   m_ObjectHideFlags: 0
@@ -1814,6 +1816,7 @@ MonoBehaviour:
   stopAtPoint: 0
   stopDelay: 0
   stopForever: 0
+  pointOcuupied: 0
 --- !u!1 &576777294
 GameObject:
   m_ObjectHideFlags: 0
@@ -2208,6 +2211,7 @@ MonoBehaviour:
   stopAtPoint: 0
   stopDelay: 3
   stopForever: 0
+  pointOcuupied: 0
 --- !u!1001 &691577054
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3046,6 +3050,7 @@ MonoBehaviour:
   stopAtPoint: 0
   stopDelay: 0
   stopForever: 0
+  pointOcuupied: 0
 --- !u!1 &1019782542
 GameObject:
   m_ObjectHideFlags: 0
@@ -3700,6 +3705,7 @@ MonoBehaviour:
   stopAtPoint: 0
   stopDelay: 3
   stopForever: 0
+  pointOcuupied: 0
 --- !u!1 &1239041114
 GameObject:
   m_ObjectHideFlags: 0
@@ -3809,6 +3815,7 @@ MonoBehaviour:
   stopAtPoint: 0
   stopDelay: 0
   stopForever: 0
+  pointOcuupied: 0
 --- !u!1 &1369149475
 GameObject:
   m_ObjectHideFlags: 0
@@ -5753,6 +5760,7 @@ MonoBehaviour:
   stopAtPoint: 0
   stopDelay: 3
   stopForever: 0
+  pointOcuupied: 0
 --- !u!1001 &1808662613
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6361,6 +6369,7 @@ MonoBehaviour:
   stopAtPoint: 0
   stopDelay: 3
   stopForever: 0
+  pointOcuupied: 0
 --- !u!1 &1903908315
 GameObject:
   m_ObjectHideFlags: 0
@@ -7325,6 +7334,7 @@ MonoBehaviour:
   stopAtPoint: 0
   stopDelay: 3
   stopForever: 0
+  pointOcuupied: 0
 --- !u!1 &2101695898
 GameObject:
   m_ObjectHideFlags: 0
@@ -7547,6 +7557,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Platform Chair2
       objectReference: {fileID: 0}
+    - target: {fileID: 4470342031679813907, guid: e63474b6258174b15a046736dd115bb4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7747,6 +7761,10 @@ PrefabInstance:
     - target: {fileID: 8047786201774361589, guid: 6a97fe9813b884331922360e938c4144, type: 3}
       propertyPath: m_SortingOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9023717632909043743, guid: 6a97fe9813b884331922360e938c4144, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8745,6 +8763,10 @@ PrefabInstance:
     - target: {fileID: 5044849263117366895, guid: a5e1be9f20d094f189edb6545533e033, type: 3}
       propertyPath: m_SortingOrder
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5786151134527175758, guid: a5e1be9f20d094f189edb6545533e033, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6434825103731115653, guid: a5e1be9f20d094f189edb6545533e033, type: 3}
       propertyPath: m_SortingOrder
