@@ -37,10 +37,11 @@ public class MouseSensor : MonoBehaviour
     // Called when another collider enters the trigger
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log("MouseSensor: OnTriggerEnter2D called with " + other.name);
+        Debug.Log("MouseSensor: OnTriggerEnter2D called with " + other.tag);
         if (other.CompareTag(mouseTag) && other.gameObject.layer == targetLayer)
         {
             currentCount++;
+            Debug.Log("MouseSensor: Current count is now " + currentCount);
             EvaluateState();
         }
     }

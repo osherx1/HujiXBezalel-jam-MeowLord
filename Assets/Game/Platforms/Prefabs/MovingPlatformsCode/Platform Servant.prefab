@@ -299,6 +299,10 @@ PrefabInstance:
       propertyPath: requiredCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5484655398663331023, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+      propertyPath: timeUntilPlatformDown
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

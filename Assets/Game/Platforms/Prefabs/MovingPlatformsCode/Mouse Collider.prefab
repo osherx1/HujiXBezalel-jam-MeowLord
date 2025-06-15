@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3517840307360354479}
   - component: {fileID: 1994199692005413052}
   - component: {fileID: 8975673282280959356}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mouse Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
