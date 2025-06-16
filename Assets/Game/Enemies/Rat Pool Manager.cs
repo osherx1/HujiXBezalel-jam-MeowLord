@@ -11,6 +11,8 @@ namespace Game.Enemies
         [SerializeField] private int poolSize = 20;
         [SerializeField] private int maxActiveRats = 5;
 
+        
+        
         private readonly Queue<GameObject> _ratPool = new Queue<GameObject>();
         private int _activeRatCount;
 
