@@ -6,14 +6,10 @@ namespace Game.Core.Audio
     public class Sound
     {
         public AudioName name;
-    
         public AudioClip clip;
-        [Range(0.0f, 1.0f)]
-        public float volume;
-        [Range(.1f, 3.0f)]
-        public float pitch;
-        public float spatialBlend;
-    
-        public bool loop;
+        [Range(0f, 1f)] public float volume = 1f;
+        [Range(0.1f, 3f)] public float pitch = 1f;
+        [Range(0f, 1f)] public float spatialBlend = 0f;
+        public bool loop = false;
     }
 }

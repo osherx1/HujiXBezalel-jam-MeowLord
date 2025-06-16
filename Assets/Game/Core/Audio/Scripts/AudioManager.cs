@@ -1,44 +1,92 @@
 using System;
-using Game.Core.Generics;
 using UnityEngine;
 
 namespace Game.Core.Audio
 {
-    public class AudioManager : MonoSingleton<AudioManager>
+    public class AudioManager : MonoBehaviour
     {
-        public Sound[] sounds;
-    
-        public SoundObject Play(AudioName name, Vector3 pos)
+        public static AudioManager Instance { get; private set; }
+
+        [SerializeField] private Sound[] sounds;
+
+        [Header("Assigned Audio Source for music")]
+        [SerializeField] private AudioSource musicSource; // ← תוכל לגרור לפה AudioSource מהסצנה
+
+        private void Awake()
         {
-            Sound s = Array.Find(sounds, sound => sound.name == name);
-            if (s == null)
+            if (Instance != null && Instance != this)
             {
-                Debug.LogWarning("Sound: " + name + " not found!");
-                return null;
+                Destroy(gameObject);
+                return;
             }
 
-       
-
-            SoundObject soundObject = SoundPool.Instance.Get();
-        
-            soundObject.Play(s,pos);
-            return soundObject;
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
-    
-    }
 
-    public enum AudioName
-    {
-        BackgroundMusic,
-        ButtonClick,
-        CatJump,
-        Rats,
-        CatBadJump,
-        CatLand,
-        MouseCatch,
-        StartMusic,
-        EndMusic,
-        CutrainMusic,
-        Wool
+        public void Play(AudioName name, Vector3 position)
+        {
+            Sound sound = Array.Find(sounds, s => s.name == name);
+            if (sound == null)
+            {
+                Debug.LogWarning($"❌ Sound {name} not found!");
+                return;
+            }
+
+            if (sound.loop)
+            {
+                PlayLoopingMusic(sound);
+            }
+            else
+            {
+                PlayOneShot(sound, position);
+            }
+        }
+        public AudioSource GetMusicSource()
+        {
+            return musicSource;
+        }
+
+        public Sound[] GetAllSounds()
+        {
+            return sounds;
+        }
+
+
+        private void PlayLoopingMusic(Sound sound)
+        {
+            if (musicSource == null)
+            {
+                Debug.LogError("❌ No AudioSource assigned to AudioManager!");
+                return;
+            }
+
+            if (musicSource.clip == sound.clip && musicSource.isPlaying)
+                return;
+
+            musicSource.clip = sound.clip;
+            musicSource.loop = true;
+            musicSource.volume = sound.volume;
+            musicSource.pitch = sound.pitch;
+            musicSource.spatialBlend = 0f;
+            musicSource.Play();
+
+            Debug.Log($"🎵 Playing background music: {sound.clip.name}");
+        }
+
+        private void PlayOneShot(Sound sound, Vector3 position)
+        {
+            GameObject sfxObj = new GameObject("SFX_" + sound.name);
+            sfxObj.transform.position = position;
+            AudioSource src = sfxObj.AddComponent<AudioSource>();
+
+            src.clip = sound.clip;
+            src.volume = sound.volume;
+            src.pitch = sound.pitch;
+            src.spatialBlend = sound.spatialBlend;
+            src.Play();
+
+            Destroy(sfxObj, sound.clip.length / sound.pitch);
+        }
     }
 }

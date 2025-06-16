@@ -1,4 +1,5 @@
 using System;
+using Game.Core.Audio;
 using Spine.Unity;
 using TMPro;
 using UnityEngine;
@@ -35,6 +36,7 @@ namespace Game.Core.Managers
         public void Start()
         {
             nameInputField.text = playerName != null ? playerName : null;
+            AudioManager.Instance.Play(AudioName.BackgroundMusic, Vector3.zero);
         }
 
         public void OnTutorialButtonPressed()
