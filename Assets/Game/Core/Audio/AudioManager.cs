@@ -35,6 +35,10 @@ namespace Game.Core.Audio
         Rats,
         CatBadJump,
         CatLand,
-        MouseDeath
+        MouseCatch,
+        StartMusic,
+        EndMusic,
+        CutrainMusic,
+        Wool
     }
 }
