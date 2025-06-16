@@ -530,20 +530,32 @@ namespace Game.Player.Scripts
             
             if (platRemoveTo != -1 && segRemoveTo != -1 && totalEnemies.Count != 0)
             {
+                _segmentDelay = true;
+                
+                
                 foreach (var enemy in totalEnemies)
                 {
                     _playerRatDetector.ApplyDamageToRat(enemy);
                 }
                 GameEvents.ScoreCombinatorReady();
-                for (int i = 0; i <= segRemoveTo && _segments.Count > 0; i++)
+                DOVirtual.DelayedCall(loopDestructionDelay, (() =>
                 {
-                    RemoveSegment(0);
-                }
+                    for (int i = 0; i <= segRemoveTo && _segments.Count > 0; i++)
+                    {
+                        RemoveSegment(0);
+                    }
+                    _segmentDelay = false;
+                }));
+               
                 for (int i = 0; i <= platRemoveTo && _visited.Count > 1; i++)
                 {
                     RemoveVisitedPlatformAt(0);
                 }
-                GameEvents.PlayerLanded();
+                DOVirtual.DelayedCall(playerLandedTimer, () =>
+                {
+                    GameEvents.PlayerLanded();
+                });
+                
             }
         }
 
