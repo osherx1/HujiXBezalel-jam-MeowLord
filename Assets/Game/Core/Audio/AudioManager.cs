@@ -29,5 +29,12 @@ namespace Game.Core.Audio
 
     public enum AudioName
     {
+        BackgroundMusic,
+        ButtonClick,
+        CatJump,
+        Rats,
+        CatBadJump,
+        CatLand,
+        MouseDeath
     }
 }

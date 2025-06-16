@@ -387,65 +387,39 @@ namespace Game.Platforms.Scripts
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            Debug.Log(
-                $"[OnTriggerEnter2D] Triggered by: {other.gameObject.name}, Tag: {other.tag}, IsTrigger: {other.isTrigger}");
-
             if (!other.isTrigger || !other.CompareTag("BackCollider"))
                 return;
 
-            // Forwards SpriteRenderer
+            string targetLayer = null;
+            
+        
             if (forwardSpriteRenderer != null)
             {
-                string nextLayer = forwardSpriteRenderer.sortingLayerName != "Platform" ? "Platform" : "Background";
-                Debug.Log(
-                    $"[OnTriggerEnter2D] Changing forwardSpriteRenderer sortingLayerName from {forwardSpriteRenderer.sortingLayerName} to {nextLayer}");
-                forwardSpriteRenderer.sortingLayerName = nextLayer;
+                targetLayer = forwardSpriteRenderer.sortingLayerName == "Platform" ? "Background" : "Platform";
+            }
+            else if (backwardSpriteRenderer != null)
+            {
+                targetLayer = backwardSpriteRenderer.sortingLayerName == "Platform" ? "Background" : "Platform";
+            }
+            else
+            {
+                targetLayer = "Platform";
             }
 
-            // Backwards SpriteRenderer
-            if (backwardSpriteRenderer != null)
+         
+            foreach (var spriteRenderer in GetComponentsInChildren<SpriteRenderer>(true))
             {
-                string nextLayer = backwardSpriteRenderer.sortingLayerName != "Platform" ? "Platform" : "Background";
-                Debug.Log(
-                    $"[OnTriggerEnter2D] Changing backwardSpriteRenderer sortingLayerName from {backwardSpriteRenderer.sortingLayerName} to {nextLayer}");
-                backwardSpriteRenderer.sortingLayerName = nextLayer;
+                spriteRenderer.sortingLayerName = targetLayer;
             }
-
-            // Forwards SkeletonMecanim
-            if (forwardSkeletonMecanim != null)
+            
+            foreach (var meshRenderer in GetComponentsInChildren<Renderer>(true))
             {
-                var meshRenderer = forwardSkeletonMecanim.GetComponent<Renderer>();
-                if (meshRenderer != null)
+                if (!(meshRenderer is SpriteRenderer))
                 {
-                    string current = meshRenderer.sortingLayerName;
-                    string nextLayer = current != "Platform" ? "Platform" : "Background";
-                    Debug.Log(
-                        $"[OnTriggerEnter2D] Changing forwardSkeletonMecanim (Renderer) sortingLayerName from {current} to {nextLayer}");
-                    meshRenderer.sortingLayerName = nextLayer;
-                }
-                else
-                {
-                    Debug.LogWarning("[OnTriggerEnter2D] forwardSkeletonMecanim has no Renderer attached!");
-                }
-            }
-
-            // Backwards SkeletonMecanim
-            if (backwardSkeletonMecanim != null)
-            {
-                var meshRenderer = backwardSkeletonMecanim.GetComponent<Renderer>();
-                if (meshRenderer != null)
-                {
-                    string current = meshRenderer.sortingLayerName;
-                    string nextLayer = current != "Platform" ? "Platform" : "Background";
-                    Debug.Log(
-                        $"[OnTriggerEnter2D] Changing backwardSkeletonMecanim (Renderer) sortingLayerName from {current} to {nextLayer}");
-                    meshRenderer.sortingLayerName = nextLayer;
-                }
-                else
-                {
-                    Debug.LogWarning("[OnTriggerEnter2D] backwardSkeletonMecanim has no Renderer attached!");
+                    meshRenderer.sortingLayerName = targetLayer;
                 }
             }
         }
+
     }
 }

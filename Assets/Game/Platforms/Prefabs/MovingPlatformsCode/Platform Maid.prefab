@@ -108,9 +108,9 @@ PolygonCollider2D:
     m_Paths:
     - - {x: -0.707256, y: 2.0195508}
       - {x: -1.8052745, y: 1.3744941}
-      - {x: -0.5877852, y: -0.80901706}
-      - {x: 0.58778536, y: -0.80901694}
-      - {x: 0.9510565, y: 0.30901712}
+      - {x: -0.757409, y: 0.092105985}
+      - {x: -0.048302174, y: 0.5903739}
+      - {x: 0.23015809, y: 1.1253285}
   m_UseDelaunayMesh: 0
 --- !u!1001 &5312343289368258015
 PrefabInstance:
@@ -160,9 +160,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4992450800512318974, guid: 843c66f4f39e246ad8aa9ee93fb4ab24, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].x
+      value: -2.2614927
+      objectReference: {fileID: 0}
+    - target: {fileID: 4992450800512318974, guid: 843c66f4f39e246ad8aa9ee93fb4ab24, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].y
+      value: 2.8497322
+      objectReference: {fileID: 0}
+    - target: {fileID: 4992450800512318974, guid: 843c66f4f39e246ad8aa9ee93fb4ab24, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].x
+      value: -3.916421
+      objectReference: {fileID: 0}
+    - target: {fileID: 4992450800512318974, guid: 843c66f4f39e246ad8aa9ee93fb4ab24, type: 3}
+      propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].y
+      value: 1.4669206
+      objectReference: {fileID: 0}
     - target: {fileID: 8588805641656770609, guid: 843c66f4f39e246ad8aa9ee93fb4ab24, type: 3}
       propertyPath: m_Name
       value: ArtMaidBack
+      objectReference: {fileID: 0}
+    - target: {fileID: 8588805641656770609, guid: 843c66f4f39e246ad8aa9ee93fb4ab24, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
