@@ -594,6 +594,42 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sounds:
   - name: 0
+    clip: {fileID: 8300000, guid: 2a9f2eda2a5bdaa40a525f73166f2e92, type: 3}
+    volume: 2
+    pitch: 1
+    spatialBlend: 0
+    loop: 0
+  - name: 0
+    clip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    spatialBlend: 0
+    loop: 0
+  - name: 0
+    clip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    spatialBlend: 0
+    loop: 0
+  - name: 0
+    clip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    spatialBlend: 0
+    loop: 0
+  - name: 0
+    clip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    spatialBlend: 0
+    loop: 0
+  - name: 0
+    clip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    spatialBlend: 0
+    loop: 0
+  - name: 0
     clip: {fileID: 0}
     volume: 0
     pitch: 0
