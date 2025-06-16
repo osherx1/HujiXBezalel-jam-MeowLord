@@ -598,12 +598,6 @@ MonoBehaviour:
     volume: 2
     pitch: 1
     spatialBlend: 0
-    loop: 1
-  - name: 0
-    clip: {fileID: 0}
-    volume: 0
-    pitch: 0
-    spatialBlend: 0
     loop: 0
   - name: 0
     clip: {fileID: 0}
@@ -665,37 +659,12 @@ MonoBehaviour:
     pitch: 0
     spatialBlend: 0
     loop: 0
---- !u!114 &247693745 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2144619033848667960, guid: 7c00dfc68f082492ea2badf09f0b62df, type: 3}
-  m_PrefabInstance: {fileID: 428407003}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 247693742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8ec42ec6b45ce4f9991f5e3b31ed91af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &247693746 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7364202261185427263, guid: 7c00dfc68f082492ea2badf09f0b62df, type: 3}
-  m_PrefabInstance: {fileID: 428407003}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &247693747
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 247693742}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e474cb856e5c4a70bac77fb4d59c0dab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initialSize: 10
-  prefab: {fileID: 247693745}
-  parent: {fileID: 247693746}
+  - name: 0
+    clip: {fileID: 0}
+    volume: 0
+    pitch: 0
+    spatialBlend: 0
+    loop: 0
 --- !u!1 &264366654
 GameObject:
   m_ObjectHideFlags: 0
@@ -1395,6 +1364,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8818960444608254384, guid: 7c00dfc68f082492ea2badf09f0b62df, type: 3}
+      propertyPath: m_Volume
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1402,9 +1375,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5157823233789972879, guid: 7c00dfc68f082492ea2badf09f0b62df, type: 3}
       insertIndex: -1
       addedObject: {fileID: 247693743}
-    - targetCorrespondingSourceObject: {fileID: 5157823233789972879, guid: 7c00dfc68f082492ea2badf09f0b62df, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 247693747}
   m_SourcePrefab: {fileID: 100100000, guid: 7c00dfc68f082492ea2badf09f0b62df, type: 3}
 --- !u!1 &457390210
 GameObject:
