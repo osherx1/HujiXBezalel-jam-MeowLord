@@ -21,8 +21,8 @@ namespace Game.Enemies.Scripts
         private float _moveTimer;
         private readonly float _moveInterval = 1f;
 
-        [SerializeField] private float leftMovement = 45f;
-        [SerializeField] private float rightMovement = 135f;
+        private readonly float _leftMovement = 225f;
+        private readonly float _rightMovement = 315f;
         
         [Header("animations")]
         [SerializeField] private Transform visualTransform;
@@ -36,11 +36,16 @@ namespace Game.Enemies.Scripts
         
         public SkeletonMecanim forwardSkeletonMecanim;
         public SkeletonMecanim backwardSkeletonMecanim;
+        
+        [Header("just created")]
+        private bool _isJustCreated;
+        private int _justCreatedDirection;
 
 
         private void OnEnable()
         {
             GameEvents.OnMouseCatch += OnRatCaught;
+            _isJustCreated = true;
         }
 
         private void OnDisable()
@@ -78,6 +83,12 @@ namespace Game.Enemies.Scripts
         {
             _randomDirection = GetRandomDirection();
             _targetDistance = GetRandomDistance();
+            if (_isJustCreated)
+            {
+                Debug.Log(" Distance: " + _targetDistance + "  Direction: " + _randomDirection);
+            }
+            
+            _isJustCreated = false;
             _startPosition = transform.position;
 
             // Wall check: pick a new direction if there's a wall
@@ -115,8 +126,8 @@ namespace Game.Enemies.Scripts
         
         private Vector2 GetRandomDirection()
         {
-            float[] allowedAngles = { leftMovement, rightMovement, 180+leftMovement, 180+rightMovement };
-            float angle = allowedAngles[Random.Range(0, allowedAngles.Length)];
+            float[] allowedAngles = { _leftMovement, _rightMovement, 180+_leftMovement, 180+_rightMovement };
+            var angle = _isJustCreated ? JustCreatedDirection() : allowedAngles[Random.Range(0, allowedAngles.Length)];
             float radians = angle * Mathf.Deg2Rad;
             return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians)).normalized;
         }
@@ -154,6 +165,11 @@ namespace Game.Enemies.Scripts
         
         private float GetRandomDistance()
         {
+            if (_isJustCreated)
+            {
+                return 10f;
+            }
+            
             return Random.Range(minMovement, maxMovement);
         }
         
@@ -222,6 +238,46 @@ namespace Game.Enemies.Scripts
                     string nextLayer = current != "Enemy" ? "Enemy" : "Background";
                     meshRenderer.sortingLayerName = nextLayer;
                 }
+            }
+        }
+        private float JustCreatedDirection()
+        {
+            int finalDirection = -1; // -1 means none found
+
+            // Define static positions for each spawn hole
+            Vector2 hole1 = new Vector2(25, 0);
+            Vector2 hole2 = new Vector2(2, 7);
+            Vector2 hole3 = new Vector2(0, -15);
+            Vector2[] spawnHoles = { hole1, hole2, hole3 };
+
+            if (_isJustCreated)
+            {
+                float closestDistance = Mathf.Infinity;
+                Vector2 currentPos = transform.position;
+
+                for (int i = 0; i < spawnHoles.Length; i++)
+                {
+                    float distance = Vector2.Distance(currentPos, spawnHoles[i]);
+
+                    if (distance < closestDistance)
+                    {
+                        closestDistance = distance;
+                        finalDirection = i;
+                    }
+                }
+            }
+
+            // Return a movement angle depending on the closest hole
+            switch (finalDirection)
+            {
+                case 0:
+                    return _leftMovement;
+                case 1:
+                    return _rightMovement;
+                case 2:
+                    return 180 + _rightMovement;
+                default:
+                    return 0f; // fallback angle
             }
         }
     }

@@ -2,6 +2,7 @@ using System.Collections;
 using Game.Core.Managers;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
+using UnityEngine.UI;
 
 namespace Game.Enemies.Scripts
 {
@@ -15,6 +16,8 @@ namespace Game.Enemies.Scripts
         [SerializeField] private Animator animator;
         [SerializeField] private Transform visualTransform;
 
+        public GameObject score;
+        [SerializeField] private GameObject scoreFlyObjectPrefab;
 
 
         private void OnEnable()
@@ -49,6 +52,7 @@ namespace Game.Enemies.Scripts
             }
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         private void Die()
         {
             GameEvents.MouseCatch(transform.position); 
@@ -58,7 +62,10 @@ namespace Game.Enemies.Scripts
 
             
             StartCoroutine(ScaleUpEffect());
+            if (score != null)
+                StartCoroutine(FlyToScoreTarget());
             StartCoroutine(DelayedReturn());
+            //StartCoroutine(DelayedReturn());
         }
         
         protected virtual IEnumerator DelayedReturn()
@@ -84,6 +91,31 @@ namespace Game.Enemies.Scripts
 
             visualTransform.localScale = targetScale;
         }
+        
+        public void SetScoreTarget(GameObject scoreTarget)
+        {
+            score = scoreTarget;
+        }
+        
+        private IEnumerator FlyToScoreTarget()
+        {
+            // Spawn the flying object at the rat's position
+            GameObject flyObj = Instantiate(scoreFlyObjectPrefab, transform.position, Quaternion.identity);
+            float duration = 0.5f;
+            float elapsed = 0f;
 
+            Vector3 start = flyObj.transform.position;
+            Vector3 end = score.transform.position;
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = Mathf.SmoothStep(0, 1, elapsed / duration);
+                flyObj.transform.position = Vector3.Lerp(start, end, t);
+                yield return null;
+            }
+
+            Destroy(flyObj); // Remove once it reaches the target
+        }
     }
 }

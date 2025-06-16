@@ -2,6 +2,7 @@ using System;
 using Game.Core.Score;
 using UnityEngine;
 using System.Collections;
+using Game.Core.Audio;
 using Game.Core.Generics;
 using Game.Core.Utils;
 using UnityEngine.SceneManagement;
@@ -70,6 +71,8 @@ namespace Game.Core.Managers
                 int idx = Random.Range(0, _randomNames.Length);
                 CurrentNickname = _randomNames[idx];
             }
+            
+            //AudioManager.Instance.Play(AudioName.BackgroundMusic, Vector3.zero);
             GameEvents.GameStarted();
             UnityMainThreadDispatcher.Instance.StartObject();
         }

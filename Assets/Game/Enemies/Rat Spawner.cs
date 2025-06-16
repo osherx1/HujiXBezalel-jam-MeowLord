@@ -1,4 +1,5 @@
 using System.Collections;
+using Game.Enemies.Scripts;
 using UnityEngine;
 
 namespace Game.Enemies
@@ -9,6 +10,8 @@ namespace Game.Enemies
         [SerializeField] private float spawnInterval = 2f;
         //Todo: add a disable to the spawner when the game ends via event
 
+        [SerializeField] private GameObject score;
+        
         private void Start()
         {
             StartCoroutine(SpawnRats());
@@ -29,6 +32,9 @@ namespace Game.Enemies
                 {
                     rat.transform.position = randomSpawnPoint.position;
                     rat.transform.rotation = randomSpawnPoint.rotation;
+                    RatHealth ratHealth = rat.GetComponent<RatHealth>();
+                    ratHealth.SetScoreTarget(score);
+                    
                 }
             }
         }
