@@ -9663,7 +9663,7 @@ PrefabInstance:
       objectReference: {fileID: 106336549}
     - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
       propertyPath: panSpeed
-      value: 10
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
       propertyPath: targetGroup
@@ -9689,6 +9689,10 @@ PrefabInstance:
       propertyPath: backgroundCollider2D
       value: 
       objectReference: {fileID: 1406787730}
+    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
+      propertyPath: cameraStuckThreshold
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 9210976875638248917, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
       propertyPath: m_Name
       value: CameraTarget
