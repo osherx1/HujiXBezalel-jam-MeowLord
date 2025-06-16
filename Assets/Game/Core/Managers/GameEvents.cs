@@ -138,17 +138,12 @@ namespace Game.Core.Managers
         {
             OnSpawnPlatform?.Invoke(obj);
         }
-        
-        public static event Action OnPlatformStopedMoving;
-        public static void PlatformStopedMoving()
+        public static event Action OnAddedYarn;
+
+        public static void AddedYarn()
         {
-            OnPlatformStopedMoving?.Invoke();
+            OnAddedYarn?.Invoke();
         }
         
-        public static event Action OnPlatformContinuedMoving;
-        public static void PlatformContinuedMoving()
-        {
-            OnPlatformContinuedMoving?.Invoke();
-        }
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Game.Core.Managers;
 using Spine.Unity;
@@ -104,7 +105,7 @@ namespace Game.Platforms.Scripts
                 HandleRunAway();
                 return;
             }
-
+            
             if (!_isMoving) return;
             if (_currentWaypoint < 0 || _currentWaypoint >= waypoints.Count) return;
             if (HandleWaiting()) return;
@@ -143,7 +144,6 @@ namespace Game.Platforms.Scripts
                 // ---- NEW: PERMANENT STOP ----
                 if (waypoints[_currentWaypoint].stopForever)
                 {
-                    _isMoving = false;
                     SetWalkingAnim(false);
                     Debug.Log(
                         $"[MovingPlatform] Platform stopped forever at waypoint {_currentWaypoint} ({currentTransform.gameObject.name})");
@@ -195,11 +195,17 @@ namespace Game.Platforms.Scripts
                 }
                 
                 
-                // exiting way point
-                waypoints[_currentWaypoint].pointOcuupied = false;
+                // changing way point occupied value, ensuring that at least it will be true for one frame
+                StartCoroutine(PointOcuupiedWaypointChange(_currentWaypoint));
                 _currentWaypoint += _direction;
                 
             }
+        }
+
+        private IEnumerator PointOcuupiedWaypointChange(int currentWaypoint)
+        {
+            yield return null;
+            waypoints[currentWaypoint].pointOcuupied = false;
         }
 
 
@@ -218,6 +224,8 @@ namespace Game.Platforms.Scripts
                     return true;
                 }
             }
+            
+            
 
             return false;
         }

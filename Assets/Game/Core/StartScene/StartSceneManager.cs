@@ -1,4 +1,5 @@
 using System;
+using Spine.Unity;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -58,9 +59,21 @@ namespace Game.Core.Managers
             {
                 GameEvents.GameInitialization();
                 SceneManager.LoadScene(1);
+                // SceneLoader.Instance.TriggerClose(() =>
+                // {
+                //     SceneLoader.Instance.TriggerOpen(() => SceneLoader.Instance.SetSkeletonSortingLayer("default"));
+                //     GameEvents.GameInitialization();
+                //     SceneManager.LoadScene(1);
+                // });
             }
             else
             {
+                // SceneLoader.Instance.TriggerClose(() =>
+                // {
+                //     SceneLoader.Instance.TriggerOpen(() => SceneLoader.Instance.SetSkeletonSortingLayer("default"));
+                //     GameEvents.GameInitialization();
+                //     SceneManager.LoadScene(2);
+                // });
                 GameEvents.GameInitialization();
                 SceneManager.LoadScene(2);
             }

@@ -65,6 +65,9 @@ namespace Game.Player.Scripts
         private bool _segmentDelay = false;
         private bool _pausedGame = false;
 
+        [SerializeField] private int[] yarnThresholds = { 200, 1000, 2500, 10000 };
+        private int _yarnThresholdIndex = 0;
+
         void Awake()
         {
             leftSegments = maxSegments;
@@ -92,6 +95,19 @@ namespace Game.Player.Scripts
             GameEvents.OnPlayerFall += HandlePlayerFall;
             GameEvents.OnPlayerPause += ActivatePauseGame;
             GameEvents.OnPlayerResume += ActivateResumeGame;
+            GameEvents.OnUpdateScore += CheckYarn;
+        }
+        
+        private void CheckYarn(int score)
+        {
+            // Increase maxSegments by one for each threshold passed, only once per threshold
+            if (_yarnThresholdIndex < yarnThresholds.Length && score >= yarnThresholds[_yarnThresholdIndex])
+            {
+                maxSegments++;
+                leftSegments = maxSegments - _segments.Count;
+                GameEvents.NumberOfSegmentsChanged(leftSegments);
+                _yarnThresholdIndex++;
+            }
         }
 
         private void ActivateResumeGame()
@@ -346,19 +362,29 @@ namespace Game.Player.Scripts
                 onMoveCompleteEvent = () =>
                 {
                     _segmentDelay = true;
+                    if (_playerRatDetector.DestroyEnemiesInLoop(loopPlatforms, enemyLayer))
+                    {
+                        DOVirtual.DelayedCall(playerLandedTimer/4, () =>
+                        {
+                            GameEvents.PlayerLanded();
+                        });
+                    }
+                    else
+                    {
+                        DOVirtual.DelayedCall(playerLandedTimer, () =>
+                        {
+                            GameEvents.PlayerLanded();
+                        });
+                    }
                     DOVirtual.DelayedCall(loopDestructionDelay, () =>
                     {
                         for (int i = _segments.Count - 1; i >= idx; i--)
                         {
                             RemoveSegment(i);
                         }
-                        _playerRatDetector.DestroyEnemiesInLoop(loopPlatforms, enemyLayer);
                         _segmentDelay = false;
                     });
-                    DOVirtual.DelayedCall(playerLandedTimer, () =>
-                    {
-                        GameEvents.PlayerLanded();
-                    });
+                    
                 };
 
                 RegisterToPlatform(newPlatScript, _lastMovingPlatform); // Register before move
@@ -504,20 +530,32 @@ namespace Game.Player.Scripts
             
             if (platRemoveTo != -1 && segRemoveTo != -1 && totalEnemies.Count != 0)
             {
+                _segmentDelay = true;
+                
+                
                 foreach (var enemy in totalEnemies)
                 {
                     _playerRatDetector.ApplyDamageToRat(enemy);
                 }
                 GameEvents.ScoreCombinatorReady();
-                for (int i = 0; i <= segRemoveTo && _segments.Count > 0; i++)
+                DOVirtual.DelayedCall(loopDestructionDelay, (() =>
                 {
-                    RemoveSegment(0);
-                }
+                    for (int i = 0; i <= segRemoveTo && _segments.Count > 0; i++)
+                    {
+                        RemoveSegment(0);
+                    }
+                    _segmentDelay = false;
+                }));
+               
                 for (int i = 0; i <= platRemoveTo && _visited.Count > 1; i++)
                 {
                     RemoveVisitedPlatformAt(0);
                 }
-                GameEvents.PlayerLanded();
+                DOVirtual.DelayedCall(playerLandedTimer, () =>
+                {
+                    GameEvents.PlayerLanded();
+                });
+                
             }
         }
 
