@@ -3107,6 +3107,7 @@ MonoBehaviour:
   redTimer: 5
   edgeFlashes:
   - {fileID: 2140138614}
+  active: 1
 --- !u!95 &1022567770 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 8889526713996864834, guid: e09090cbfa4c24be3aaddd137d35e02a, type: 3}
@@ -9660,6 +9661,10 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 106336549}
+    - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
+      propertyPath: panSpeed
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 4747746529679566916, guid: eeaabefc1c99842e7b32692b0701c41d, type: 3}
       propertyPath: targetGroup
       value: 

@@ -13,6 +13,7 @@ namespace Game.Core.Generics
         protected override void Awake()
         {
             base.Awake();
+            DontDestroyOnLoad(parent);
             _pool = new Stack<T>();
             CreateObjects();
         }
