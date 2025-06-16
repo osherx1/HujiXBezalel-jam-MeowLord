@@ -57,22 +57,25 @@ namespace Game.Core.Managers
             PlayerPrefs.SetString("Name", playerName);
             if (startTutorial)
             {
-                
-                SceneLoader.Instance.TriggerClose(() =>
-                {
-                    SceneLoader.Instance.TriggerOpen(() => SceneLoader.Instance.SetSkeletonSortingLayer("default"));
-                    GameEvents.GameInitialization();
-                    SceneManager.LoadScene(1);
-                });
+                GameEvents.GameInitialization();
+                SceneManager.LoadScene(1);
+                // SceneLoader.Instance.TriggerClose(() =>
+                // {
+                //     SceneLoader.Instance.TriggerOpen(() => SceneLoader.Instance.SetSkeletonSortingLayer("default"));
+                //     GameEvents.GameInitialization();
+                //     SceneManager.LoadScene(1);
+                // });
             }
             else
             {
-                SceneLoader.Instance.TriggerClose(() =>
-                {
-                    SceneLoader.Instance.TriggerOpen(() => SceneLoader.Instance.SetSkeletonSortingLayer("default"));
-                    GameEvents.GameInitialization();
-                    SceneManager.LoadScene(2);
-                });
+                // SceneLoader.Instance.TriggerClose(() =>
+                // {
+                //     SceneLoader.Instance.TriggerOpen(() => SceneLoader.Instance.SetSkeletonSortingLayer("default"));
+                //     GameEvents.GameInitialization();
+                //     SceneManager.LoadScene(2);
+                // });
+                GameEvents.GameInitialization();
+                SceneManager.LoadScene(2);
             }
             
         } 
