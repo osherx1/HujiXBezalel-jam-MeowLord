@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Attributes;
 using DG.Tweening;
@@ -45,7 +46,7 @@ namespace Game.Core.Camera.Scripts
         
         private Tween cameraMoveTween;  
         private bool edgePanning = false;
-        [SerializeField] public bool isCameraLocked = false;
+        [SerializeField] public bool isCameraLocked = true;
         [SerializeField] public int tutorialModeTargetFrame = 0;
 
         
@@ -53,7 +54,7 @@ namespace Game.Core.Camera.Scripts
         private UnityEngine.Camera _cam;
         private Vector3 _camPosBefore;
         private float _noMovementTime = 0f;
-        [SerializeField] private float cameraStuckThreshold = 0.3f;
+        [SerializeField] private float cameraStuckThreshold = 0.1f;
         private bool _didEdgePan;
         private int _clampedPlatform = 5;
 
@@ -70,8 +71,14 @@ namespace Game.Core.Camera.Scripts
         void OnEnable()
         {
             targetLogger?.Log("Target subscribed to player");
+            GameEvents.OnGameStarted += EnableOnGameStart;
+            GameEvents.OnTutorialStarted += EnableOnGameStart;
+        }
+
+        private void EnableOnGameStart()
+        {
+            isCameraLocked = false;
             RegisterCameraToGoBackToPlayer();
-            RegisterCameraToMoveTowardsPlayer();
             RegisterCameraToAdjustFraming();
         }
 
@@ -139,36 +146,48 @@ namespace Game.Core.Camera.Scripts
         void Update()
         {
             if(isCameraLocked) return;
-            Vector3 mousePos = UnityEngine.Input.mousePosition;
-            Rect dontMoveRect = EladsHelperFunctions.GetCenteredRect(dontMoveZoneWidthPercent, dontMoveZoneHeightPercent);
-
-            // Check if mouse is inside the UI exclusion zone (screen coordinates)
-            if (uiExclusionZone.Contains(new Vector2(mousePos.x, Screen.height - mousePos.y))) // Y flip for screen coords
-            {
-                _didEdgePan = false;
-                edgePanning = false;
-                return;
-            }
-
-            // Calculate camera's current position before moving the target
+            
             _camPosBefore = UnityEngine.Camera.main.transform.position;
 
-            _didEdgePan = false;
-
-            // --- EDGE PAN LOGIC ---
-            if (!dontMoveRect.Contains(mousePos))
+            float moveX = UnityEngine.Input.GetAxisRaw("Horizontal");
+            float moveY = UnityEngine.Input.GetAxisRaw("Vertical");
+            Vector3 move = new Vector3(moveX, moveY, 0).normalized;
+            if (move.sqrMagnitude > 0)
             {
-                // Try to pan the camera target
-                edgePanning = true;
-                Vector2 direction = ((Vector2)mousePos - dontMoveRect.center).normalized;
-                transform.position += new Vector3(direction.x, direction.y, 0) * (panSpeed * Time.deltaTime);
-                _didEdgePan = true;
+                cameraMoveTween?.Kill();
+                transform.position += move * (panSpeed * Time.deltaTime);
             }
-            else
-            {
-                _didEdgePan = false;
-                edgePanning = false;
-            }
+            
+            // Vector3 mousePos = UnityEngine.Input.mousePosition;
+            // Rect dontMoveRect = EladsHelperFunctions.GetCenteredRect(dontMoveZoneWidthPercent, dontMoveZoneHeightPercent);
+            //
+            // // Check if mouse is inside the UI exclusion zone (screen coordinates)
+            // if (uiExclusionZone.Contains(new Vector2(mousePos.x, Screen.height - mousePos.y))) // Y flip for screen coords
+            // {
+            //     _didEdgePan = false;
+            //     edgePanning = false;
+            //     return;
+            // }
+            //
+            // // Calculate camera's current position before moving the target
+            // _camPosBefore = UnityEngine.Camera.main.transform.position;
+            // 
+            // _didEdgePan = false;
+            //
+            // // --- EDGE PAN LOGIC ---
+            // if (!dontMoveRect.Contains(mousePos))
+            // {
+            //     // Try to pan the camera target
+            //     cameraMoveTween?.Kill();
+            //     Vector2 direction = ((Vector2)mousePos - dontMoveRect.center).normalized;
+            //     transform.position += new Vector3(direction.x, direction.y, 0) * (panSpeed * Time.deltaTime);
+            //   
+            // }
+            // else
+            // {
+            //     _didEdgePan = false;
+            //     edgePanning = false;
+            // }
             
         }
 
@@ -223,6 +242,22 @@ namespace Game.Core.Camera.Scripts
                 cinemachineConfiner.InvalidateBoundingShapeCache();
                 _clampedPlatform = clampedPlatforms;
             }
+        }
+
+        public void AdjustTargetFraming(System.Action onComplete)
+        {
+            AdjustTargetFraming();
+            MoveTowardsPlayer();
+            if (onComplete != null)
+            {
+                StartCoroutine(InvokeAfterDelayCoroutine(onComplete, 1f));
+            }
+        }
+
+        private IEnumerator InvokeAfterDelayCoroutine(System.Action callback, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            callback?.Invoke();
         }
 
         void OnDrawGizmos()

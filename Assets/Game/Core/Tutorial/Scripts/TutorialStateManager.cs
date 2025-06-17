@@ -47,9 +47,14 @@ namespace Game.Core.Tutorial
         #endregion
 
 
-        private void Start()
+        private void StartTutorialStateOrder()
         {
             StartCoroutine(StartOfTutorialState());
+        }
+
+        private void OnEnable()
+        {
+            GameEvents.OnTutorialStarted += StartTutorialStateOrder;
         }
 
         private void OnDisable()
@@ -420,66 +425,8 @@ namespace Game.Core.Tutorial
             }
             InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed -= OnLeftClickPerformed;
             _leftClick = false;
-            tutorialTextRenderer.HideBlurAndText(()=>SceneManager.LoadScene(2));
-            StartCoroutine(WhileCatchingSecondMouseState());
+            tutorialTextRenderer.HideBlurAndText(()=> GameManager.Instance.StartGameFromTutorial());
         }
-
-        #endregion
-
-        #region WhileCatchingSecondMouseState
-
-        private IEnumerator WhileCatchingSecondMouseState()
-        {
-            // Pre-logic for WhileCatchingSecondMouse
-            // TODO: Add pre-logic here
-            while (true)
-            {
-                yield return null;
-                // TODO: Wait for condition to proceed to SecondMosueCatch
-                if (false) // Replace with actual condition
-                    break;
-            }
-
-            StartCoroutine(SecondMosueCatchState());
-        }
-
-        #endregion
-
-        #region SecondMosueCatchState
-
-        private IEnumerator SecondMosueCatchState()
-        {
-            // Pre-logic for SecondMosueCatch
-            // TODO: Add pre-logic here
-            while (true)
-            {
-                yield return null;
-                // TODO: Wait for condition to proceed to FinalText
-                if (false) // Replace with actual condition
-                    break;
-            }
-
-            StartCoroutine(FinalTextState());
-        }
-
-        #endregion
-
-        #region FinalTextState
-
-        private IEnumerator FinalTextState()
-        {
-            // Pre-logic for FinalText
-            // TODO: Add pre-logic here
-            while (true)
-            {
-                yield return null;
-                // TODO: Wait for condition to finish tutorial
-                if (false) // Replace with actual condition
-                    break;
-            }
-            // Tutorial finished
-        }
-
         #endregion
     }
 }

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: mouseBack
+  m_Controller: {fileID: 9100000, guid: 78c1c0c86fb874ec9ac182aa4c380462, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7973542416239868818, guid: 78c1c0c86fb874ec9ac182aa4c380462, type: 2}
+    m_OverrideClip: {fileID: 7973542416239868818, guid: 78c1c0c86fb874ec9ac182aa4c380462, type: 2}
+  - m_OriginalClip: {fileID: 5577297242663865381, guid: 78c1c0c86fb874ec9ac182aa4c380462, type: 2}
+    m_OverrideClip: {fileID: 5577297242663865381, guid: 78c1c0c86fb874ec9ac182aa4c380462, type: 2}
+  - m_OriginalClip: {fileID: -6335906109032334494, guid: 78c1c0c86fb874ec9ac182aa4c380462, type: 2}
+    m_OverrideClip: {fileID: -6335906109032334494, guid: 78c1c0c86fb874ec9ac182aa4c380462, type: 2}
+  - m_OriginalClip: {fileID: -2654343879559833539, guid: 78c1c0c86fb874ec9ac182aa4c380462, type: 2}
+    m_OverrideClip: {fileID: -2654343879559833539, guid: 78c1c0c86fb874ec9ac182aa4c380462, type: 2}
+  - m_OriginalClip: {fileID: -1261109775754408955, guid: 78c1c0c86fb874ec9ac182aa4c380462, type: 2}
+    m_OverrideClip: {fileID: -4805053494780304783, guid: 6a2211c7616b2445ea2e16002b29e66a, type: 2}
+  - m_OriginalClip: {fileID: 5527048405196162246, guid: 78c1c0c86fb874ec9ac182aa4c380462, type: 2}
+    m_OverrideClip: {fileID: -810175815282056596, guid: 6a2211c7616b2445ea2e16002b29e66a, type: 2}

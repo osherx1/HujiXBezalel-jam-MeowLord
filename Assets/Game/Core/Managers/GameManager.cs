@@ -2,6 +2,8 @@ using System;
 using Game.Core.Score;
 using UnityEngine;
 using System.Collections;
+using Game.Core.Audio;
+using Game.Core.Camera.Scripts;
 using Game.Core.Generics;
 using Game.Core.Utils;
 using UnityEngine.SceneManagement;
@@ -9,17 +11,17 @@ using Random = UnityEngine.Random;
 
 namespace Game.Core.Managers
 {
-    public class GameManager: MonoSingleton<GameManager>
+    public class GameManager : MonoSingleton<GameManager>
     {
-        private  GameplayScore _gameplayScore;
-        private  HighScoreManager _highScoreManager;
+        private GameplayScore _gameplayScore;
+        private HighScoreManager _highScoreManager;
         private FirebaseInitializer _firebaseIntializer;
         private PauseController _pauseController;
         [SerializeField] private HighScoreLogger highScoreLogger;
         private float _timeStarted;
-        
+
         public HighScoreManager HighScoreManager => _highScoreManager;
-        
+
         private static readonly string[] _randomNames = new string[]
         {
             "Pixel", "Whiskers", "Shadow", "Nova", "Milo",
@@ -29,7 +31,7 @@ namespace Game.Core.Managers
         };
 
         public string CurrentNickname { get; private set; }
-        
+
         public void SetNickname(string nickname)
         {
             if (!string.IsNullOrWhiteSpace(nickname))
@@ -41,7 +43,7 @@ namespace Game.Core.Managers
             GameEvents.OnGameInitialization += InitializeRelevantObjects;
             GameEvents.OnGameFinished += OnGameFinished;
         }
-        
+
         public void OnDisable()
         {
             GameEvents.OnGameInitialization -= InitializeRelevantObjects;
@@ -54,15 +56,18 @@ namespace Game.Core.Managers
             {
                 _pauseController = new PauseController();
             }
+
             if (highScoreLogger == null)
             {
                 highScoreLogger = gameObject.AddComponent<HighScoreLogger>();
             }
+
             if (_firebaseIntializer == null)
             {
                 _firebaseIntializer = new FirebaseInitializer(highScoreLogger);
             }
-            if(_highScoreManager == null)  _highScoreManager = new HighScoreManager(highScoreLogger);
+
+            if (_highScoreManager == null) _highScoreManager = new HighScoreManager(highScoreLogger);
             if (_gameplayScore == null) _gameplayScore = new GameplayScore();
             _timeStarted = Time.time;
             if (CurrentNickname == null)
@@ -70,23 +75,51 @@ namespace Game.Core.Managers
                 int idx = Random.Range(0, _randomNames.Length);
                 CurrentNickname = _randomNames[idx];
             }
-            GameEvents.GameStarted();
+
             UnityMainThreadDispatcher.Instance.StartObject();
         }
-        
+
         private void OnGameFinished()
         {
             float finishedTime = Time.time - _timeStarted;
             _highScoreManager.TryAddHighScore(_gameplayScore.Score, CurrentNickname, finishedTime);
-            StartCoroutine(GameFinishedTimerCoroutine());
+            var camera = GameObject.FindFirstObjectByType<HybridCameraFollow>();
+            camera.tutorialModeTargetFrame = 6;
+            camera.AdjustTargetFraming(() =>
+                SceneLoader.Instance.TriggerClose(() =>
+                    SceneLoader.Instance.LoadSceneWithCallback(3, () =>
+                    {
+                        SceneLoader.Instance.SetSkeletonSortingLayer("Curtain");
+                        GameEvents.EndSceneStarted();
+                        SceneLoader.Instance.TriggerOut(() => SceneLoader.Instance.SetSkeletonSortingLayer("default"));
+                    })));
         }
 
-        
-        private IEnumerator GameFinishedTimerCoroutine()
+
+        public void StartGame()
         {
-            SceneManager.LoadScene("end");
+            SceneLoader.Instance.SetSkeletonSortingLayer("Curtain", () =>
+                SceneLoader.Instance.TriggerClose(() =>
+                    SceneLoader.Instance.LoadSceneWithCallback(2, () =>
+                        SceneLoader.Instance.SetSkeletonSortingLayer("default", ()
+                            => SceneLoader.Instance.TriggerOpen(() =>
+                                StartCoroutine(GameStartCamera()))))));
+        }
+
+        public void StartGameFromTutorial()
+        {
+            SceneLoader.Instance.TriggerClose(() =>
+                SceneLoader.Instance.LoadSceneWithCallback(2, () =>
+                    SceneLoader.Instance.TriggerOpen(() =>
+                        StartCoroutine(GameStartCamera()))));
+        }
+
+        private IEnumerator GameStartCamera()
+        {
             yield return null;
-            GameEvents.EndSceneStarted();
+            var camera = GameObject.FindFirstObjectByType<HybridCameraFollow>();
+            camera.tutorialModeTargetFrame = 0;
+            camera.AdjustTargetFraming(() => GameEvents.GameStarted());
         }
     }
 }

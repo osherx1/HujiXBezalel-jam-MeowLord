@@ -8,6 +8,7 @@ public class LeaderboardUI : MonoBehaviour
 {
     public TMP_Text[] nameFields;
     public TMP_Text[] scoreFields;
+    public TMP_Text[] timeFields;
     
     private void OnEnable()
     {
@@ -30,11 +31,13 @@ public class LeaderboardUI : MonoBehaviour
             {
                 nameFields[i].text = table[i].Item3;
                 scoreFields[i].text = table[i].Item2.ToString();
+                timeFields[i].text = FormatTime(table[i].Item4);
             }
             else
             {
                 nameFields[i].text = "";
                 scoreFields[i].text = "";
+                timeFields[i].text = "";
             }
         }
         });

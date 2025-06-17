@@ -19,6 +19,9 @@ namespace Game.Core.Managers
         public static event Action<int> OnUpdateScore;
 
         public static event Action OnGameStarted;
+        
+        public static event Action OnTutorialStarted;
+        
 
         public static event Action<int> OnNumberOfSegmentsChanged;
         
@@ -62,6 +65,7 @@ namespace Game.Core.Managers
         public static void GameFinished()
         {
             OnGameFinished?.Invoke();
+            Debug.Log("Game finished");
         }
         
         public static void MouseCatch(Vector3 mousePosition)
@@ -138,12 +142,11 @@ namespace Game.Core.Managers
         {
             OnSpawnPlatform?.Invoke(obj);
         }
-        public static event Action OnAddedYarn;
 
-        public static void AddedYarn()
+
+        public static void TutorialStarted()
         {
-            OnAddedYarn?.Invoke();
+            OnTutorialStarted?.Invoke();
         }
-        
     }
 }

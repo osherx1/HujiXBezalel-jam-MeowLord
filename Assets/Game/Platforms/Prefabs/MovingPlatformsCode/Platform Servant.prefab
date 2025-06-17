@@ -109,7 +109,7 @@ MonoBehaviour:
   animatorBackward: {fileID: 0}
   spriteRootForward: {fileID: 1606423050537056324}
   spriteRootBackward: {fileID: 4652222579619192249}
-  forwardSpriteRenderer: {fileID: 6103026844070822746}
+  forwardSpriteRenderer: {fileID: 0}
   backwardSpriteRenderer: {fileID: 0}
   forwardSkeletonMecanim: {fileID: 5895278988345312879}
   backwardSkeletonMecanim: {fileID: 0}
@@ -180,6 +180,26 @@ PrefabInstance:
       propertyPath: requiredCount
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1562230580606197596, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515804372130557941, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
+      propertyPath: m_SortingLayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2515804372130557941, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1640570925
+      objectReference: {fileID: 0}
+    - target: {fileID: 4496888205907327045, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4496888205907327045, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 3.21
+      objectReference: {fileID: 0}
     - target: {fileID: 6902140902893706995, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
       propertyPath: m_Name
       value: ArtServerBack
@@ -190,11 +210,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7974540978787812126, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.06
+      value: 0.23
       objectReference: {fileID: 0}
     - target: {fileID: 7974540978787812126, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.35
+      value: -0.58
       objectReference: {fileID: 0}
     - target: {fileID: 7974540978787812126, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
       propertyPath: m_LocalPosition.z
@@ -228,6 +248,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8672203676245242222, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
+      propertyPath: m_Offset.x
+      value: 1.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 8672203676245242222, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
+      propertyPath: m_Offset.y
+      value: 2.9
+      objectReference: {fileID: 0}
     - target: {fileID: 8829605694688894461, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -240,11 +268,6 @@ PrefabInstance:
 --- !u!4 &4652222579619192249 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7974540978787812126, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
-  m_PrefabInstance: {fileID: 3331327874756075175}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &6103026844070822746 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 8829605694688894461, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
   m_PrefabInstance: {fileID: 3331327874756075175}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4015280717697640432
