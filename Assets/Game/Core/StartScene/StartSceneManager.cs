@@ -17,7 +17,6 @@ namespace Game.Core.StartScene
 
         public void Awake()
         {
-            
             if (PlayerPrefs.GetInt("SawTutorial", 0) == 1)
             {
                 viImage.enabled = false;
@@ -48,12 +47,13 @@ namespace Game.Core.StartScene
 
         public void OnSubmitName()
         {
-            if(!active) return;
+            if (!active) return;
             if (string.IsNullOrWhiteSpace(nameInputField.text))
             {
                 // TODO indicate to player that his input not good by sound/text, or switch the name to the player prefs name
                 return;
             }
+
             active = false;
             PlayerPrefs.SetInt("SawTutorial", 1);
             playerName = nameInputField.text;
@@ -62,12 +62,12 @@ namespace Game.Core.StartScene
             GameEvents.GameInitialization();
             if (startTutorial)
             {
-                SceneLoader.Instance.TriggerClose(() =>
-                {
-                            SceneLoader.Instance.LoadSceneWithCallback(1, () => 
-                                SceneLoader.Instance.TriggerOpen(() => 
-                                    SceneLoader.Instance.SetSkeletonSortingLayer("default",GameEvents.TutorialStarted)));
-                });
+                SceneLoader.Instance.SetSkeletonSortingLayer("Curtain", () =>
+                    SceneLoader.Instance.TriggerClose(() =>
+                        SceneLoader.Instance.LoadSceneWithCallback(1, 
+                            () => SceneLoader.Instance.SetSkeletonSortingLayer("default", () =>
+                            SceneLoader.Instance.TriggerOpen(
+                                 GameEvents.TutorialStarted )))));
             }
             else
             {

@@ -425,7 +425,7 @@ namespace Game.Core.Tutorial
             }
             InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed -= OnLeftClickPerformed;
             _leftClick = false;
-            tutorialTextRenderer.HideBlurAndText(()=>SceneManager.LoadScene(2));
+            tutorialTextRenderer.HideBlurAndText(()=> GameManager.Instance.StartGameFromTutorial());
         }
         #endregion
     }

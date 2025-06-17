@@ -5,89 +5,109 @@ using System.Collections;
 using Game.UI.Scripts;
 using Spine;
 using Spine.Unity;
-using UnityEngine.Serialization;
 using UnityEngine.SceneManagement;
 
 namespace Game.Core.Managers
 {
-    public class SceneLoader:MonoSingleton<SceneLoader>
+    public class SceneLoader : MonoSingleton<SceneLoader>
     {
-        [SerializeField] private Animator animator;
-        [SerializeField] private MeshRenderer skeletonRenderer;
-        
-        public void TriggerClose(System.Action onComplete)
-        {
-            StartCoroutine(TriggerAndWaitCoroutine("Close", "closed",onComplete));
-        }
+        [SerializeField] private SkeletonGraphic skeletonGraphic;
 
-        public void TriggerOpen(System.Action onComplete)
-        {
-            StartCoroutine(TriggerAndWaitCoroutine("Open", "opened", onComplete));
-        }
+        public void TriggerClose(Action onComplete) => StartCoroutine(PlayAndWait("Close", onComplete));
+        public void TriggerOpen(Action onComplete) => StartCoroutine(PlayAndWait("Open", onComplete));
+        public void TriggerOut(Action onComplete) => StartCoroutine(PlayAndWait("Out", onComplete));
 
-        public void TriggerOut(System.Action onComplete)
-        {
-            StartCoroutine(TriggerAndWaitCoroutine("Out", "out",onComplete));
-        }
+        public void TriggerClose() => TriggerClose(null);
+        public void TriggerOpen() => TriggerOpen(null);
+        public void TriggerOut() => TriggerOut(null);
 
-        public void TriggerClose()
-        {
-            TriggerClose(null);
-        }
-        public void TriggerOpen()
-        {
-            TriggerOpen(null);
-        }
-        public void TriggerOut()
-        {
-            TriggerOut(null);
-        }
-
-        private IEnumerator TriggerAndWaitCoroutine(string trigger, string stateName, Action onComplete)
+        private IEnumerator PlayAndWait(string trigger, Action onComplete)
         {
             yield return null;
-            if (animator == null || skeletonRenderer == null)
+
+            
+
+            var state = skeletonGraphic.AnimationState;
+            var current = state.GetCurrent(0);
+            string currentAnim = current?.Animation?.Name;
+
+            TrackEntry firstEntry = null;
+
+            switch (trigger)
             {
-               var curtain = GameObject.FindObjectOfType<Curtain>();
-               if (curtain == null)
-               {
-                   Debug.LogWarning("Animator or SkeletonRenderer not found");
-               }
-               animator = curtain.animator;
-               skeletonRenderer = curtain.meshRenderer;
+                case "Close":
+                    if (currentAnim == "opened")
+                    {
+                        firstEntry = state.SetAnimation(0, "inClose", false);
+                        state.AddAnimation(0, "closed", false, 0f).MixDuration = 0.5f;
+                    }
+                    else if (currentAnim == "out")
+                    {
+                        firstEntry = state.SetAnimation(0, "outClose", false);
+                        state.AddAnimation(0, "closed", false, 0f).MixDuration = 0.5f;
+                    }
+                    break;
+
+                case "Open":
+                    firstEntry = state.SetAnimation(0, "inOpen", false);
+                    state.AddAnimation(0, "opened", false, 0f).MixDuration = 0.5f;
+                    break;
+
+                case "Out":
+                    firstEntry = state.SetAnimation(0, "outOpen", false);
+                    state.AddAnimation(0, "out", false, 0f).MixDuration = 0.5f;
+                    break;
+
+                default:
+                    Debug.LogWarning($"Unknown trigger: {trigger}");
+                    yield break;
             }
-            animator.SetTrigger(trigger);
-            // wait until the animator actually enters your state
-            yield return new WaitUntil(() => 
-                animator.GetCurrentAnimatorStateInfo(0).IsName(stateName)
-            );
-            // now wait until that state has played through once
-            yield return new WaitUntil(() => 
-                animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f
-            );
+
+            if (firstEntry != null)
+            {
+                yield return new WaitForSpineAnimation(firstEntry,WaitForSpineAnimation.AnimationEventTypes.Complete);
+            }
+
             onComplete?.Invoke();
         }
 
-        public void SetSkeletonSortingLayer(string sortingLayerName)
+        public void SetSkeletonSortingLayer(string sortingLayerName, Action callback = null)
         {
-            SetSkeletonSortingLayer(sortingLayerName, null);
-        }
-
-        public void SetSkeletonSortingLayer(string sortingLayerName, System.Action callback)
-        {
-            if (skeletonRenderer != null)
+            var canvas = GetComponent<Canvas>();
+            if (canvas != null)
             {
-                skeletonRenderer.sortingLayerName = sortingLayerName;
+                canvas.overrideSorting = true;
+
+                // Use a symbolic sorting layer name to set sortingOrder
+                switch (sortingLayerName)
+                {
+                    case "Curtain":
+                        canvas.sortingOrder = 10;
+                        break;
+                    case "default":
+                        canvas.sortingOrder = -10;
+                        break;
+                    default:
+                        canvas.sortingOrder = 0;
+                        break;
+                }
             }
+            else
+            {
+                Debug.LogWarning("Canvas not found on GameObject.");
+            }
+
             callback?.Invoke();
         }
 
-        public void LoadSceneWithCallback(int sceneIndex, System.Action callback = null)
+        public void SetSkeletonSortingLayer(string sortingLayerName) => SetSkeletonSortingLayer(sortingLayerName, null);
+
+        public void LoadSceneWithCallback(int sceneIndex, Action callback = null)
         {
             StartCoroutine(LoadSceneCoroutine(sceneIndex, callback));
         }
 
-        private IEnumerator LoadSceneCoroutine(int sceneIndex, System.Action callback)
+        private IEnumerator LoadSceneCoroutine(int sceneIndex, Action callback)
         {
             AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneIndex);
             while (!asyncLoad.isDone)
