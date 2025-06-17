@@ -1316,12 +1316,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 713002479}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e474cb856e5c4a70bac77fb4d59c0dab, type: 3}
+  m_Script: {fileID: 11500000, guid: fa4c7594e53c4a59a0f0702d0800e9fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initialSize: 10
-  prefab: {fileID: 2144619033848667960, guid: 7c00dfc68f082492ea2badf09f0b62df, type: 3}
-  parent: {fileID: 1501926333}
 --- !u!4 &713002481
 Transform:
   m_ObjectHideFlags: 0
@@ -2539,10 +2536,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1790605527}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddde4e3fd88fe466cb04332a4bdf2d3c, type: 3}
+  m_Script: {fileID: 11500000, guid: c9895a66ce0f9ac4d83879b99a0ef0bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   sounds: []
+  musicSource: {fileID: 0}
 --- !u!4 &1790605529
 Transform:
   m_ObjectHideFlags: 0

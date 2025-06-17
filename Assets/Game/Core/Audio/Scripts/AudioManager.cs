@@ -14,6 +14,7 @@ namespace Game.Core.Audio
 
         private void Awake()
         {
+            
             if (Instance != null && Instance != this)
             {
                 Destroy(gameObject);
