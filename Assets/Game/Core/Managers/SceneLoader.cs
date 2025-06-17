@@ -2,9 +2,11 @@ using System;
 using Game.Core.Generics;
 using UnityEngine;
 using System.Collections;
+using Game.UI.Scripts;
 using Spine;
 using Spine.Unity;
 using UnityEngine.Serialization;
+using UnityEngine.SceneManagement;
 
 namespace Game.Core.Managers
 {
@@ -43,6 +45,17 @@ namespace Game.Core.Managers
 
         private IEnumerator TriggerAndWaitCoroutine(string trigger, string stateName, Action onComplete)
         {
+            yield return null;
+            if (animator == null || skeletonRenderer == null)
+            {
+               var curtain = GameObject.FindObjectOfType<Curtain>();
+               if (curtain == null)
+               {
+                   Debug.LogWarning("Animator or SkeletonRenderer not found");
+               }
+               animator = curtain.animator;
+               skeletonRenderer = curtain.meshRenderer;
+            }
             animator.SetTrigger(trigger);
             // wait until the animator actually enters your state
             yield return new WaitUntil(() => 
@@ -57,10 +70,31 @@ namespace Game.Core.Managers
 
         public void SetSkeletonSortingLayer(string sortingLayerName)
         {
+            SetSkeletonSortingLayer(sortingLayerName, null);
+        }
+
+        public void SetSkeletonSortingLayer(string sortingLayerName, System.Action callback)
+        {
             if (skeletonRenderer != null)
             {
                 skeletonRenderer.sortingLayerName = sortingLayerName;
             }
+            callback?.Invoke();
+        }
+
+        public void LoadSceneWithCallback(int sceneIndex, System.Action callback = null)
+        {
+            StartCoroutine(LoadSceneCoroutine(sceneIndex, callback));
+        }
+
+        private IEnumerator LoadSceneCoroutine(int sceneIndex, System.Action callback)
+        {
+            AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(sceneIndex);
+            while (!asyncLoad.isDone)
+            {
+                yield return null;
+            }
+            callback?.Invoke();
         }
     }
 }

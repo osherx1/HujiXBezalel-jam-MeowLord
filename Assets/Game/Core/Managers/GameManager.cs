@@ -3,6 +3,7 @@ using Game.Core.Score;
 using UnityEngine;
 using System.Collections;
 using Game.Core.Audio;
+using Game.Core.Camera.Scripts;
 using Game.Core.Generics;
 using Game.Core.Utils;
 using UnityEngine.SceneManagement;
@@ -72,8 +73,6 @@ namespace Game.Core.Managers
                 CurrentNickname = _randomNames[idx];
             }
             
-            //AudioManager.Instance.Play(AudioName.BackgroundMusic, Vector3.zero);
-            GameEvents.GameStarted();
             UnityMainThreadDispatcher.Instance.StartObject();
         }
         
@@ -81,15 +80,35 @@ namespace Game.Core.Managers
         {
             float finishedTime = Time.time - _timeStarted;
             _highScoreManager.TryAddHighScore(_gameplayScore.Score, CurrentNickname, finishedTime);
-            StartCoroutine(GameFinishedTimerCoroutine());
+            var camera = GameObject.FindFirstObjectByType < HybridCameraFollow>();
+            camera.tutorialModeTargetFrame = 6;
+            camera.AdjustTargetFraming(()=>SceneLoader.Instance.SetSkeletonSortingLayer("Curtain",() => 
+                SceneLoader.Instance.TriggerClose(()=> 
+                    SceneLoader.Instance.LoadSceneWithCallback(3, () =>
+                    {
+                        GameEvents.EndSceneStarted();
+                        SceneLoader.Instance.TriggerOut();
+                    }))));
         }
 
         
-        private IEnumerator GameFinishedTimerCoroutine()
+
+        public void StartGame()
         {
-            SceneManager.LoadScene("end");
+            SceneLoader.Instance.TriggerClose(() =>
+            {
+                SceneLoader.Instance.LoadSceneWithCallback(2, () => 
+                    SceneLoader.Instance.TriggerOpen(() => 
+                        SceneLoader.Instance.SetSkeletonSortingLayer("default",() => StartCoroutine(GameStartCamera()))));
+            });
+        }
+
+        private IEnumerator GameStartCamera()
+        {
             yield return null;
-            GameEvents.EndSceneStarted();
+            var camera = GameObject.FindFirstObjectByType < HybridCameraFollow>();
+            camera.tutorialModeTargetFrame = 0;
+            camera.AdjustTargetFraming(() => GameEvents.GameStarted());
         }
     }
 }

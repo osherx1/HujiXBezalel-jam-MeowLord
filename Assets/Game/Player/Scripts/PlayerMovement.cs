@@ -91,13 +91,27 @@ namespace Game.Player.Scripts
 
         void OnEnable()
         {
-            _clickAction.performed += OnClick;
-            GameEvents.OnPlayerFall += HandlePlayerFall;
+            GameEvents.OnGameStarted += GameStarted;
+            GameEvents.OnTutorialStarted += GameStarted;
+            GameEvents.OnGameFinished += GameFinished;
             GameEvents.OnPlayerPause += ActivatePauseGame;
             GameEvents.OnPlayerResume += ActivateResumeGame;
+        }
+
+        private void GameFinished()
+        {
+            _clickAction.performed -= OnClick;
+            GameEvents.OnPlayerFall -= HandlePlayerFall;
+            GameEvents.OnUpdateScore -= CheckYarn;
+        }
+
+        private void GameStarted()
+        {
+            _clickAction.performed += OnClick;
+            GameEvents.OnPlayerFall += HandlePlayerFall;
             GameEvents.OnUpdateScore += CheckYarn;
         }
-        
+
         private void CheckYarn(int score)
         {
             // Increase maxSegments by one for each threshold passed, only once per threshold
@@ -127,6 +141,10 @@ namespace Game.Player.Scripts
             GameEvents.OnPlayerFall -= HandlePlayerFall;
             GameEvents.OnGamePause -= ActivatePauseGame;
             GameEvents.OnGameResume -= ActivateResumeGame;
+            GameEvents.OnUpdateScore -= CheckYarn;
+            GameEvents.OnGameStarted -= GameStarted;
+            GameEvents.OnGameFinished -= GameFinished;
+            GameEvents.OnTutorialStarted -= GameStarted;
         }
 
         private void HandlePlayerFall()

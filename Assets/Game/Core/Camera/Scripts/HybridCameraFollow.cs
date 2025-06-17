@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Attributes;
 using DG.Tweening;
@@ -45,7 +46,7 @@ namespace Game.Core.Camera.Scripts
         
         private Tween cameraMoveTween;  
         private bool edgePanning = false;
-        [SerializeField] public bool isCameraLocked = false;
+        [SerializeField] public bool isCameraLocked = true;
         [SerializeField] public int tutorialModeTargetFrame = 0;
 
         
@@ -70,8 +71,14 @@ namespace Game.Core.Camera.Scripts
         void OnEnable()
         {
             targetLogger?.Log("Target subscribed to player");
+            GameEvents.OnGameStarted += EnableOnGameStart;
+            GameEvents.OnTutorialStarted += EnableOnGameStart;
+        }
+
+        private void EnableOnGameStart()
+        {
+            isCameraLocked = false;
             RegisterCameraToGoBackToPlayer();
-            // RegisterCameraToMoveTowardsPlayer();
             RegisterCameraToAdjustFraming();
         }
 
@@ -141,7 +148,7 @@ namespace Game.Core.Camera.Scripts
             if(isCameraLocked) return;
             
             _camPosBefore = UnityEngine.Camera.main.transform.position;
-            
+
             float moveX = UnityEngine.Input.GetAxisRaw("Horizontal");
             float moveY = UnityEngine.Input.GetAxisRaw("Vertical");
             Vector3 move = new Vector3(moveX, moveY, 0).normalized;
@@ -235,6 +242,22 @@ namespace Game.Core.Camera.Scripts
                 cinemachineConfiner.InvalidateBoundingShapeCache();
                 _clampedPlatform = clampedPlatforms;
             }
+        }
+
+        public void AdjustTargetFraming(System.Action onComplete)
+        {
+            AdjustTargetFraming();
+            MoveTowardsPlayer();
+            if (onComplete != null)
+            {
+                StartCoroutine(InvokeAfterDelayCoroutine(onComplete, 1f));
+            }
+        }
+
+        private IEnumerator InvokeAfterDelayCoroutine(System.Action callback, float delay)
+        {
+            yield return new WaitForSeconds(delay);
+            callback?.Invoke();
         }
 
         void OnDrawGizmos()

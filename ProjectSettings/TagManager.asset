@@ -63,5 +63,8 @@ TagManager:
   - name: UI
     uniqueID: 3010176797
     locked: 0
+  - name: Curtain
+    uniqueID: 1900619207
+    locked: 0
   m_RenderingLayers:
   - Default

@@ -1,23 +1,23 @@
-using System;
 using Game.Core.Audio;
-using Spine.Unity;
+using Game.Core.Managers;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace Game.Core.Managers
+namespace Game.Core.StartScene
 {
-    public class StartSceneManager: MonoBehaviour
+    public class StartSceneManager : MonoBehaviour
     {
         [SerializeField] private Image viImage;
         [SerializeField] private bool startTutorial;
         [SerializeField] private TMP_InputField nameInputField;
         private string playerName;
+        private bool active = true;
 
 
         public void Awake()
         {
+            
             if (PlayerPrefs.GetInt("SawTutorial", 0) == 1)
             {
                 viImage.enabled = false;
@@ -25,10 +25,10 @@ namespace Game.Core.Managers
             }
             else
             {
-                
                 viImage.enabled = true;
                 startTutorial = true;
             }
+
             playerName = PlayerPrefs.GetString("Name", null);
             GameManager.Instance.SetNickname(playerName);
         }
@@ -44,43 +44,35 @@ namespace Game.Core.Managers
             viImage.enabled = !viImage.enabled;
             startTutorial = !startTutorial;
         }
-        
+
 
         public void OnSubmitName()
         {
+            if(!active) return;
             if (string.IsNullOrWhiteSpace(nameInputField.text))
             {
                 // TODO indicate to player that his input not good by sound/text, or switch the name to the player prefs name
                 return;
             }
+            active = false;
             PlayerPrefs.SetInt("SawTutorial", 1);
             playerName = nameInputField.text;
             GameManager.Instance.SetNickname(playerName);
             PlayerPrefs.SetString("Name", playerName);
+            GameEvents.GameInitialization();
             if (startTutorial)
             {
-                GameEvents.GameInitialization();
-                SceneManager.LoadScene(1);
-                // SceneLoader.Instance.TriggerClose(() =>
-                // {
-                //     SceneLoader.Instance.TriggerOpen(() => SceneLoader.Instance.SetSkeletonSortingLayer("default"));
-                //     GameEvents.GameInitialization();
-                //     SceneManager.LoadScene(1);
-                // });
+                SceneLoader.Instance.TriggerClose(() =>
+                {
+                            SceneLoader.Instance.LoadSceneWithCallback(1, () => 
+                                SceneLoader.Instance.TriggerOpen(() => 
+                                    SceneLoader.Instance.SetSkeletonSortingLayer("default",GameEvents.TutorialStarted)));
+                });
             }
             else
             {
-                // SceneLoader.Instance.TriggerClose(() =>
-                // {
-                //     SceneLoader.Instance.TriggerOpen(() => SceneLoader.Instance.SetSkeletonSortingLayer("default"));
-                //     GameEvents.GameInitialization();
-                //     SceneManager.LoadScene(2);
-                // });
-                GameEvents.GameInitialization();
-                SceneManager.LoadScene(2);
+                GameManager.Instance.StartGame();
             }
-            
-        } 
-
+        }
     }
 }

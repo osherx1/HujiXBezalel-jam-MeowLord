@@ -1,3 +1,5 @@
+using System;
+using Game.Core.Managers;
 using TMPro;
 using UnityEngine;
 
@@ -7,11 +9,28 @@ namespace Game.UI.Scripts
     {
         [SerializeField] TextMeshProUGUI timerText;
 
-        private float _timePass;
+        private float _timePass = 0f;
+        private bool activate = false;
+
+        public void OnEnable()
+        {
+            GameEvents.OnGameStarted += Activate;
+        }
+
+        private void Activate()
+        {
+            activate = true;
+        }
 
         // Update is called once per frame
         void Update()
         {
+            if(!activate) return;
+            if (_timePass > 10f)
+            {
+                activate = false;
+                GameEvents.GameFinished();
+            }
             _timePass += Time.deltaTime;
             int minutes = Mathf.FloorToInt(_timePass / 60);
             int seconds = Mathf.FloorToInt(_timePass % 60);
