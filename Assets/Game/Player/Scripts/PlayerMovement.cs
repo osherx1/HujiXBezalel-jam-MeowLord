@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Attributes;
 using DG.Tweening;
+using Game.Core.Audio;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Game.Core.Input;
@@ -103,6 +104,7 @@ namespace Game.Player.Scripts
             // Increase maxSegments by one for each threshold passed, only once per threshold
             if (_yarnThresholdIndex < yarnThresholds.Length && score >= yarnThresholds[_yarnThresholdIndex])
             {
+                AudioManager.Instance.Play(AudioName.Wool, transform.position);
                 maxSegments++;
                 leftSegments = maxSegments - _segments.Count;
                 GameEvents.NumberOfSegmentsChanged(leftSegments);
@@ -133,6 +135,7 @@ namespace Game.Player.Scripts
             if (onMoveCompleteEvent != null) return;
             _fall = true;
             animator.SetTrigger(Fall);
+            AudioManager.Instance.Play(AudioName.CatBadJump, transform.position);
             GameEvents.PlayerFallPointsUpdate(transform.position);
             for (int i = _segments.Count - 1; i >= 0; i--)
             {
@@ -157,6 +160,7 @@ namespace Game.Player.Scripts
             _visited.Clear();
             onMoveCompleteEvent = () =>
             {
+                AudioManager.Instance.Play(AudioName.CatLand, transform.position);
                 GameEvents.PlayerLanded();
             };
             
@@ -208,7 +212,7 @@ namespace Game.Player.Scripts
                 // Animate movement
                 DOTween.Kill(transform); // Kill any previous tweens on this transform
                 isMoving = true;
-
+                AudioManager.Instance.Play(AudioName.CatJump, transform.position);
                 if (moveCoroutine != null) StopCoroutine(moveCoroutine);
                 moveCoroutine = StartCoroutine(MoveToPlatformCoroutine(platform));
                 playerLogger?.Log("Player Activated event PlayerMoved");
@@ -231,6 +235,7 @@ namespace Game.Player.Scripts
 
             transform.position = platform.position;
             animator.SetTrigger(Land);
+            
             onMoveCompleteEvent?.Invoke();
             onMoveCompleteEvent = null;
             isMoving = false;
@@ -309,6 +314,7 @@ namespace Game.Player.Scripts
                 // Remove last segment and last platform
                 onMoveCompleteEvent = () =>
                 {
+                    AudioManager.Instance.Play(AudioName.CatLand, transform.position);
                     RemoveSegment(_segments.Count - 1);
                     GameEvents.PlayerLanded();
                 };
@@ -329,6 +335,7 @@ namespace Game.Player.Scripts
             {
                 onMoveCompleteEvent = (() =>
                 {
+                    AudioManager.Instance.Play(AudioName.CatLand, transform.position);
                     GameEvents.PlayerLanded();
                     onMoveCompleteEvent = null;
                     GameEvents.PlayerFall();
@@ -361,6 +368,7 @@ namespace Game.Player.Scripts
 
                 onMoveCompleteEvent = () =>
                 {
+                    AudioManager.Instance.Play(AudioName.CatLand, transform.position);
                     _segmentDelay = true;
                     if (_playerRatDetector.DestroyEnemiesInLoop(loopPlatforms, enemyLayer))
                     {
@@ -403,6 +411,7 @@ namespace Game.Player.Scripts
 
             onMoveCompleteEvent = () =>
             {
+                AudioManager.Instance.Play(AudioName.CatLand, transform.position);
                 GameEvents.PlayerLanded();
                 _segments[^1].ToT = _lastPlat;
             };
