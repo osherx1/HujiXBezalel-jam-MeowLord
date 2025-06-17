@@ -26,11 +26,6 @@ namespace Game.UI.Scripts
         void Update()
         {
             if(!activate) return;
-            if (_timePass > 10f)
-            {
-                activate = false;
-                GameEvents.GameFinished();
-            }
             _timePass += Time.deltaTime;
             int minutes = Mathf.FloorToInt(_timePass / 60);
             int seconds = Mathf.FloorToInt(_timePass % 60);
