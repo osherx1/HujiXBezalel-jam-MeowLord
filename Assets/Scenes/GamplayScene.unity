@@ -8522,6 +8522,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 712530533}
     - target: {fileID: 3180241267807240156, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
+      propertyPath: limitGroups.Array.data[1].maxActive
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3180241267807240156, guid: c7f8e499f821c42fdbd5373839e199f8, type: 3}
       propertyPath: 'routesSetup.Array.data[0].routes.Array.data[0]'
       value: 
       objectReference: {fileID: 234767914}

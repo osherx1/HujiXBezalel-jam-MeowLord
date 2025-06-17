@@ -342,11 +342,7 @@ namespace Game.Player.Scripts
             {
                 onMoveCompleteEvent = (() =>
                 {
-                    AudioManager.Instance.Play(AudioName.CatLand, transform.position);
-                    GameEvents.PlayerLanded();
-                    onMoveCompleteEvent = null;
-                    GameEvents.PlayerFall();
-                    GameEvents.ScoreCombinatorReady();
+                    HandleGameLoss();
                 });
                 RegisterToPlatform(newPlatScript, _lastMovingPlatform);
                 MovePlayerToPlatform(newPlat);
@@ -369,6 +365,12 @@ namespace Game.Player.Scripts
                 _visited.RemoveRange(idx + 1, _visited.Count - idx - 1);
                 onMoveCompleteEvent = () =>
                 {
+                    if (_playerRatDetector.HasKingOrQueenInLoopPolygon(loopPlatforms, playerStats.platformLayer))
+                    {
+                        HandleGameLoss();
+                        return;
+                    }
+                    
                     AudioManager.Instance.Play(AudioName.CatLand, transform.position);
                     if (_playerRatDetector.DestroyEnemiesInLoop(loopPlatforms, enemyLayer))
                     {
@@ -494,14 +496,13 @@ namespace Game.Player.Scripts
 
         private void Update()
         {
-            if (isMoving || _fall || _pausedGame) return;
+            if (_pausedGame) return;
             CheckForClosedPolygons();
             CheckIfMouseOnPlatform();
         }
 
         private void CheckForClosedPolygons()
         {
-            
             var polygons = _playerRatDetector.CheckForClosedPolygons();
             if (polygons == null || polygons.Count == 0) return;
             int segRemoveTo = -1;
@@ -509,6 +510,14 @@ namespace Game.Player.Scripts
             HashSet<Collider2D> totalEnemies = new HashSet<Collider2D>();
             foreach (var polygon in polygons)
             {
+                // Check for King or Queen in the polygon
+                if (_playerRatDetector.HasKingOrQueenInLoopPolygon(polygon.polygonPoints, playerStats.platformLayer))
+                {
+                    HandleGameLoss();
+                    return;
+                }
+
+                if (isMoving || _fall) return;
                 var enemies = _playerRatDetector.GetEnemiesInLoop(polygon.polygonPoints, enemyLayer);
                 if (enemies == null || !enemies.Any())
                     continue;
@@ -522,6 +531,12 @@ namespace Game.Player.Scripts
             {
                 HandlePolygonEnemies(totalEnemies, segRemoveTo, platRemoveTo);
             }
+        }
+
+        private void HandleGameLoss()
+        {
+            AudioManager.Instance.Play(AudioName.CatBadJump, transform.position);
+            GameEvents.GameFinished();
         }
 
         private void HandlePolygonEnemies(HashSet<Collider2D> totalEnemies, int segRemoveTo, int platRemoveTo)
@@ -548,6 +563,7 @@ namespace Game.Player.Scripts
 
         private void CheckIfMouseOnPlatform()
         {
+            if(isMoving) return;
             Vector2 screenPos = Mouse.current.position.ReadValue();
             Vector3 worldPos = _mainCam.ScreenToWorldPoint(screenPos);
             var hit = Physics2D.Raycast(worldPos, Vector2.zero, 0f, clickableLayer);
