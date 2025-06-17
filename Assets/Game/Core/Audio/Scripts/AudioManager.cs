@@ -5,27 +5,19 @@ namespace Game.Core.Audio
 {
     public class AudioManager : MonoBehaviour
     {
-        
-        private float lastMusicVolume = 1f;
-        private bool isMuted = false;
         public static AudioManager Instance { get; private set; }
+
+        [Header("Audio Settings")]
+        [SerializeField] private AudioSource musicSource;
 
         [SerializeField] private Sound[] sounds;
 
-        [Header("Assigned Audio Source for music")]
-        [SerializeField] private AudioSource musicSource; // ← תוכל לגרור לפה AudioSource מהסצנה
+        private float lastMusicVolume = 1f;
+        private bool isMuted = false;
 
         private void Awake()
         {
-            
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
-
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
 
         public void Play(AudioName name, Vector3 pos)
@@ -40,39 +32,12 @@ namespace Game.Core.Audio
             if (s.loop)
             {
                 PlayLoopingMusic(s);
-                return;
             }
-
-            PlayOneShot(s, pos);
+            else
+            {
+                PlayOneShot(s, pos);
+            }
         }
-
-
-        private void PlayOneShot(Sound s, Vector3 pos)
-        {
-            GameObject sfxObject = new GameObject("SFX_" + s.name);
-            sfxObject.transform.position = pos;
-
-            AudioSource src = sfxObject.AddComponent<AudioSource>();
-            src.clip = s.clip;
-            src.volume = s.volume;
-            src.pitch = s.pitch;
-            src.spatialBlend = s.spatialBlend;
-            src.loop = false;
-            src.Play();
-            
-            Destroy(sfxObject, s.clip.length / s.pitch);
-        }
-
-        public AudioSource GetMusicSource()
-        {
-            return musicSource;
-        }
-
-        public Sound[] GetAllSounds()
-        {
-            return sounds;
-        }
-
 
         private void PlayLoopingMusic(Sound sound)
         {
@@ -94,7 +59,23 @@ namespace Game.Core.Audio
 
             Debug.Log($"🎵 Playing background music: {sound.clip.name}");
         }
-        
+
+        private void PlayOneShot(Sound s, Vector3 pos)
+        {
+            GameObject sfxObject = new GameObject("SFX_" + s.name);
+            sfxObject.transform.position = pos;
+
+            AudioSource src = sfxObject.AddComponent<AudioSource>();
+            src.clip = s.clip;
+            src.volume = s.volume;
+            src.pitch = s.pitch;
+            src.spatialBlend = s.spatialBlend;
+            src.loop = false;
+            src.Play();
+
+            Destroy(sfxObject, s.clip.length / s.pitch);
+        }
+
         public void ToggleMusicMute()
         {
             if (musicSource == null) return;
@@ -117,6 +98,16 @@ namespace Game.Core.Audio
         public bool IsMusicMuted()
         {
             return isMuted;
+        }
+
+        public AudioSource GetMusicSource()
+        {
+            return musicSource;
+        }
+
+        public Sound[] GetAllSounds()
+        {
+            return sounds;
         }
     }
 }
