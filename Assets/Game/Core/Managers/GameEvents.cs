@@ -138,12 +138,7 @@ namespace Game.Core.Managers
         {
             OnSpawnPlatform?.Invoke(obj);
         }
-        public static event Action OnAddedYarn;
-
-        public static void AddedYarn()
-        {
-            OnAddedYarn?.Invoke();
-        }
+        
         
     }
 }
