@@ -1605,7 +1605,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.6696477, y: -3.46466, z: -1.0053988}
+  m_LocalPosition: {x: 6.6548624, y: -3.46466, z: -1.0053988}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5984,7 +5984,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1436.2, y: 957.9}
+  m_AnchoredPosition: {x: -1448, y: 950}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1833173216
@@ -6009,8 +6009,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0:00
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8882a53f4a91446b3af58b15cd014c73, type: 2}
-  m_sharedMaterial: {fileID: -8656509400851962742, guid: 8882a53f4a91446b3af58b15cd014c73, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 0fa5f75f6621e4447b575d2d0c1a7cd2, type: 2}
+  m_sharedMaterial: {fileID: -5029040805898684799, guid: 0fa5f75f6621e4447b575d2d0c1a7cd2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6034,8 +6034,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 62.7
-  m_fontSizeBase: 62.7
+  m_fontSize: 53
+  m_fontSizeBase: 53
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -8199,20 +8199,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5437615423132646168, guid: e09090cbfa4c24be3aaddd137d35e02a, type: 3}
       propertyPath: m_fontSize
-      value: 97.6
+      value: 53
       objectReference: {fileID: 0}
     - target: {fileID: 5437615423132646168, guid: e09090cbfa4c24be3aaddd137d35e02a, type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 8882a53f4a91446b3af58b15cd014c73, type: 2}
+      objectReference: {fileID: 11400000, guid: 0fa5f75f6621e4447b575d2d0c1a7cd2, type: 2}
     - target: {fileID: 5437615423132646168, guid: e09090cbfa4c24be3aaddd137d35e02a, type: 3}
       propertyPath: m_fontSizeBase
-      value: 97.6
+      value: 53
       objectReference: {fileID: 0}
     - target: {fileID: 5437615423132646168, guid: e09090cbfa4c24be3aaddd137d35e02a, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: -8656509400851962742, guid: 8882a53f4a91446b3af58b15cd014c73, type: 2}
+      objectReference: {fileID: -5029040805898684799, guid: 0fa5f75f6621e4447b575d2d0c1a7cd2, type: 2}
     - target: {fileID: 5437615423132646168, guid: e09090cbfa4c24be3aaddd137d35e02a, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0
@@ -8283,7 +8283,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8353344515821315377, guid: e09090cbfa4c24be3aaddd137d35e02a, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 120
+      value: 116
       objectReference: {fileID: 0}
     - target: {fileID: 8353344515821315377, guid: e09090cbfa4c24be3aaddd137d35e02a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -9181,7 +9181,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3289521635732688376, guid: ee75d052543f0462fa2cdba454e07088, type: 3}
       propertyPath: m_fontSize
-      value: 61.9
+      value: 58.37
       objectReference: {fileID: 0}
     - target: {fileID: 3289521635732688376, guid: ee75d052543f0462fa2cdba454e07088, type: 3}
       propertyPath: m_margin.w
@@ -9194,7 +9194,7 @@ PrefabInstance:
     - target: {fileID: 3289521635732688376, guid: ee75d052543f0462fa2cdba454e07088, type: 3}
       propertyPath: m_fontAsset
       value: 
-      objectReference: {fileID: 11400000, guid: 8882a53f4a91446b3af58b15cd014c73, type: 2}
+      objectReference: {fileID: 11400000, guid: 0fa5f75f6621e4447b575d2d0c1a7cd2, type: 2}
     - target: {fileID: 3289521635732688376, guid: ee75d052543f0462fa2cdba454e07088, type: 3}
       propertyPath: m_fontStyle
       value: 0
@@ -9205,12 +9205,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3289521635732688376, guid: ee75d052543f0462fa2cdba454e07088, type: 3}
       propertyPath: m_fontSizeBase
-      value: 61.9
+      value: 58.37
       objectReference: {fileID: 0}
     - target: {fileID: 3289521635732688376, guid: ee75d052543f0462fa2cdba454e07088, type: 3}
       propertyPath: m_sharedMaterial
       value: 
-      objectReference: {fileID: -8656509400851962742, guid: 8882a53f4a91446b3af58b15cd014c73, type: 2}
+      objectReference: {fileID: -5029040805898684799, guid: 0fa5f75f6621e4447b575d2d0c1a7cd2, type: 2}
     - target: {fileID: 3289521635732688376, guid: ee75d052543f0462fa2cdba454e07088, type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4294967295
