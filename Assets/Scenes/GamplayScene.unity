@@ -2489,11 +2489,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sounds:
   - name: 0
-    clip: {fileID: 8300000, guid: 2a9f2eda2a5bdaa40a525f73166f2e92, type: 3}
-    volume: 1
+    clip: {fileID: 8300000, guid: 2e3e987f852644eae805c2a69f30b8a1, type: 3}
+    volume: 0.481
     pitch: 1
     spatialBlend: 0
-    loop: 0
+    loop: 1
+  - name: 7
+    clip: {fileID: 8300000, guid: cd7593f25a9e64494981f1f9c1dac840, type: 3}
+    volume: 0.481
+    pitch: 1
+    spatialBlend: 0
+    loop: 1
   musicSource: {fileID: 717728564}
 --- !u!82 &717728564
 AudioSource:
