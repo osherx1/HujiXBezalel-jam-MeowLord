@@ -14,6 +14,7 @@ namespace Game.Core.Score
             _score = 0;
             GameEvents.OnGameStarted += ResetScore;
             GameEvents.OnTutorialStarted += ResetScore;
+            GameEvents.OnTutorialReset += ResetScore;
             ScoreCombinator = new GameplayScoreCombinator(this);
         }
 
