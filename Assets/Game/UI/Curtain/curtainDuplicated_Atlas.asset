@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a6b194f808b1af6499c93410e504af42, type: 3}
-  m_Name: curtain_Atlas
+  m_Name: curtainDuplicated_Atlas
   m_EditorClassIdentifier: 
   textureLoadingMode: 0
   onDemandTextureLoader: {fileID: 0}
-  atlasFile: {fileID: 4900000, guid: 1a223fa5196cf4526aa031ecf1679928, type: 3}
+  atlasFile: {fileID: 4900000, guid: 6238754913e54476ebc2dabd18f22f8a, type: 3}
   materials:
-  - {fileID: 2100000, guid: 85871686f304f4282aca184ae850597d, type: 2}
-  - {fileID: 2100000, guid: 557b762c9461b403fb13f6cdec47f993, type: 2}
+  - {fileID: 2100000, guid: 5d265a7b4660346b2a0a1c6352dbe778, type: 2}

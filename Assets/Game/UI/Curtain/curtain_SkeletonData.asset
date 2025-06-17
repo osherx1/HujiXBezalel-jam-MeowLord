@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: curtain_SkeletonData
   m_EditorClassIdentifier: 
   atlasAssets:
-  - {fileID: 11400000, guid: 3f40120fa0ba145389afcf8c05c47766, type: 2}
+  - {fileID: 11400000, guid: 21e144a91103f46898e469a024fb734e, type: 2}
   scale: 0.01
   skeletonJSON: {fileID: 4900000, guid: c75914118581a4f0a935dbaa4b621bcf, type: 3}
   isUpgradingBlendModeMaterials: 0
