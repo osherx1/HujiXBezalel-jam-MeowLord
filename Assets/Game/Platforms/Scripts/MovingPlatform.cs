@@ -27,6 +27,7 @@ namespace Game.Platforms.Scripts
         public SpriteRenderer backwardSpriteRenderer;
         public SkeletonMecanim forwardSkeletonMecanim;
         public SkeletonMecanim backwardSkeletonMecanim;
+        private bool isFrozen = false;
 
 
         // Which direction are we facing right now?
@@ -96,26 +97,27 @@ namespace Game.Platforms.Scripts
 
         void Update()
         {
-            
-            if (isAfraid) // If afraid, do NOT move!
+            if (isFrozen)
                 return;
-            
+
+            if (isAfraid)
+                return;
+
             if (_runAway)
             {
                 HandleRunAway();
                 return;
             }
-            
+
             if (!_isMoving) return;
             if (_currentWaypoint < 0 || _currentWaypoint >= waypoints.Count) return;
             if (HandleWaiting()) return;
 
             UpdateWalkingAnim();
-
             MoveToWaypoint();
-
             HandleWaypointArrival();
         }
+
 
         void OnDestroy()
         {
@@ -418,6 +420,56 @@ namespace Game.Platforms.Scripts
                 {
                     meshRenderer.sortingLayerName = targetLayer;
                 }
+            }
+        }
+        
+        public void SetFrozen(bool frozen)
+        {
+            isFrozen = frozen;
+            Debug.Log("Frozen state set to: " + frozen);
+
+            SetWalkingAnim(false);
+
+            if (frozen)
+            {
+                if (_isFacingForward)
+                    animatorForward?.Play("Idle", 0, 0);
+                else
+                    animatorBackward?.Play("Idle", 0, 0);
+            }
+        }
+
+        void OnEnable()
+        {
+            GameEvents.OnGameFinished += FreezePlatform;
+        }
+
+        void OnDisable()
+        {
+            GameEvents.OnGameFinished -= FreezePlatform;
+        }
+
+        private void FreezePlatform()
+        {
+            SetFrozen(true);
+        }
+        
+        public void SetSkinActive(bool isActive)
+        {
+            string targetSkin = isActive ? "active" : "inactive";
+
+            if (forwardSkeletonMecanim != null && forwardSkeletonMecanim.Skeleton != null)
+            {
+                forwardSkeletonMecanim.Skeleton.SetSkin(targetSkin);
+                forwardSkeletonMecanim.Skeleton.SetSlotsToSetupPose();
+                forwardSkeletonMecanim.LateUpdate(); // חשוב כדי לעדכן את התצוגה מיד
+            }
+
+            if (backwardSkeletonMecanim != null && backwardSkeletonMecanim.Skeleton != null)
+            {
+                backwardSkeletonMecanim.Skeleton.SetSkin(targetSkin);
+                backwardSkeletonMecanim.Skeleton.SetSlotsToSetupPose();
+                backwardSkeletonMecanim.LateUpdate();
             }
         }
 

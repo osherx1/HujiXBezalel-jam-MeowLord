@@ -156,6 +156,12 @@ MonoBehaviour:
     pitch: 1
     spatialBlend: 0
     loop: 1
+  - name: 1
+    clip: {fileID: 8300000, guid: a5698b8c1a4624744b1e9b7d06e75474, type: 3}
+    volume: 0.481
+    pitch: 1
+    spatialBlend: 0
+    loop: 1
   musicSource: {fileID: 190731366193122410}
 --- !u!114 &3106742271818743991
 MonoBehaviour:

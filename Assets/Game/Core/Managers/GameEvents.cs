@@ -65,6 +65,7 @@ namespace Game.Core.Managers
         public static void GameFinished()
         {
             OnGameFinished?.Invoke();
+            Debug.Log("Game finished");
         }
         
         public static void MouseCatch(Vector3 mousePosition)

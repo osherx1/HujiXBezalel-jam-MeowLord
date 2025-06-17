@@ -166,5 +166,29 @@ namespace Game.Player.Scripts
                     .Select(t => (Vector2)t.position)
                     .ToArray();
             }
+
+
+        public bool HasKingOrQueenInLoopPolygon(List<Transform> loopPlatforms, LayerMask platformLayer)
+        {
+            var poly = GetPolygonPoints(loopPlatforms);
+            var candidates = GetCandidateColliders(poly, platformLayer);
+            foreach (var c in candidates)
+            {
+                if (c == null) continue;
+                var root = Game.Core.Utils.EladsHelperFunctions.GetRootTransformPlatformHead(c.transform);
+                if (root == null) continue;
+                var movingPlatform = root.GetComponent<Game.Platforms.Scripts.MovingPlatform>();
+                if (movingPlatform != null &&
+                    (movingPlatform.platformType == Game.Platforms.Scripts.PlatformType.King ||
+                     movingPlatform.platformType == Game.Platforms.Scripts.PlatformType.Queen))
+                {
+                    if (Game.Core.Utils.EladsHelperFunctions.PointInPolygon(poly, root.position))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 }

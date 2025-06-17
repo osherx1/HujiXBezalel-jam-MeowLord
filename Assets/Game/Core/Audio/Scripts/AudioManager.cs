@@ -5,6 +5,9 @@ namespace Game.Core.Audio
 {
     public class AudioManager : MonoBehaviour
     {
+        
+        private float lastMusicVolume = 1f;
+        private bool isMuted = false;
         public static AudioManager Instance { get; private set; }
 
         [SerializeField] private Sound[] sounds;
@@ -25,24 +28,41 @@ namespace Game.Core.Audio
             DontDestroyOnLoad(gameObject);
         }
 
-        public void Play(AudioName name, Vector3 position)
+        public void Play(AudioName name, Vector3 pos)
         {
-            Sound sound = Array.Find(sounds, s => s.name == name);
-            if (sound == null)
+            Sound s = Array.Find(sounds, sound => sound.name == name);
+            if (s == null)
             {
-                Debug.LogWarning($"❌ Sound {name} not found!");
+                Debug.LogWarning("❌ Sound not found: " + name);
                 return;
             }
 
-            if (sound.loop)
+            if (s.loop)
             {
-                PlayLoopingMusic(sound);
+                PlayLoopingMusic(s);
+                return;
             }
-            else
-            {
-                PlayOneShot(sound, position);
-            }
+
+            PlayOneShot(s, pos);
         }
+
+
+        private void PlayOneShot(Sound s, Vector3 pos)
+        {
+            GameObject sfxObject = new GameObject("SFX_" + s.name);
+            sfxObject.transform.position = pos;
+
+            AudioSource src = sfxObject.AddComponent<AudioSource>();
+            src.clip = s.clip;
+            src.volume = s.volume;
+            src.pitch = s.pitch;
+            src.spatialBlend = s.spatialBlend;
+            src.loop = false;
+            src.Play();
+            
+            Destroy(sfxObject, s.clip.length / s.pitch);
+        }
+
         public AudioSource GetMusicSource()
         {
             return musicSource;
@@ -74,20 +94,29 @@ namespace Game.Core.Audio
 
             Debug.Log($"🎵 Playing background music: {sound.clip.name}");
         }
-
-        private void PlayOneShot(Sound sound, Vector3 position)
+        
+        public void ToggleMusicMute()
         {
-            GameObject sfxObj = new GameObject("SFX_" + sound.name);
-            sfxObj.transform.position = position;
-            AudioSource src = sfxObj.AddComponent<AudioSource>();
+            if (musicSource == null) return;
 
-            src.clip = sound.clip;
-            src.volume = sound.volume;
-            src.pitch = sound.pitch;
-            src.spatialBlend = sound.spatialBlend;
-            src.Play();
+            if (isMuted)
+            {
+                musicSource.volume = lastMusicVolume;
+                isMuted = false;
+            }
+            else
+            {
+                lastMusicVolume = musicSource.volume;
+                musicSource.volume = 0f;
+                isMuted = true;
+            }
 
-            Destroy(sfxObj, sound.clip.length / sound.pitch);
+            Debug.Log($"🔇 Music muted: {isMuted}");
+        }
+
+        public bool IsMusicMuted()
+        {
+            return isMuted;
         }
     }
 }
