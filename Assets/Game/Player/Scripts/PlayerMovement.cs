@@ -503,6 +503,7 @@ namespace Game.Player.Scripts
 
         private void CheckForClosedPolygons()
         {
+            if (isMoving || _fall) return;
             var polygons = _playerRatDetector.CheckForClosedPolygons();
             if (polygons == null || polygons.Count == 0) return;
             int segRemoveTo = -1;
@@ -516,8 +517,7 @@ namespace Game.Player.Scripts
                     HandleGameLoss();
                     return;
                 }
-
-                if (isMoving || _fall) return;
+                
                 var enemies = _playerRatDetector.GetEnemiesInLoop(polygon.polygonPoints, enemyLayer);
                 if (enemies == null || !enemies.Any())
                     continue;
