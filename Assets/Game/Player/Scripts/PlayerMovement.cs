@@ -93,6 +93,7 @@ namespace Game.Player.Scripts
         {
             GameEvents.OnGameStarted += GameStarted;
             GameEvents.OnTutorialStarted += GameStarted;
+            GameEvents.OnTutorialReset += GameStarted;
             GameEvents.OnGameFinished += GameFinished;
             GameEvents.OnPlayerPause += ActivatePauseGame;
             GameEvents.OnPlayerResume += ActivateResumeGame;
@@ -106,6 +107,12 @@ namespace Game.Player.Scripts
         }
 
         private void GameStarted()
+        {
+            _clickAction.performed += OnClick;
+            GameEvents.OnPlayerFall += HandlePlayerFall;
+            GameEvents.OnUpdateScore += CheckYarn;
+        }
+        private void GameStarted(Action<Action> action)
         {
             _clickAction.performed += OnClick;
             GameEvents.OnPlayerFall += HandlePlayerFall;
@@ -139,12 +146,14 @@ namespace Game.Player.Scripts
         {
             _clickAction.performed -= OnClick;
             GameEvents.OnPlayerFall -= HandlePlayerFall;
-            GameEvents.OnGamePause -= ActivatePauseGame;
-            GameEvents.OnGameResume -= ActivateResumeGame;
+            GameEvents.OnPlayerPause -= ActivatePauseGame;
+            GameEvents.OnPlayerResume -= ActivateResumeGame;
             GameEvents.OnUpdateScore -= CheckYarn;
             GameEvents.OnGameStarted -= GameStarted;
             GameEvents.OnGameFinished -= GameFinished;
             GameEvents.OnTutorialStarted -= GameStarted;
+            GameEvents.OnTutorialReset -= GameStarted;
+            
         }
 
         private void HandlePlayerFall()

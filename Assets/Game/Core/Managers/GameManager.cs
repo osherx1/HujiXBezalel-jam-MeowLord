@@ -41,6 +41,28 @@ namespace Game.Core.Managers
         public void OnEnable()
         {
             GameEvents.OnGameInitialization += InitializeRelevantObjects;
+            GameEvents.OnGameStarted += GameSarted;
+            GameEvents.OnTutorialStarted += TutorialStarted;
+        }
+
+        private void TutorialStarted()
+        {
+            GameEvents.OnGameFinished += OnTutorialReset;
+        }
+
+        private void OnTutorialReset()
+        {
+            SceneLoader.Instance.TriggerClose(() =>
+                SceneLoader.Instance.LoadSceneWithCallback(1, () =>
+                    GameEvents.TutorialReset((Action action) =>
+                        SceneLoader.Instance.TriggerOpen(action)
+                    )
+                )
+            );
+        }
+
+        private void GameSarted()
+        {
             GameEvents.OnGameFinished += OnGameFinished;
         }
 
@@ -108,10 +130,12 @@ namespace Game.Core.Managers
 
         public void StartGameFromTutorial()
         {
-            SceneLoader.Instance.TriggerClose(() =>
-                SceneLoader.Instance.LoadSceneWithCallback(2, () =>
-                    SceneLoader.Instance.TriggerOpen(() =>
-                        StartCoroutine(GameStartCamera()))));
+            SceneLoader.Instance.SetSkeletonSortingLayer("Curtain", () =>
+                    SceneLoader.Instance.TriggerClose(() =>
+                        SceneLoader.Instance.LoadSceneWithCallback(1, 
+                            () => SceneLoader.Instance.SetSkeletonSortingLayer("default", () =>
+                            SceneLoader.Instance.TriggerOpen(
+                                 GameEvents.TutorialStarted )))));
         }
 
         private IEnumerator GameStartCamera()

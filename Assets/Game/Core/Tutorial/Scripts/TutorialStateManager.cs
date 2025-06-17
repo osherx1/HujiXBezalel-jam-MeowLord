@@ -1,18 +1,14 @@
 using System;
-using Game.Core.Camera.Scripts;
-using UnityEngine;
 using System.Collections;
-using DG.Tweening;
+using Game.Core.Camera.Scripts;
 using Game.Core.Input;
 using Game.Core.Managers;
 using Game.Enemies.Scripts;
 using Game.Platforms.Scripts;
-using TMPro;
+using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
-namespace Game.Core.Tutorial
+namespace Game.Core.Tutorial.Scripts
 {
     public class TutorialStateManager : MonoBehaviour
     {
@@ -55,13 +51,29 @@ namespace Game.Core.Tutorial
         private void OnEnable()
         {
             GameEvents.OnTutorialStarted += StartTutorialStateOrder;
+            GameEvents.OnTutorialReset += TutorialResetStateInvoker;
+            hybridCamera.RegisterCameraToGoBackToPlayer(false);
+            hybridCamera.RegisterCameraToMoveTowardsPlayer(false);
+            hybridCamera.RegisterCameraToAdjustFraming(false);
         }
+
+        private void TutorialResetStateInvoker(Action<Action> obj)
+        {
+            StartCoroutine(TutorialResetState(obj));
+        }
+
+        
 
         private void OnDisable()
         {
             InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed -= OnLeftClickPerformed;
             InputSystemSingleton.Instance.InputSystem.PlayerControls.RightClick.performed -= OnRightClickPerformed;
             GameEvents.OnMouseCatch -= MouseCatch;
+            GameEvents.OnTutorialStarted -= StartTutorialStateOrder;
+            GameEvents.OnTutorialReset -= TutorialResetStateInvoker;
+            hybridCamera.RegisterCameraToGoBackToPlayer(false);
+            hybridCamera.RegisterCameraToMoveTowardsPlayer(false);
+            
         }
 
         #region ClickInput
@@ -85,9 +97,6 @@ namespace Game.Core.Tutorial
 
         private IEnumerator StartOfTutorialState()
         {
-            hybridCamera.RegisterCameraToGoBackToPlayer(false);
-            hybridCamera.RegisterCameraToMoveTowardsPlayer(false);
-            hybridCamera.RegisterCameraToAdjustFraming(false);
             GameEvents.PlayerPause();
             cameraTarget.position = firstPositionOfCamera.position;
 
@@ -270,7 +279,11 @@ namespace Game.Core.Tutorial
 
         private IEnumerator ServantEnterState()
         {
-            GameEvents.SpawnPlatform(PlatformType.ServantRed);
+            PlatformEventSpawnData spawnData = new PlatformEventSpawnData
+            {
+                PlatformType = PlatformType.ServantRed
+            };
+            GameEvents.SpawnPlatform(spawnData);
             while (true)
             {
                 Debug.Log("Enter");
@@ -347,18 +360,13 @@ namespace Game.Core.Tutorial
         }
 
         #endregion
-
+        
+        
+        
         #region YarnTextState
 
         [TextArea(3, 10)] [SerializeField] private string yarnAddedText;
-        [TextArea(3, 10)] [SerializeField] private string queenText;
-        [TextArea(3, 10)] [SerializeField] private string finalText;
-        [TextArea(3, 10)] [SerializeField] private string greatJobText;
-
-
-        [SerializeField] private PlatformWaypointPoint waypointPointServantEnd;
-        [SerializeField] private PlatformWaypointPoint wayPointQueen;
-        [SerializeField] private GameObject mouseTutorial2;
+        
 
         private IEnumerator YarnTextState()
         {
@@ -371,7 +379,49 @@ namespace Game.Core.Tutorial
 
             InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed -= OnLeftClickPerformed;
             _leftClick = false;
-            tutorialTextRenderer.HideBlurAndText((() => GameEvents.SpawnPlatform(PlatformType.Queen)));
+
+            StartCoroutine(QueenState());
+        }
+        #endregion
+
+        #region TutorialResetState
+
+        [SerializeField] private GameObject servantRouteHead;
+        [SerializeField] private PlatformWaypointPoint wayPointServant2;
+        private IEnumerator TutorialResetState(Action<Action> onComplete)
+        {   
+            GameEvents.PlayerPause();
+            hybridCamera.AdjustTargetFraming();
+            var spawnData = new PlatformEventSpawnData
+            {
+                PlatformType = PlatformType.ServantRed,
+                PlatformRouteParent = servantRouteHead
+            };
+            GameEvents.MouseCatch(new Vector3(100,100,100)); // Easiest way to add 200 points.
+            GameEvents.ScoreCombinatorReady();
+            GameEvents.MouseCatch(new Vector3(100,100,100));
+            GameEvents.ScoreCombinatorReady();
+            GameEvents.SpawnPlatform(spawnData);
+            onComplete.Invoke(() => StartCoroutine(QueenState()));
+            yield break;
+        }
+        #endregion
+        #region QueenState
+        [TextArea(3, 10)] [SerializeField] private string queenText;
+        [TextArea(3, 10)] [SerializeField] private string finalText;
+        [TextArea(3, 10)] [SerializeField] private string greatJobText;
+
+
+        [SerializeField] private PlatformWaypointPoint waypointPointServantEnd;
+        [SerializeField] private PlatformWaypointPoint wayPointQueen;
+        [SerializeField] private GameObject mouseTutorial2;
+        private IEnumerator QueenState()
+        {
+            PlatformEventSpawnData queenData = new PlatformEventSpawnData
+            {
+                PlatformType = PlatformType.Queen
+            };
+            tutorialTextRenderer.HideBlurAndText((() => GameEvents.SpawnPlatform(queenData)));
             while (!wayPointQueen.pointOcuupied)
             {
                 yield return null;
@@ -396,6 +446,7 @@ namespace Game.Core.Tutorial
             _leftClick = false;
             tutorialTextRenderer.HideBlurAndText((() =>
             {
+                wayPointServant2.stopForever = false;
                 waypointPointServantEnd.stopForever = false;
                 var rat = Instantiate(mouseTutorial2, firstPositionOfCamera.position, Quaternion.identity);
                 rat.transform.position = startingMouseLocation.position;
@@ -406,11 +457,15 @@ namespace Game.Core.Tutorial
                 hybridCamera.RegisterCameraToGoBackToPlayer();
                 hybridCamera.RegisterCameraToMoveTowardsPlayer();
             }));
+            var spawnData = new PlatformEventSpawnData
+            {
+                PlatformType = PlatformType.ServantRed
+            };
             while (!_mouseCatch)
             {
-                GameEvents.SpawnPlatform(PlatformType.ServantRed);
+                GameEvents.SpawnPlatform(spawnData);
                 yield return new WaitForSeconds(1f);
-                GameEvents.SpawnPlatform(PlatformType.Queen);
+                GameEvents.SpawnPlatform(queenData);
             }
             _mouseCatch = false;
             GameEvents.PlayerPause();
@@ -425,8 +480,9 @@ namespace Game.Core.Tutorial
             }
             InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed -= OnLeftClickPerformed;
             _leftClick = false;
-            tutorialTextRenderer.HideBlurAndText(()=> GameManager.Instance.StartGameFromTutorial());
+            tutorialTextRenderer.HideBlurAndText(()=> GameManager.Instance.StartGame());
         }
+
         #endregion
     }
 }

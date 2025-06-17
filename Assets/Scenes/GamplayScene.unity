@@ -8759,6 +8759,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Art statue
       objectReference: {fileID: 0}
+    - target: {fileID: 3902175443741013777, guid: 66d21cab308b54075a9b1cc630768025, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8283684215601412183, guid: 66d21cab308b54075a9b1cc630768025, type: 3}
       propertyPath: m_SortingOrder
       value: 3

@@ -72,7 +72,6 @@ namespace Game.Core.Camera.Scripts
         {
             targetLogger?.Log("Target subscribed to player");
             GameEvents.OnGameStarted += EnableOnGameStart;
-            GameEvents.OnTutorialStarted += EnableOnGameStart;
         }
 
         private void EnableOnGameStart()
@@ -241,6 +240,7 @@ namespace Game.Core.Camera.Scripts
                 backgroundCollider2D.offset = colliderSizeOffsets[clampedPlatforms];
                 cinemachineConfiner.InvalidateBoundingShapeCache();
                 _clampedPlatform = clampedPlatforms;
+                if(tutorialModeTargetFrame != 0) MoveTowardsPlayer();
             }
         }
 
