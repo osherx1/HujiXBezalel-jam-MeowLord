@@ -97,6 +97,7 @@ namespace Game.Player.Scripts
             GameEvents.OnGameFinished += GameFinished;
             GameEvents.OnPlayerPause += ActivatePauseGame;
             GameEvents.OnPlayerResume += ActivateResumeGame;
+            GameEvents.OnUpdateScore += CheckYarn;
         }
 
         private void GameFinished()
@@ -110,7 +111,6 @@ namespace Game.Player.Scripts
         {
             _clickAction.performed += OnClick;
             GameEvents.OnPlayerFall += HandlePlayerFall;
-            GameEvents.OnUpdateScore += CheckYarn;
         }
         private void GameStarted(Action<Action> action)
         {
