@@ -46,6 +46,7 @@ namespace Game.Enemies.Scripts
         {
             GameEvents.OnMouseCatch += OnRatCaught;
             _isJustCreated = true;
+            _isDead = false;
         }
 
         private void OnDisable()
@@ -58,6 +59,7 @@ namespace Game.Enemies.Scripts
         void Start()
         {
             PickNewDirection();
+            _isDead = false;
         }
 
         // Update is called once per frame

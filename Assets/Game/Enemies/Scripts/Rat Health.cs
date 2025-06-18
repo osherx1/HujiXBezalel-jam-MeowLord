@@ -1,8 +1,7 @@
 using System.Collections;
 using Game.Core.Managers;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
-using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace Game.Enemies.Scripts
 {
@@ -19,16 +18,19 @@ namespace Game.Enemies.Scripts
         public GameObject score;
         [SerializeField] private GameObject scoreFlyObjectPrefab;
 
+        [SerializeField] private float flyToScoreSpeed = 1.5f;
+
 
         private void OnEnable()
         {
             ResetHealth();
             ResetAnimator();
+            visualTransform.localScale = new Vector3(1, 1, 1);
             
             if (visualTransform != null)
                 visualTransform.localScale = Vector3.one;
         }
-        
+
         private void ResetAnimator()
         {
             if (animator == null) return;
@@ -52,7 +54,6 @@ namespace Game.Enemies.Scripts
             }
         }
 
-        // ReSharper disable Unity.PerformanceAnalysis
         private void Die()
         {
             GameEvents.MouseCatch(transform.position); 
@@ -65,7 +66,6 @@ namespace Game.Enemies.Scripts
             if (score != null)
                 StartCoroutine(FlyToScoreTarget());
             StartCoroutine(DelayedReturn());
-            //StartCoroutine(DelayedReturn());
         }
         
         protected virtual IEnumerator DelayedReturn()
@@ -99,9 +99,10 @@ namespace Game.Enemies.Scripts
         
         private IEnumerator FlyToScoreTarget()
         {
+            yield return new WaitForSeconds(0.5f);
             // Spawn the flying object at the rat's position
             GameObject flyObj = Instantiate(scoreFlyObjectPrefab, transform.position, Quaternion.identity);
-            float duration = 0.5f;
+            float duration = flyToScoreSpeed;
             float elapsed = 0f;
 
             Vector3 start = flyObj.transform.position;
