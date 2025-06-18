@@ -20,6 +20,8 @@ namespace Game.Platforms.Scripts
         [SerializeField] private Animator animatorBackward;
         [SerializeField] private Transform spriteRootForward;
         [SerializeField] private Transform spriteRootBackward;
+        
+        private float _frozenOriginalSpeed = 0f;
 
         [Header("References for Layer Changing")]
         public SpriteRenderer forwardSpriteRenderer;
@@ -56,6 +58,7 @@ namespace Game.Platforms.Scripts
 
         private System.Action<MovingPlatform> _onFinish;
 
+        
         // ---------- INIT ----------
         public void Init(GameObject route, float speed, System.Action<MovingPlatform> onFinish)
         {
@@ -296,6 +299,7 @@ namespace Game.Platforms.Scripts
             spriteRootBackward.gameObject.SetActive(!isForward);
         }
 
+
         public void OnPlayerJumpedOnKingOrQueen()
         {
             PolygonCollider2D childCollider = null;
@@ -426,18 +430,24 @@ namespace Game.Platforms.Scripts
         public void SetFrozen(bool frozen)
         {
             isFrozen = frozen;
-            Debug.Log("Frozen state set to: " + frozen);
-
-            SetWalkingAnim(false);
+            Debug.Log("🧊 Frozen state set to: " + frozen);
 
             if (frozen)
             {
-                if (_isFacingForward)
-                    animatorForward?.Play("Idle", 0, 0);
-                else
-                    animatorBackward?.Play("Idle", 0, 0);
+                
+                foreach (var point in waypoints)
+                {
+                    point.stopAtPoint = true;
+                    point.stopDelay = 10f;
+                }
+
+                
+                _waiting = true;
+                _waitTimer = 10f;
             }
         }
+
+
 
         void OnEnable()
         {
@@ -457,7 +467,10 @@ namespace Game.Platforms.Scripts
         public void SetSkinActive(bool isActive)
         {
             string targetSkin = isActive ? "active" : "inactive";
-
+            if(platformType is PlatformType.King || platformType is PlatformType.Queen or PlatformType.ServantCart or PlatformType.ServantChef){
+                return;
+            }
+            // Added for now as they don't have this setups yet
             if (forwardSkeletonMecanim != null && forwardSkeletonMecanim.Skeleton != null)
             {
                 forwardSkeletonMecanim.Skeleton.SetSkin(targetSkin);

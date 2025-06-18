@@ -93,9 +93,11 @@ namespace Game.Player.Scripts
         {
             GameEvents.OnGameStarted += GameStarted;
             GameEvents.OnTutorialStarted += GameStarted;
+            GameEvents.OnTutorialReset += GameStarted;
             GameEvents.OnGameFinished += GameFinished;
             GameEvents.OnPlayerPause += ActivatePauseGame;
             GameEvents.OnPlayerResume += ActivateResumeGame;
+            GameEvents.OnUpdateScore += CheckYarn;
         }
 
         private void GameFinished()
@@ -106,6 +108,11 @@ namespace Game.Player.Scripts
         }
 
         private void GameStarted()
+        {
+            _clickAction.performed += OnClick;
+            GameEvents.OnPlayerFall += HandlePlayerFall;
+        }
+        private void GameStarted(Action<Action> action)
         {
             _clickAction.performed += OnClick;
             GameEvents.OnPlayerFall += HandlePlayerFall;
@@ -139,12 +146,14 @@ namespace Game.Player.Scripts
         {
             _clickAction.performed -= OnClick;
             GameEvents.OnPlayerFall -= HandlePlayerFall;
-            GameEvents.OnGamePause -= ActivatePauseGame;
-            GameEvents.OnGameResume -= ActivateResumeGame;
+            GameEvents.OnPlayerPause -= ActivatePauseGame;
+            GameEvents.OnPlayerResume -= ActivateResumeGame;
             GameEvents.OnUpdateScore -= CheckYarn;
             GameEvents.OnGameStarted -= GameStarted;
             GameEvents.OnGameFinished -= GameFinished;
             GameEvents.OnTutorialStarted -= GameStarted;
+            GameEvents.OnTutorialReset -= GameStarted;
+            
         }
 
         private void HandlePlayerFall()
@@ -503,6 +512,7 @@ namespace Game.Player.Scripts
 
         private void CheckForClosedPolygons()
         {
+            if (isMoving || _fall) return;
             var polygons = _playerRatDetector.CheckForClosedPolygons();
             if (polygons == null || polygons.Count == 0) return;
             int segRemoveTo = -1;
@@ -516,8 +526,7 @@ namespace Game.Player.Scripts
                     HandleGameLoss();
                     return;
                 }
-
-                if (isMoving || _fall) return;
+                
                 var enemies = _playerRatDetector.GetEnemiesInLoop(polygon.polygonPoints, enemyLayer);
                 if (enemies == null || !enemies.Any())
                     continue;

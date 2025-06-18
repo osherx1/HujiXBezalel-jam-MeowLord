@@ -17,7 +17,7 @@ namespace Game.Player.Scripts
 
         private List<GameObject> platformsInRange = new List<GameObject>();
         private List<GameObject> lightAreasInRange = new List<GameObject>();
-        private List<SkeletonMecanim> _skeletonMecanimsInRange = new List<SkeletonMecanim>();
+        private List<MovingPlatform> _movingPlatformsInRange = new List<MovingPlatform>();
 
         private Coroutine movingPlatformCoroutine;
         private MonoBehaviour coroutineRunner;
@@ -55,18 +55,18 @@ namespace Game.Player.Scripts
             // Build new sets for this frame
             var newPlatformsInRange = new HashSet<GameObject>();
             var newLightAreasInRange = new HashSet<GameObject>();
-            var newSkeletonsInRange = new HashSet<SkeletonMecanim>();
+            var newMovingPlatformsInRange = new HashSet<MovingPlatform>();
 
             if (playerPlatforms.Count > 1)
             {
                 var platGO = playerPlatforms[playerPlatforms.Count - 2].gameObject;
-                UpdatePlatformsAndLightsProcessing(platGO, newLightAreasInRange, newSkeletonsInRange,newPlatformsInRange);
+                UpdatePlatformsAndLightsProcessing(platGO, newLightAreasInRange, newMovingPlatformsInRange, newPlatformsInRange);
             }
             
             if (playerPlatforms.Count > 0)
             {
                 var platGO = playerPlatforms[playerPlatforms.Count - 1].gameObject;
-                UpdatePlatformsAndLightsProcessing(platGO, newLightAreasInRange, newSkeletonsInRange,newPlatformsInRange);
+                UpdatePlatformsAndLightsProcessing(platGO, newLightAreasInRange, newMovingPlatformsInRange, newPlatformsInRange);
             }
             
             foreach (var hit in hits)
@@ -76,54 +76,50 @@ namespace Game.Player.Scripts
                     var platGO = hit.gameObject;
                     var platGOTransform = EladsHelperFunctions.GetRootTransformPlatformHead(platGO.transform);
                     platGO = platGOTransform.gameObject;
-                    UpdatePlatformsAndLightsProcessing(platGO, newLightAreasInRange, newSkeletonsInRange,newPlatformsInRange);
+                    UpdatePlatformsAndLightsProcessing(platGO, newLightAreasInRange, newMovingPlatformsInRange, newPlatformsInRange);
                 }
             }
 
-            // Disable light areas and skeletons that are no longer in range
+            // Disable light areas and moving platforms that are no longer in range
             foreach (var light in lightAreasInRange)
             {
                 if (!newLightAreasInRange.Contains(light))
                     light.SetActive(false);
             }
 
-            foreach (var skeleton in _skeletonMecanimsInRange)
+            foreach (var movingPlatform in _movingPlatformsInRange)
             {
-                if (!newSkeletonsInRange.Contains(skeleton))
+                if (!newMovingPlatformsInRange.Contains(movingPlatform))
                 {
-                    skeleton.skeleton.SetSkin("inactive");
-                    skeleton.skeleton.SetSlotsToSetupPose();
-                    skeleton.skeleton.Update(0);
+                    movingPlatform.SetSkinActive(false);
                 }
             }
 
-            // Enable new light areas and skeletons
+            // Enable new light areas and moving platforms
             foreach (var light in newLightAreasInRange)
             {
                 if (!lightAreasInRange.Contains(light))
                     light.SetActive(true);
             }
 
-            foreach (var skeleton in newSkeletonsInRange)
+            foreach (var movingPlatform in newMovingPlatformsInRange)
             {
-                if (!_skeletonMecanimsInRange.Contains(skeleton) )
+                if (!_movingPlatformsInRange.Contains(movingPlatform))
                 {
-                    skeleton.skeleton.SetSkin("active");
-                    skeleton.skeleton.SetSlotsToSetupPose();
-                    skeleton.skeleton.Update(0);
+                    movingPlatform.SetSkinActive(true);
                 }
             }
 
             // Update the lists for next frame
             platformsInRange = new List<GameObject>(newPlatformsInRange);
             lightAreasInRange = new List<GameObject>(newLightAreasInRange);
-            _skeletonMecanimsInRange = new List<SkeletonMecanim>(newSkeletonsInRange);
+            _movingPlatformsInRange = new List<MovingPlatform>(newMovingPlatformsInRange);
             
         }
 
         private void UpdatePlatformsAndLightsProcessing(GameObject platGO,
             HashSet<GameObject> newLightAreasInRange,
-            HashSet<SkeletonMecanim> newSkeletonsInRange, HashSet<GameObject> newPlatformsInRange)
+            HashSet<MovingPlatform> newMovingPlatformsInRange, HashSet<GameObject> newPlatformsInRange)
         {
             newPlatformsInRange.Add(platGO);
             var platGoMoving = platGO.GetComponentInChildren<MovingPlatform>();
@@ -138,10 +134,10 @@ namespace Game.Player.Scripts
                     newLightAreasInRange.Add(descendant.gameObject);
                 }
 
-                var skeleton = descendant.GetComponent<SkeletonMecanim>();
-                if (skeleton != null)
+                var movingPlatform = descendant.GetComponent<MovingPlatform>();
+                if (movingPlatform != null)
                 {
-                    newSkeletonsInRange.Add(skeleton);
+                    newMovingPlatformsInRange.Add(movingPlatform);
                 }
             }
             

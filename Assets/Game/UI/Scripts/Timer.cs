@@ -16,6 +16,11 @@ namespace Game.UI.Scripts
         {
             GameEvents.OnGameStarted += Activate;
         }
+        
+        public void OnDisable()
+        {
+            GameEvents.OnGameStarted -= Activate;
+        }
 
         private void Activate()
         {

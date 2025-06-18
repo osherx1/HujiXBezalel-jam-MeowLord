@@ -1,3 +1,4 @@
+using System;
 using Game.Core.Managers;
 
 namespace Game.Core.Score
@@ -12,7 +13,15 @@ namespace Game.Core.Score
         {
             _score = 0;
             GameEvents.OnGameStarted += ResetScore;
+            GameEvents.OnTutorialStarted += ResetScore;
+            GameEvents.OnTutorialReset += ResetScore;
             ScoreCombinator = new GameplayScoreCombinator(this);
+        }
+
+        private void ResetScore(Action<Action> obj)
+        {
+            _score = 0;
+            GameEvents.UpdateScore(_score);
         }
 
         public void ResetScore()

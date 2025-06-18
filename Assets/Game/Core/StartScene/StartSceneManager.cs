@@ -62,12 +62,7 @@ namespace Game.Core.StartScene
             GameEvents.GameInitialization();
             if (startTutorial)
             {
-                SceneLoader.Instance.SetSkeletonSortingLayer("Curtain", () =>
-                    SceneLoader.Instance.TriggerClose(() =>
-                        SceneLoader.Instance.LoadSceneWithCallback(1, 
-                            () => SceneLoader.Instance.SetSkeletonSortingLayer("default", () =>
-                            SceneLoader.Instance.TriggerOpen(
-                                 GameEvents.TutorialStarted )))));
+                GameManager.Instance.StartGameFromTutorial();
             }
             else
             {

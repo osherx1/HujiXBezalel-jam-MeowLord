@@ -39,13 +39,27 @@ public class PlatformSpawner : MonoBehaviour
             {
                 // Randomly choose a type each time
                 int randomIndex = Random.Range(0, spawnTypes.Length);
-                SpawnPlatform(spawnTypes[randomIndex]);
+                pool.SpawnPlatform(spawnTypes[randomIndex]);
             }
         }
     }
 
-    private void SpawnPlatform(PlatformType spawnType)
+    private void SpawnPlatform(PlatformEventSpawnData obj)
     {
-        pool.SpawnPlatform(spawnType);
+        if (obj.PlatformRouteParent == null)
+        {
+            pool.SpawnPlatform(obj.PlatformType);
+        }
+        else
+        {
+            pool.SpawnPlatform(obj.PlatformType,obj.PlatformRouteParent);
+        }
     }
+}
+
+
+public struct PlatformEventSpawnData
+{
+    public PlatformType PlatformType;
+    public GameObject PlatformRouteParent;
 }

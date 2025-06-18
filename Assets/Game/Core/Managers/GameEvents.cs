@@ -136,9 +136,9 @@ namespace Game.Core.Managers
             OnPlayerResume?.Invoke();
         }
 
-        public static event Action<PlatformType> OnSpawnPlatform;
+        public static event Action<PlatformEventSpawnData> OnSpawnPlatform;
 
-        public static void SpawnPlatform(PlatformType obj)
+        public static void SpawnPlatform(PlatformEventSpawnData obj)
         {
             OnSpawnPlatform?.Invoke(obj);
         }
@@ -147,6 +147,12 @@ namespace Game.Core.Managers
         public static void TutorialStarted()
         {
             OnTutorialStarted?.Invoke();
+        }
+
+        public static event Action<Action<Action>> OnTutorialReset;
+        public static void TutorialReset(Action<Action> onComplete)
+        {
+            OnTutorialReset?.Invoke(onComplete);
         }
     }
 }

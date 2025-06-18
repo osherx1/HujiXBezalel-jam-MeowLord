@@ -151,8 +151,64 @@ namespace Game.Platforms.Scripts
             });
         }
 
-        
-        
+        public void SpawnPlatform(PlatformType type, GameObject route)
+        {
+            for (int i = 0; i < limitGroups.Count; i++)
+            {
+                if (limitGroups[i].types.Contains(type) && groupActiveCounts[i] >= limitGroups[i].maxActive)
+                {
+                    Debug.Log($"Spawn blocked: limit group {i} (types: {string.Join(",", limitGroups[i].types)}) reached {groupActiveCounts[i]}/{limitGroups[i].maxActive}");
+                    return;
+                }
+            }
+
+            if (!pools.ContainsKey(type))
+            {
+                Debug.LogError("No pool for type: " + type);
+                return;
+            }
+
+            if (route == null)
+            {
+                Debug.LogError("Route is null for type: " + type);
+                return;
+            }
+
+            if (activeRoutes.ContainsKey(route) && activeRoutes[route])
+            {
+                Debug.Log($"Route is already active for type: {type}");
+                return;
+            }
+
+            MovingPlatform platform;
+            if (pools[type].Count > 0)
+            {
+                platform = pools[type].Dequeue();
+            }
+            else
+            {
+                var prefab = platformPrefabs.Find(p => p.type == type).prefab;
+                platform = Instantiate(prefab, spawnPoint.position, Quaternion.identity, this.transform);
+                platform.platformType = type;
+            }
+
+            
+            platform.gameObject.SetActive(true);
+            platform.transform.position = spawnPoint.position;
+
+            for (int i = 0; i < limitGroups.Count; i++)
+            {
+                if (limitGroups[i].types.Contains(type))
+                    groupActiveCounts[i]++;
+            }
+
+            // Pass the chosen route and a callback that knows which route to release
+            platform.Init(route, platform.moveSpeed, (p) =>
+            {
+                ReturnToPool(p);
+                platform.PlatformReturn();
+            });
+        }
 
         private void ReturnToPool(MovingPlatform platform, GameObject route)
         {
@@ -180,7 +236,21 @@ namespace Game.Platforms.Scripts
                     groupActiveCounts[i]--;
             }
         }
-        
-        
+
+        public void ReturnToPool(MovingPlatform platform)
+        {
+            platform.transform.position = spawnPoint.position;
+            platform.gameObject.SetActive(false);
+            platform.EnableAllPolygonColliders();
+            pools[platform.platformType].Enqueue(platform);
+            var collider = platform.GetComponent<Collider2D>();
+            if (collider != null)
+                collider.enabled = true;
+            for (int i = 0; i < limitGroups.Count; i++)
+            {
+                if (limitGroups[i].types.Contains(platform.platformType))
+                    groupActiveCounts[i]--;
+            }
+        }
     }
 }
