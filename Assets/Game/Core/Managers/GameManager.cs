@@ -109,12 +109,12 @@ namespace Game.Core.Managers
             camera.tutorialModeTargetFrame = 6;
             camera.AdjustTargetFraming(() =>
                 SceneLoader.Instance.TriggerClose(() =>
+                    SceneLoader.Instance.SetSkeletonSortingLayer("Curtain",() =>
                     SceneLoader.Instance.LoadSceneWithCallback(3, () =>
                     {
-                        SceneLoader.Instance.SetSkeletonSortingLayer("Curtain");
                         GameEvents.EndSceneStarted();
                         SceneLoader.Instance.TriggerOut(() => SceneLoader.Instance.SetSkeletonSortingLayer("default"));
-                    })));
+                    }))));
         }
 
 
