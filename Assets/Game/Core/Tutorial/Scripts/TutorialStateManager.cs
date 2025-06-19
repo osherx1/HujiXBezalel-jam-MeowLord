@@ -83,6 +83,11 @@ namespace Game.Core.Tutorial.Scripts
         {
             _leftClick = true;
         }
+        
+        private void OnLeftClickPerformed()
+        {
+            _leftClick = true;
+        }
 
         private void OnRightClickPerformed(InputAction.CallbackContext obj)
         {
@@ -97,13 +102,13 @@ namespace Game.Core.Tutorial.Scripts
         {
             GameEvents.PlayerPause();
             cameraTarget.position = firstPositionOfCamera.position;
-
+            
             while (true)
             {
                 yield return null;
                 break;
             }
-
+            
             StartCoroutine(FirstMouseEnterState());
         }
 
@@ -144,7 +149,8 @@ namespace Game.Core.Tutorial.Scripts
             tutorialTextRenderer.ShowBlurAndImages(blurPanelFirstMouseTextState, textAndImagesFirstMouseTextState,
                 () =>
                 {
-                    InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed += OnLeftClickPerformed;
+                    GameEvents.PlayerResume();
+                    GameEvents.OnPlayerMoved += OnLeftClickPerformed;
                 });
 
             while (true)
@@ -152,11 +158,10 @@ namespace Game.Core.Tutorial.Scripts
                 yield return null;
                 if (_leftClick)
                 {
-                    GameEvents.PlayerResume();
                     tutorialTextRenderer.HideBlurAndImages(blurPanelFirstMouseTextState,
                         textAndImagesFirstMouseTextState);
                     _leftClick = false;
-                    InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed -= OnLeftClickPerformed;
+                    GameEvents.OnPlayerMoved -= OnLeftClickPerformed;
                     break;
                 }
             }

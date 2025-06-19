@@ -214,6 +214,7 @@ namespace Game.Player.Scripts
         {
             DOTween.Kill(transform); // Kill any previous tweens on this transform
             isMoving = true;
+            GameEvents.PlayerMoved();
             AudioManager.Instance.Play(AudioName.CatJump, transform.position);
             if (moveCoroutine != null) StopCoroutine(moveCoroutine);
             moveCoroutine = StartCoroutine(MoveToPlatformCoroutine(platform));
