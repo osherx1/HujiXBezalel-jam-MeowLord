@@ -1,24 +1,20 @@
 using UnityEngine;
-using TMPro;
 using UnityEngine.UI;
 using System.Collections;
 
 namespace Game.Core.Tutorial
 {
-    public class TutorialTextRenderer: MonoBehaviour
+    public class TutorialTextRenderer : MonoBehaviour
     {
-        [Header("Tutorial UI Elements")]
-        [SerializeField] private TMP_Text tutorialText;
-        [SerializeField] private GameObject textGameObject;
-        [SerializeField] private Image blurPanel;
-        [SerializeField, Range(0f, 1f)] private float blurAlpha = 0.7f;
-        [SerializeField] private float blurDuration = 0.5f;
-        [SerializeField] private float textFadeDuration = 0.5f;
+        [Header("Tutorial UI Settings")] [SerializeField]
+        private float blurDuration = 0.5f;
+
+        [SerializeField] private float imageFadeDuration = 0.5f;
 
         private Coroutine blurCoroutine;
-        private Coroutine textCoroutine;
+        private Coroutine imageCoroutine;
 
-        private void SetPanelAlpha(float alpha)
+        private void SetPanelAlpha(Image blurPanel, float alpha)
         {
             if (blurPanel != null)
             {
@@ -28,55 +24,56 @@ namespace Game.Core.Tutorial
             }
         }
 
-        public void ShowBlurAndText(string message)
+        private void SetImagesAlpha(Image[] images, float alpha)
         {
-            ShowBlurAndText(message, null, null);
+            if (images == null) return;
+            foreach (var img in images)
+            {
+                if (img == null) continue;
+                var c = img.color;
+                c.a = alpha;
+                img.color = c;
+            }
         }
 
-        public void ShowBlurAndText(string message, Vector3? worldPosition)
+        public void ShowBlurAndImages(Image blurPanel, Image[] imagesToShow)
         {
-            ShowBlurAndText(message, worldPosition, null);
+            ShowBlurAndImages(blurPanel, imagesToShow, null);
         }
 
-        public void ShowBlurAndText(string message, System.Action onComplete)
-        {
-            ShowBlurAndText(message, null, onComplete);
-        }
-        public void ShowBlurAndText(string message, Vector3? worldPosition, System.Action onComplete)
+        public void ShowBlurAndImages(Image blurPanel, Image[] imagesToShow, System.Action onComplete)
         {
             if (blurCoroutine != null) StopCoroutine(blurCoroutine);
-            if (textCoroutine != null) StopCoroutine(textCoroutine);
-            blurCoroutine = StartCoroutine(BlurInCoroutine(blurAlpha, blurDuration, () => {
-                if (worldPosition.HasValue)
+            if (imageCoroutine != null) StopCoroutine(imageCoroutine);
+            blurCoroutine = StartCoroutine(BlurInCoroutine(blurPanel, 1f, blurDuration,
+                () =>
                 {
-                    // Convert world position to screen position for UI
-                    Vector3 screenPos = UnityEngine.Camera.main.WorldToScreenPoint(worldPosition.Value);
-                    textGameObject.transform.position = screenPos;
-                }
-                textCoroutine = StartCoroutine(ShowTextCoroutine(message, textFadeDuration, onComplete));
-            }));
+                    imageCoroutine = StartCoroutine(ShowImagesCoroutine(imagesToShow, imageFadeDuration, onComplete));
+                }));
         }
 
-        public void HideBlurAndText()
+        public void HideBlurAndImages(Image blurPanel, Image[] imagesToHide)
         {
-            HideBlurAndText(null);
+            HideBlurAndImages(blurPanel, imagesToHide, null);
         }
 
-        public void HideBlurAndText(System.Action onComplete)
+        public void HideBlurAndImages(Image blurPanel, Image[] imagesToHide, System.Action onComplete)
         {
             if (blurCoroutine != null) StopCoroutine(blurCoroutine);
-            if (textCoroutine != null) StopCoroutine(textCoroutine);
-            StartCoroutine(BlurOutAndHideTextCoroutine(onComplete));
+            if (imageCoroutine != null) StopCoroutine(imageCoroutine);
+            StartCoroutine(BlurOutAndHideImagesCoroutine(blurPanel, imagesToHide, onComplete));
         }
 
-        public void TransitionText(string newMessage, System.Action onComplete = null)
+        public void TransitionImages(Image blurPanelToHide, Image[] imagesToHide, Image blurPanelToShow, Image[] imagesToShow, System.Action onComplete = null)
         {
-            if (textCoroutine != null) StopCoroutine(textCoroutine);
-            textCoroutine = StartCoroutine(TransitionTextCoroutine(newMessage, textFadeDuration, onComplete));
+            if (imageCoroutine != null) StopCoroutine(imageCoroutine);
+            imageCoroutine = StartCoroutine(TransitionImagesCoroutine(blurPanelToHide, imagesToHide, blurPanelToShow, imagesToShow, onComplete));
         }
 
-        private IEnumerator BlurInCoroutine(float targetAlpha, float duration, System.Action onComplete)
+        private IEnumerator BlurInCoroutine(Image blurPanel, float targetAlpha, float duration,
+            System.Action onComplete)
         {
+            if (blurPanel == null) yield break;
             blurPanel.gameObject.SetActive(true);
             float startAlpha = blurPanel.color.a;
             float t = 0f;
@@ -84,18 +81,22 @@ namespace Game.Core.Tutorial
             {
                 t += Time.deltaTime;
                 float lerpAlpha = Mathf.Lerp(startAlpha, targetAlpha, t / duration);
-                SetPanelAlpha(lerpAlpha);
+                SetPanelAlpha(blurPanel, lerpAlpha);
                 yield return null;
             }
-            SetPanelAlpha(targetAlpha);
+
+            SetPanelAlpha(blurPanel, targetAlpha);
             onComplete?.Invoke();
         }
 
-        private IEnumerator ShowTextCoroutine(string message, float duration, System.Action onComplete = null)
+        private IEnumerator ShowImagesCoroutine(Image[] images, float duration, System.Action onComplete = null)
         {
-            tutorialText.text = message;
-            textGameObject.SetActive(true);
-            Color c = tutorialText.color;
+            if (images == null) yield break;
+            foreach (var img in images)
+            {
+                if (img != null) img.gameObject.SetActive(true);
+            }
+
             float startAlpha = 0f;
             float targetAlpha = 1f;
             float t = 0f;
@@ -103,82 +104,66 @@ namespace Game.Core.Tutorial
             {
                 t += Time.deltaTime;
                 float lerpAlpha = Mathf.Lerp(startAlpha, targetAlpha, t / duration);
-                c.a = lerpAlpha;
-                tutorialText.color = c;
+                SetImagesAlpha(images, lerpAlpha);
                 yield return null;
             }
-            c.a = targetAlpha;
-            tutorialText.color = c;
+
+            SetImagesAlpha(images, targetAlpha);
             onComplete?.Invoke();
         }
 
-        private IEnumerator BlurOutAndHideTextCoroutine(System.Action onComplete = null)
+        private IEnumerator BlurOutAndHideImagesCoroutine(Image blurPanel, Image[] images,
+            System.Action onComplete = null)
         {
-            // Fade out text
-            Color c = tutorialText.color;
-            float startAlpha = c.a;
+            // Fade out images
+            float startAlpha = 1f;
             float t = 0f;
-            while (t < textFadeDuration)
+            while (t < imageFadeDuration)
             {
                 t += Time.deltaTime;
-                float lerpAlpha = Mathf.Lerp(startAlpha, 0f, t / textFadeDuration);
-                c.a = lerpAlpha;
-                tutorialText.color = c;
+                float lerpAlpha = Mathf.Lerp(startAlpha, 0f, t / imageFadeDuration);
+                SetImagesAlpha(images, lerpAlpha);
                 yield return null;
             }
-            c.a = 0f;
-            tutorialText.color = c;
-            textGameObject.SetActive(false);
+
+            SetImagesAlpha(images, 0f);
+            if (images != null)
+            {
+                foreach (var img in images)
+                {
+                    if (img != null) img.gameObject.SetActive(false);
+                }
+            }
 
             // Fade out blur
-            float panelStartAlpha = blurPanel.color.a;
-            t = 0f;
-            while (t < blurDuration)
+            if (blurPanel != null)
             {
-                t += Time.deltaTime;
-                float lerpAlpha = Mathf.Lerp(panelStartAlpha, 0f, t / blurDuration);
-                SetPanelAlpha(lerpAlpha);
-                yield return null;
+                float panelStartAlpha = blurPanel.color.a;
+                t = 0f;
+                while (t < blurDuration)
+                {
+                    t += Time.deltaTime;
+                    float lerpAlpha = Mathf.Lerp(panelStartAlpha, 0f, t / blurDuration);
+                    SetPanelAlpha(blurPanel, lerpAlpha);
+                    yield return null;
+                }
+
+                SetPanelAlpha(blurPanel, 0f);
+                blurPanel.gameObject.SetActive(false);
             }
-            SetPanelAlpha(0f);
-            blurPanel.gameObject.SetActive(false);
+
             onComplete?.Invoke();
         }
 
-        private IEnumerator TransitionTextCoroutine(string newMessage, float duration, System.Action onComplete = null)
+        private IEnumerator TransitionImagesCoroutine(Image blurPanelToHide, Image[] imagesToHide, Image blurPanelToShow, Image[] imagesToShow, System.Action onComplete)
         {
-            // Fade out current text
-            Color c = tutorialText.color;
-            float startAlpha = c.a;
-            float t = 0f;
-            while (t < duration)
+            // Hide current blur and images
+            yield return StartCoroutine(BlurOutAndHideImagesCoroutine(blurPanelToHide, imagesToHide));
+            // Show new blur and images
+            yield return StartCoroutine(BlurInCoroutine(blurPanelToShow, 1f, blurDuration, () =>
             {
-                t += Time.deltaTime;
-                float lerpAlpha = Mathf.Lerp(startAlpha, 0f, t / duration);
-                c.a = lerpAlpha;
-                tutorialText.color = c;
-                yield return null;
-            }
-            c.a = 0f;
-            tutorialText.color = c;
-
-            // Change text
-            tutorialText.text = newMessage;
-
-            // Fade in new text
-            t = 0f;
-            float targetAlpha = 1f;
-            while (t < duration)
-            {
-                t += Time.deltaTime;
-                float lerpAlpha = Mathf.Lerp(0f, targetAlpha, t / duration);
-                c.a = lerpAlpha;
-                tutorialText.color = c;
-                yield return null;
-            }
-            c.a = targetAlpha;
-            tutorialText.color = c;
-            onComplete?.Invoke();
+                imageCoroutine = StartCoroutine(ShowImagesCoroutine(imagesToShow, imageFadeDuration, onComplete));
+            }));
         }
     }
 }

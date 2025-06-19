@@ -161,7 +161,6 @@ namespace Game.Player.Scripts
             if (onMoveCompleteEvent != null) return;
             _fall = true;
             animator.SetTrigger(Fall);
-            AudioManager.Instance.Play(AudioName.CatBadJump, transform.position);
             GameEvents.PlayerFallPointsUpdate(transform.position);
             RemoveAllSegments();
             UnregisterAllVisitedPlatforms();

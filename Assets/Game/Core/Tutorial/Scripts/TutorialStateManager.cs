@@ -7,6 +7,8 @@ using Game.Enemies.Scripts;
 using Game.Platforms.Scripts;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace Game.Core.Tutorial.Scripts
 {
@@ -62,7 +64,6 @@ namespace Game.Core.Tutorial.Scripts
             StartCoroutine(TutorialResetState(obj));
         }
 
-        
 
         private void OnDisable()
         {
@@ -71,9 +72,6 @@ namespace Game.Core.Tutorial.Scripts
             GameEvents.OnMouseCatch -= MouseCatch;
             GameEvents.OnTutorialStarted -= StartTutorialStateOrder;
             GameEvents.OnTutorialReset -= TutorialResetStateInvoker;
-            hybridCamera.RegisterCameraToGoBackToPlayer(false);
-            hybridCamera.RegisterCameraToMoveTowardsPlayer(false);
-            
         }
 
         #region ClickInput
@@ -138,9 +136,12 @@ namespace Game.Core.Tutorial.Scripts
         [Header("FirstMouseTextState")] [TextArea(3, 10)] [SerializeField]
         private string firstMouseText;
 
+        [SerializeField] private Image blurPanelFirstMouseTextState;
+        [SerializeField] private Image[] textAndImagesFirstMouseTextState;
+
         private IEnumerator FirstMouseTextState(GameObject rat)
         {
-            tutorialTextRenderer.ShowBlurAndText(firstMouseText,
+            tutorialTextRenderer.ShowBlurAndImages(blurPanelFirstMouseTextState, textAndImagesFirstMouseTextState,
                 () =>
                 {
                     InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed += OnLeftClickPerformed;
@@ -152,7 +153,8 @@ namespace Game.Core.Tutorial.Scripts
                 if (_leftClick)
                 {
                     GameEvents.PlayerResume();
-                    tutorialTextRenderer.HideBlurAndText();
+                    tutorialTextRenderer.HideBlurAndImages(blurPanelFirstMouseTextState,
+                        textAndImagesFirstMouseTextState);
                     _leftClick = false;
                     InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed -= OnLeftClickPerformed;
                     break;
@@ -215,11 +217,14 @@ namespace Game.Core.Tutorial.Scripts
 
         [SerializeField] private float cameraWaitTime = 2f;
         [SerializeField] private float triggerDistanceCameraMove = 0.5f;
+        [SerializeField] private Image blurPanelCameraMoveTextState;
+        [SerializeField] private Image[] textAndImagesCameraMoveTextState;
 
         private IEnumerator CameraMoveTextState()
         {
             yield return new WaitForSeconds(cameraWaitTime);
-            tutorialTextRenderer.ShowBlurAndText(cameraMoveText, () => { hybridCamera.isCameraLocked = false; });
+            tutorialTextRenderer.ShowBlurAndImages(blurPanelCameraMoveTextState, textAndImagesCameraMoveTextState,
+                () => { hybridCamera.isCameraLocked = false; });
             var lastPosition = cameraTarget.transform.position;
             float totalMovement = 0f;
             while (true)
@@ -246,19 +251,24 @@ namespace Game.Core.Tutorial.Scripts
         [Header("PlayerRightClickTextState")] [TextArea(3, 10)] [SerializeField]
         private string rightClickText;
 
+        [SerializeField] private Image blurPanelPlayerRightClickTextState;
+        [SerializeField] private Image[] textAndPlayerRightClickTextState;
+
         private IEnumerator PlayerRightClickTextState()
         {
-            tutorialTextRenderer.TransitionText(rightClickText, () =>
-            {
-                InputSystemSingleton.Instance.InputSystem.PlayerControls.RightClick.performed += OnRightClickPerformed;
-                hybridCamera.RegisterCameraToGoBackToPlayer();
-            });
+            tutorialTextRenderer.TransitionImages(blurPanelCameraMoveTextState, textAndImagesCameraMoveTextState,
+                blurPanelPlayerRightClickTextState, textAndPlayerRightClickTextState, () =>
+                {
+                    InputSystemSingleton.Instance.InputSystem.PlayerControls.RightClick.performed +=
+                        OnRightClickPerformed;
+                    hybridCamera.RegisterCameraToGoBackToPlayer();
+                });
             while (true)
             {
                 if (_rightClick)
                 {
                     hybridCamera.RegisterCameraToGoBackToPlayer(false);
-                    tutorialTextRenderer.HideBlurAndText();
+                    tutorialTextRenderer.HideBlurAndImages(blurPanelPlayerRightClickTextState, textAndPlayerRightClickTextState);
                     InputSystemSingleton.Instance.InputSystem.PlayerControls.RightClick.performed -=
                         OnRightClickPerformed;
                     _rightClick = false;
@@ -305,11 +315,14 @@ namespace Game.Core.Tutorial.Scripts
         private string servantStopedMovingText;
 
         [TextArea(3, 10)] [SerializeField] private string yarnText;
-
+        [SerializeField] private Image blurPanelServantStopedMovingState;
+        [SerializeField] private Image[] textAndImagesServantStopedMovingState;
+        [SerializeField] private Image yarnblurPanelServantStopedMovingState;
+        [SerializeField] private Image[] yarnServantStopedMovingState;
         // ReSharper disable Unity.PerformanceAnalysis
         private IEnumerator ServantStopedMovingState()
         {
-            tutorialTextRenderer.ShowBlurAndText(servantStopedMovingText,
+            tutorialTextRenderer.ShowBlurAndImages(blurPanelServantStopedMovingState,textAndImagesServantStopedMovingState,
                 () => InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed += OnLeftClickPerformed);
             while (!_leftClick)
             {
@@ -318,7 +331,7 @@ namespace Game.Core.Tutorial.Scripts
 
             InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed -= OnLeftClickPerformed;
             _leftClick = false;
-            tutorialTextRenderer.TransitionText(yarnText,
+            tutorialTextRenderer.TransitionImages(blurPanelServantStopedMovingState,textAndImagesServantStopedMovingState,yarnblurPanelServantStopedMovingState,yarnServantStopedMovingState,
                 () => InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed += OnLeftClickPerformed);
             while (!_leftClick)
             {
@@ -328,7 +341,7 @@ namespace Game.Core.Tutorial.Scripts
             InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed -= OnLeftClickPerformed;
             _leftClick = false;
 
-            tutorialTextRenderer.HideBlurAndText((() =>
+            tutorialTextRenderer.HideBlurAndImages(yarnblurPanelServantStopedMovingState,yarnServantStopedMovingState,(() =>
             {
                 waypointPointServantEnter.stopForever = false;
                 var rat = Instantiate(mousePrefab, firstPositionOfCamera.position, Quaternion.identity);
@@ -360,17 +373,17 @@ namespace Game.Core.Tutorial.Scripts
         }
 
         #endregion
-        
-        
-        
+
+
         #region YarnTextState
 
         [TextArea(3, 10)] [SerializeField] private string yarnAddedText;
-        
+        [SerializeField] private Image blurPanelYarnTextState;
+        [SerializeField] private Image[] textAndImagesYarnTextState;
 
         private IEnumerator YarnTextState()
         {
-            tutorialTextRenderer.ShowBlurAndText(yarnAddedText,
+            tutorialTextRenderer.ShowBlurAndImages(blurPanelYarnTextState,textAndImagesYarnTextState,
                 () => InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed += OnLeftClickPerformed);
             while (!_leftClick)
             {
@@ -382,14 +395,16 @@ namespace Game.Core.Tutorial.Scripts
 
             StartCoroutine(QueenState());
         }
+
         #endregion
 
         #region TutorialResetState
 
         [SerializeField] private GameObject servantRouteHead;
         [SerializeField] private PlatformWaypointPoint wayPointServant2;
+
         private IEnumerator TutorialResetState(Action<Action> onComplete)
-        {   
+        {
             GameEvents.PlayerPause();
             hybridCamera.AdjustTargetFraming();
             var spawnData = new PlatformEventSpawnData
@@ -397,16 +412,19 @@ namespace Game.Core.Tutorial.Scripts
                 PlatformType = PlatformType.ServantRed,
                 PlatformRouteParent = servantRouteHead
             };
-            GameEvents.MouseCatch(new Vector3(100,100,100)); // Easiest way to add 200 points.
+            GameEvents.MouseCatch(new Vector3(100, 100, 100)); // Easiest way to add 200 points.
             GameEvents.ScoreCombinatorReady();
-            GameEvents.MouseCatch(new Vector3(100,100,100));
+            GameEvents.MouseCatch(new Vector3(100, 100, 100));
             GameEvents.ScoreCombinatorReady();
             GameEvents.SpawnPlatform(spawnData);
             onComplete.Invoke(() => StartCoroutine(QueenState()));
             yield break;
         }
+
         #endregion
+
         #region QueenState
+
         [TextArea(3, 10)] [SerializeField] private string queenText;
         [TextArea(3, 10)] [SerializeField] private string finalText;
         [TextArea(3, 10)] [SerializeField] private string greatJobText;
@@ -415,19 +433,31 @@ namespace Game.Core.Tutorial.Scripts
         [SerializeField] private PlatformWaypointPoint waypointPointServantEnd;
         [SerializeField] private PlatformWaypointPoint wayPointQueen;
         [SerializeField] private GameObject mouseTutorial2;
+
+
+        [SerializeField] private Image blurPanelQueenState;
+        [SerializeField] private Image[] textAndImagesQueenState;
+        
+        [SerializeField] private Image blurPanelFinalState;
+        [SerializeField] private Image[] textAndImagesFinalState;
+        
+        [SerializeField] private Image blurPanelGreatJobState;
+        [SerializeField] private Image[] textAndImagesGreatJobState;
+
+
         private IEnumerator QueenState()
         {
             PlatformEventSpawnData queenData = new PlatformEventSpawnData
             {
                 PlatformType = PlatformType.Queen
             };
-            tutorialTextRenderer.HideBlurAndText((() => GameEvents.SpawnPlatform(queenData)));
+            tutorialTextRenderer.HideBlurAndImages(blurPanelYarnTextState,textAndImagesYarnTextState,(() => GameEvents.SpawnPlatform(queenData)));
             while (!wayPointQueen.pointOcuupied)
             {
                 yield return null;
             }
 
-            tutorialTextRenderer.ShowBlurAndText(queenText,
+            tutorialTextRenderer.ShowBlurAndImages(blurPanelQueenState,textAndImagesQueenState,
                 () => InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed += OnLeftClickPerformed);
             while (!_leftClick)
             {
@@ -436,15 +466,16 @@ namespace Game.Core.Tutorial.Scripts
 
             InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed -= OnLeftClickPerformed;
             _leftClick = false;
-            tutorialTextRenderer.TransitionText(finalText,
+            tutorialTextRenderer.TransitionImages(blurPanelQueenState,textAndImagesQueenState,blurPanelFinalState,textAndImagesFinalState,
                 () => InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed += OnLeftClickPerformed);
             while (!_leftClick)
             {
                 yield return null;
             }
+
             InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed -= OnLeftClickPerformed;
             _leftClick = false;
-            tutorialTextRenderer.HideBlurAndText((() =>
+            tutorialTextRenderer.HideBlurAndImages(blurPanelFinalState,textAndImagesFinalState,(() =>
             {
                 wayPointServant2.stopForever = false;
                 waypointPointServantEnd.stopForever = false;
@@ -467,20 +498,22 @@ namespace Game.Core.Tutorial.Scripts
                 yield return new WaitForSeconds(1f);
                 GameEvents.SpawnPlatform(queenData);
             }
+
             _mouseCatch = false;
             GameEvents.PlayerPause();
             hybridCamera.RegisterCameraToGoBackToPlayer(false);
             hybridCamera.RegisterCameraToMoveTowardsPlayer(false);
             GameEvents.OnMouseCatch -= MouseCatch;
-            tutorialTextRenderer.ShowBlurAndText(greatJobText,
+            tutorialTextRenderer.ShowBlurAndImages(blurPanelGreatJobState,textAndImagesGreatJobState,
                 () => InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed += OnLeftClickPerformed);
             while (!_leftClick)
             {
                 yield return null;
             }
+
             InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed -= OnLeftClickPerformed;
             _leftClick = false;
-            tutorialTextRenderer.HideBlurAndText(()=> GameManager.Instance.StartGame());
+            tutorialTextRenderer.HideBlurAndImages(blurPanelGreatJobState,textAndImagesGreatJobState,() => GameManager.Instance.StartGame());
         }
 
         #endregion

@@ -73,6 +73,12 @@ namespace Game.Core.Camera.Scripts
             targetLogger?.Log("Target subscribed to player");
             GameEvents.OnGameStarted += EnableOnGameStart;
         }
+        void OnDisable()
+        {
+            RegisterCameraToGoBackToPlayer(false);
+            RegisterCameraToMoveTowardsPlayer(false);
+            RegisterCameraToAdjustFraming(false);
+        }
 
         private void EnableOnGameStart()
         {
@@ -117,12 +123,6 @@ namespace Game.Core.Camera.Scripts
             }
         }
 
-        void OnDisable()
-        {
-            RegisterCameraToGoBackToPlayer(false);
-            RegisterCameraToMoveTowardsPlayer(false);
-            RegisterCameraToAdjustFraming(false);
-        }
 
         private void OnRightClickPerformed(InputAction.CallbackContext obj)
         {

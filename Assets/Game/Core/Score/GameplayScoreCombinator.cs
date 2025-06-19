@@ -13,8 +13,8 @@ namespace Game.Core.Score
             PlayerFall,
             MouseCatch
         }
-        
-        public static event Action<Vector3,int> RenderPoints;
+
+        public static event Action<Vector3, int> RenderPoints;
 
         private readonly GameplayScore _gameplayScore;
         private readonly List<(EventType type, Vector3 position)> _eventsThisFrame = new();
@@ -26,7 +26,7 @@ namespace Game.Core.Score
             GameEvents.OnMouseCatch += OnMouseCatch;
             GameEvents.OnScoreCombinatorReady += UpdatePlayerScore;
         }
-        
+
 
         private void OnPlayerFall(Vector3 position)
         {
@@ -37,7 +37,7 @@ namespace Game.Core.Score
         {
             _eventsThisFrame.Add((EventType.MouseCatch, position));
         }
-        
+
 
         private void UpdatePlayerScore()
         {
@@ -70,6 +70,7 @@ namespace Game.Core.Score
                 if (evt.type == EventType.MouseCatch)
                     mousePositions.Add(evt.position);
             }
+
             int mouseCount = mousePositions.Count;
             if (mouseCount == 0) return;
 
@@ -80,6 +81,7 @@ namespace Game.Core.Score
             {
                 multiplier *= 1.5f; // Each additional mouse adds 50% on top of the last
             }
+
             float pointsPerMouse = basePoints * multiplier;
             int intPointsPerMouse = Mathf.RoundToInt(pointsPerMouse);
 
@@ -93,8 +95,5 @@ namespace Game.Core.Score
                 RenderPoints?.Invoke(pos, intPointsPerMouse);
             }
         }
-
-        // MonoBehaviour proxy for calling LateUpdate
-        
     }
-} 
+}
