@@ -75,6 +75,7 @@ namespace Game.Core.Tutorial
         {
             if (blurPanel == null) yield break;
             blurPanel.gameObject.SetActive(true);
+            SetPanelAlpha(blurPanel, 0F);
             float startAlpha = blurPanel.color.a;
             float t = 0f;
             while (t < duration)

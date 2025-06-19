@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using DG.Tweening;
 using Game.Core.Camera.Scripts;
 using Game.Core.Input;
 using Game.Core.Managers;
@@ -23,26 +24,7 @@ namespace Game.Core.Tutorial.Scripts
         [SerializeField] private TutorialTextRenderer tutorialTextRenderer;
         private bool _mouseCatch = false;
 
-
-        #region TutorialStateOrder
-
-        // 1. StartOfTutorial
-        // 2. FirstMouseEnter
-        // 3. FirstMouseText
-        // 4. FirstMouseCatch
-        // 5. CameraMoveToSecondPlacement
-        // 6. CameraMoveText
-        // 7. CameraMovedByPlayer
-        // 8. PlayerLeftClickText
-        // 9. PlayerLeftClicked
-        // 10. ServantKingAndQueenEnter
-        // 11. SecondMouseEnter
-        // 12. YarnText
-        // 13. WhileCatchingSecondMouse
-        // 14. SecondMosueCatch
-        // 15. FinalText
-
-        #endregion
+        
 
 
         private void StartTutorialStateOrder()
@@ -316,28 +298,60 @@ namespace Game.Core.Tutorial.Scripts
 
         #region ServantStopedMovingState
 
-        [Header("ServantStopedMovingState")] [TextArea(3, 10)] [SerializeField]
-        private string servantStopedMovingText;
-
-        [TextArea(3, 10)] [SerializeField] private string yarnText;
+        [SerializeField] private Collider2D[] platformToDisable;
+        [SerializeField] private GameObject[] platformToDisableLightAreas;
         [SerializeField] private Image blurPanelServantStopedMovingState;
         [SerializeField] private Image[] textAndImagesServantStopedMovingState;
         [SerializeField] private Image yarnblurPanelServantStopedMovingState;
         [SerializeField] private Image[] yarnServantStopedMovingState;
+        
         // ReSharper disable Unity.PerformanceAnalysis
         private IEnumerator ServantStopedMovingState()
         {
             tutorialTextRenderer.ShowBlurAndImages(blurPanelServantStopedMovingState,textAndImagesServantStopedMovingState,
-                () => InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed += OnLeftClickPerformed);
+                () =>
+                {
+                    GameEvents.PlayerResume();
+                    foreach (var col in platformToDisable)
+                    {
+                        col.enabled = false;
+                    }
+
+                    DOVirtual.DelayedCall(0.1f, () =>
+                    {
+                        foreach (var plat in platformToDisableLightAreas)
+                        {
+                            plat.SetActive(true);
+                        }
+                    });
+                    
+                    GameEvents.OnPlayerMoved += OnLeftClickPerformed;
+                });
             while (!_leftClick)
             {
                 yield return null;
             }
-
-            InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed -= OnLeftClickPerformed;
+            
+            GameEvents.OnPlayerMoved -= OnLeftClickPerformed;
             _leftClick = false;
+            GameEvents.OnPlayerLanded += OnLeftClickPerformed;
+            while (!_leftClick)
+            {
+                yield return null;
+            }
+            _leftClick = false;
+            GameEvents.OnPlayerLanded -= OnLeftClickPerformed;
+            GameEvents.PlayerPause();
             tutorialTextRenderer.TransitionImages(blurPanelServantStopedMovingState,textAndImagesServantStopedMovingState,yarnblurPanelServantStopedMovingState,yarnServantStopedMovingState,
-                () => InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed += OnLeftClickPerformed);
+                () =>
+                {
+                    InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed += OnLeftClickPerformed;
+                    foreach (var col in platformToDisable)
+                    {
+                        col.enabled = true;
+                    }
+                });
+            
             while (!_leftClick)
             {
                 yield return null;
@@ -345,9 +359,10 @@ namespace Game.Core.Tutorial.Scripts
 
             InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed -= OnLeftClickPerformed;
             _leftClick = false;
-
+            
             tutorialTextRenderer.HideBlurAndImages(yarnblurPanelServantStopedMovingState,yarnServantStopedMovingState,(() =>
             {
+                
                 waypointPointServantEnter.stopForever = false;
                 var rat = Instantiate(mousePrefab, firstPositionOfCamera.position, Quaternion.identity);
                 rat.transform.position = startingMouseLocation.position;

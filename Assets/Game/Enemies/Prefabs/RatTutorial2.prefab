@@ -111,8 +111,6 @@ MonoBehaviour:
   wallLayer:
     serializedVersion: 2
     m_Bits: 8
-  leftMovement: 45
-  rightMovement: 135
   visualTransform: {fileID: 4403993085036343574}
   frontSkeleton: {fileID: 2673754158456206790}
   backSkeleton: {fileID: 4346376675703900344}
@@ -134,7 +132,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 1
   animator: {fileID: 863507590429610504}
-  visualTransform: {fileID: 363345502158777736}
+  visualTransform: {fileID: 4403993085036343574}
+  score: {fileID: 0}
+  scoreFlyObjectPrefab: {fileID: 0}
+  flyToScoreSpeed: 1.5
 --- !u!70 &28706090543579344
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

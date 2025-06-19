@@ -219,12 +219,10 @@ namespace Game.Player.Scripts
             if (moveCoroutine != null) StopCoroutine(moveCoroutine);
             moveCoroutine = StartCoroutine(MoveToPlatformCoroutine(platform));
             playerLogger?.Log("Player Activated event PlayerMoved");
-            GameEvents.PlayerMoved();
         }
 
         private IEnumerator MoveToPlatformCoroutine(Transform platform)
         {
-            isMoving = true;
             while (Vector3.Distance(transform.position, platform.position) > 0.05f)
             {
                 while (_pausedGame)
