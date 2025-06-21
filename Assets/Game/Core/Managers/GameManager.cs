@@ -52,6 +52,7 @@ namespace Game.Core.Managers
 
         private void OnTutorialReset()
         {
+            GameEvents.OnGameFinished -= OnTutorialReset;
             SceneLoader.Instance.TriggerClose(() =>
                 SceneLoader.Instance.LoadSceneWithCallback(1, () =>
                     GameEvents.TutorialReset((Action action) =>
@@ -70,6 +71,7 @@ namespace Game.Core.Managers
         {
             GameEvents.OnGameInitialization -= InitializeRelevantObjects;
             GameEvents.OnGameFinished -= OnGameFinished;
+            GameEvents.OnTutorialStarted -= TutorialStarted;
         }
 
         private void InitializeRelevantObjects()
@@ -103,6 +105,7 @@ namespace Game.Core.Managers
 
         private void OnGameFinished()
         {
+            GameEvents.OnGameFinished -= OnGameFinished;
             float finishedTime = Time.time - _timeStarted;
             _highScoreManager.TryAddHighScore(_gameplayScore.Score, CurrentNickname, finishedTime);
             var camera = GameObject.FindFirstObjectByType<HybridCameraFollow>();

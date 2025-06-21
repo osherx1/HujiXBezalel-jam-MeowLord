@@ -305,7 +305,6 @@ namespace Game.Core.Tutorial.Scripts
         [SerializeField] private Image yarnblurPanelServantStopedMovingState;
         [SerializeField] private Image[] yarnServantStopedMovingState;
         
-        // ReSharper disable Unity.PerformanceAnalysis
         private IEnumerator ServantStopedMovingState()
         {
             tutorialTextRenderer.ShowBlurAndImages(blurPanelServantStopedMovingState,textAndImagesServantStopedMovingState,

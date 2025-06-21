@@ -67,6 +67,7 @@ namespace Game.Player.Scripts
 
         [SerializeField] private int[] yarnThresholds = { 200, 1000, 2500, 10000 };
         private int _yarnThresholdIndex = 0;
+        private bool _gameEnded = false;
 
         void Awake()
         {
@@ -294,7 +295,7 @@ namespace Game.Player.Scripts
 
         private void OnClick(InputAction.CallbackContext ctx)
         {
-            if (isMoving || _fall || _pausedGame) return;
+            if (isMoving || _fall || _pausedGame || _gameEnded) return;
             Vector2 screenPos = Mouse.current.position.ReadValue();
             Vector3 worldPos = _mainCam.ScreenToWorldPoint(screenPos);
             var hit = Physics2D.Raycast(worldPos, Vector2.zero, 0f, clickableLayer);
@@ -372,12 +373,16 @@ namespace Game.Player.Scripts
                 _visited.RemoveRange(idx + 1, _visited.Count - idx - 1);
                 onMoveCompleteEvent = () =>
                 {
+                    
                     if (_playerRatDetector.HasKingOrQueenInLoopPolygon(loopPlatforms, playerStats.platformLayer))
                     {
                         HandleGameLoss();
                         return;
                     }
-                    
+                    for (int i = _segments.Count - 1; i >= idx; i--)
+                    {
+                        RemoveSegment(i);
+                    }
                     AudioManager.Instance.Play(AudioName.CatLand, transform.position);
                     if (_playerRatDetector.DestroyEnemiesInLoop(loopPlatforms, enemyLayer))
                     {
@@ -386,10 +391,6 @@ namespace Game.Player.Scripts
                     else
                     {
                         DOVirtual.DelayedCall(playerLandedTimer, () => GameEvents.PlayerLanded());
-                    }
-                    for (int i = _segments.Count - 1; i >= idx; i--)
-                    {
-                        RemoveSegment(i);
                     }
                 };
                 RegisterToPlatform(newPlatScript, _lastMovingPlatform);
@@ -503,14 +504,14 @@ namespace Game.Player.Scripts
 
         private void Update()
         {
-            if (_pausedGame) return;
+            if (_pausedGame || _gameEnded) return;
             CheckForClosedPolygons();
             CheckIfMouseOnPlatform();
         }
 
         private void CheckForClosedPolygons()
         {
-            if (isMoving || _fall) return;
+            if (isMoving || _fall ) return;
             var polygons = _playerRatDetector.CheckForClosedPolygons();
             if (polygons == null || polygons.Count == 0) return;
             int segRemoveTo = -1;
@@ -542,6 +543,7 @@ namespace Game.Player.Scripts
 
         private void HandleGameLoss()
         {
+            _gameEnded = true;
             AudioManager.Instance.Play(AudioName.CatBadJump, transform.position);
             GameEvents.GameFinished();
         }

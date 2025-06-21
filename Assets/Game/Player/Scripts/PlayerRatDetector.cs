@@ -56,6 +56,11 @@ namespace Game.Player.Scripts
                         _intersectionPoints.Add(intersectionGO);
                         // Build the polygon: from i+1 to j, plus the intersection points at start and end
                         var polygonPoints = new List<Transform>();
+                        // in case of _visited change while function run
+                        if (_visited.Count < i + 2)
+                        {
+                            return new List<Polygon>();
+                        }
                         polygonPoints.Add(_visited[i + 1]); // Start after segA
                         for (int k = i + 2; k <= j; k++)
                         {
