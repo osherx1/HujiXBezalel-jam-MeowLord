@@ -41,6 +41,10 @@ namespace Game.Core.Camera.Scripts
         [SerializeField] private Vector2[] colliderSizeOffsets; 
         [SerializeField] private CinemachineConfiner2D cinemachineConfiner;
 
+        [Header("Boundary Behavior")]
+        [SerializeField] [Range(0, 0.5f)] private float softEdgeFactor = 0.2f;
+        [SerializeField] [Range(0, 1f)] private float minSpeedAtEdge = 0.1f;
+        
         [Header("UI Exclusion Zone")]
         [SerializeField] private Rect uiExclusionZone = new Rect(20, 20, 180, 60); // Default values, adjust in Inspector
         
@@ -150,44 +154,69 @@ namespace Game.Core.Camera.Scripts
 
             float moveX = UnityEngine.Input.GetAxisRaw("Horizontal");
             float moveY = UnityEngine.Input.GetAxisRaw("Vertical");
-            Vector3 move = new Vector3(moveX, moveY, 0).normalized;
-            if (move.sqrMagnitude > 0)
+            Vector3 moveDirection = new Vector3(moveX, moveY, 0).normalized;
+
+            if (moveDirection.sqrMagnitude > 0)
             {
+                float dynamicPanSpeed = GetDynamicPanSpeed(moveDirection);
+                targetLogger?.Log($"Dynamic Pan Speed: {dynamicPanSpeed}");
                 cameraMoveTween?.Kill();
-                transform.position += move * (panSpeed * Time.deltaTime);
+                transform.position += moveDirection * (dynamicPanSpeed * Time.deltaTime);
+            }
+        }
+        
+        private float GetDynamicPanSpeed(Vector3 moveDirection)
+        {
+            if (!_cam) return panSpeed; // Safety check
+
+            Bounds confinerBounds = backgroundCollider2D.bounds;
+            if (confinerBounds.size == Vector3.zero) return panSpeed;
+
+            Vector3 cameraPosition = _cam.transform.position;
+            
+            float softZoneWidth = confinerBounds.size.x * softEdgeFactor;
+            float softZoneHeight = confinerBounds.size.y * softEdgeFactor;
+
+            float horizontalMultiplier = 1f;
+            float verticalMultiplier = 1f;
+
+            // Check horizontal movement
+            if (moveDirection.x > 0 && softZoneWidth > 0) // Moving right
+            {
+                float distToRightEdge = confinerBounds.max.x - cameraPosition.x;
+                if (distToRightEdge < softZoneWidth)
+                {
+                    horizontalMultiplier = Mathf.SmoothStep(minSpeedAtEdge, 1f, distToRightEdge / softZoneWidth);
+                }
+            }
+            else if (moveDirection.x < 0 && softZoneWidth > 0) // Moving left
+            {
+                float distToLeftEdge = cameraPosition.x - confinerBounds.min.x;
+                if (distToLeftEdge < softZoneWidth)
+                {
+                    horizontalMultiplier = Mathf.SmoothStep(minSpeedAtEdge, 1f, distToLeftEdge / softZoneWidth);
+                }
+            }
+
+            // Check vertical movement
+            if (moveDirection.y > 0 && softZoneHeight > 0) // Moving up
+            {
+                float distToTopEdge = confinerBounds.max.y - cameraPosition.y;
+                if (distToTopEdge < softZoneHeight)
+                {
+                    verticalMultiplier = Mathf.SmoothStep(minSpeedAtEdge, 1f, distToTopEdge / softZoneHeight);
+                }
+            }
+            else if (moveDirection.y < 0 && softZoneHeight > 0) // Moving down
+            {
+                float distToBottomEdge = cameraPosition.y - confinerBounds.min.y;
+                if (distToBottomEdge < softZoneHeight)
+                {
+                    verticalMultiplier = Mathf.SmoothStep(minSpeedAtEdge, 1f, distToBottomEdge / softZoneHeight);
+                }
             }
             
-            // Vector3 mousePos = UnityEngine.Input.mousePosition;
-            // Rect dontMoveRect = EladsHelperFunctions.GetCenteredRect(dontMoveZoneWidthPercent, dontMoveZoneHeightPercent);
-            //
-            // // Check if mouse is inside the UI exclusion zone (screen coordinates)
-            // if (uiExclusionZone.Contains(new Vector2(mousePos.x, Screen.height - mousePos.y))) // Y flip for screen coords
-            // {
-            //     _didEdgePan = false;
-            //     edgePanning = false;
-            //     return;
-            // }
-            //
-            // // Calculate camera's current position before moving the target
-            // _camPosBefore = UnityEngine.Camera.main.transform.position;
-            // 
-            // _didEdgePan = false;
-            //
-            // // --- EDGE PAN LOGIC ---
-            // if (!dontMoveRect.Contains(mousePos))
-            // {
-            //     // Try to pan the camera target
-            //     cameraMoveTween?.Kill();
-            //     Vector2 direction = ((Vector2)mousePos - dontMoveRect.center).normalized;
-            //     transform.position += new Vector3(direction.x, direction.y, 0) * (panSpeed * Time.deltaTime);
-            //   
-            // }
-            // else
-            // {
-            //     _didEdgePan = false;
-            //     edgePanning = false;
-            // }
-            
+            return panSpeed * Mathf.Min(horizontalMultiplier, verticalMultiplier);
         }
 
         
