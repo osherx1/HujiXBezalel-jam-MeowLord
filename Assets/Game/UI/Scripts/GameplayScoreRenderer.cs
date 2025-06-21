@@ -13,6 +13,7 @@ namespace Game.UI.Scripts
         [SerializeField] private GameObject yarn;
 
         private GameplayScore _gameplayScore;
+        private Coroutine courtine;
 
         private void Start()
         {
@@ -26,17 +27,17 @@ namespace Game.UI.Scripts
 
         private void DisplayYarn()
         {
-            if(yarn == null) return;
-            StartCoroutine(DisplayYarnCourtine());
+            if(yarn == null || courtine != null) return;
+            courtine = StartCoroutine(DisplayYarnCourtine());
         }
 
         private IEnumerator DisplayYarnCourtine()
         {
             yarn.SetActive(true);
-            yield return transform.DOPunchScale(Vector3.one * 0.5f, 0.5f);
+            yield return yarn.transform.DOPunchScale(Vector3.one * 0.5f, 0.5f);
             yield return new WaitForSeconds(2f);
             yarn.SetActive(false);
-            
+            courtine = null;
         }
 
         private void OnDestroy()

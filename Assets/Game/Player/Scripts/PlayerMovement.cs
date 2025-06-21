@@ -131,6 +131,7 @@ namespace Game.Player.Scripts
                 GameEvents.NumberOfSegmentsChanged(leftSegments);
                 _yarnThresholdIndex++;
                 GameEvents.YarnAdded();
+                CheckYarn(score);
             }
         }
 
