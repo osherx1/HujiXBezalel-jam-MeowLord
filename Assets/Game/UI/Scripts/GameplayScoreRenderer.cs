@@ -34,6 +34,11 @@ namespace Game.UI.Scripts
         private IEnumerator DisplayYarnCourtine()
         {
             yarn.SetActive(true);
+            
+            // Make the score text blink. 
+            // The tween has an even number of loops, so it will end at the original alpha.
+            scoreText.DOFade(0.2f, 0.25f).SetLoops(8, LoopType.Yoyo);
+            
             yield return yarn.transform.DOPunchScale(Vector3.one * 0.5f, 0.5f);
             yield return new WaitForSeconds(2f);
             yarn.SetActive(false);
@@ -43,6 +48,7 @@ namespace Game.UI.Scripts
         private void OnDestroy()
         {
             GameEvents.OnUpdateScore -= UpdateScoreDisplay;
+            GameEvents.OnYarnAdded -= DisplayYarn;
         }
 
         private void UpdateScoreDisplay(int score)
