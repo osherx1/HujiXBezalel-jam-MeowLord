@@ -16,7 +16,7 @@ namespace Game.UI.Scripts
 
         private void Start()
         {
-            yarn.SetActive(false);
+            if(yarn != null) yarn.SetActive(false);
             // Subscribe to global score update event
             GameEvents.OnUpdateScore += UpdateScoreDisplay;
             GameEvents.OnYarnAdded += DisplayYarn;

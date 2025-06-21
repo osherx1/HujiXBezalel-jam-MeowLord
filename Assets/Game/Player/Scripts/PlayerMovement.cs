@@ -84,7 +84,7 @@ namespace Game.Player.Scripts
             // Register and snap onto it if found
             onMoveCompleteEvent = GameEvents.PlayerLanded;
             RegisterToPlatform(sensor, movingPlatform);
-            MovePlayerToPlatform(nearest);
+            MovePlayerToPlatform(nearest, false);
             _mainCam = Camera.main;
             GameEvents.NumberOfSegmentsChanged(leftSegments);
             // Find the nearest platform and its sensor
@@ -194,7 +194,7 @@ namespace Game.Player.Scripts
                 _lastMovingPlatform.hasPlayerOnTop = true;
         }
 
-        private void MovePlayerToPlatform(Transform platform, bool withDelay = true)
+        private void MovePlayerToPlatform(Transform platform, bool withSound = true)
         {
             if (platform == null) return;
             _lastPlat = platform;
@@ -209,15 +209,15 @@ namespace Game.Player.Scripts
                 playerLogger.Log($"Player {_visited.Count} moving to {platform.name}");
             }
             RotatePlayerTowards(platform);
-            AnimateAndMoveToPlatform(platform);
+            AnimateAndMoveToPlatform(platform,withSound);
         }
 
-        private void AnimateAndMoveToPlatform(Transform platform)
+        private void AnimateAndMoveToPlatform(Transform platform, bool withSound)
         {
             DOTween.Kill(transform); // Kill any previous tweens on this transform
             isMoving = true;
             GameEvents.PlayerMoved();
-            AudioManager.Instance.Play(AudioName.CatJump, transform.position);
+            if (withSound) AudioManager.Instance.Play(AudioName.CatJump, transform.position);
             if (moveCoroutine != null) StopCoroutine(moveCoroutine);
             moveCoroutine = StartCoroutine(MoveToPlatformCoroutine(platform));
             playerLogger?.Log("Player Activated event PlayerMoved");
