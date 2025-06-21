@@ -65,7 +65,7 @@ namespace Game.Player.Scripts
         private MovingPlatform _lastMovingPlatform;
         private bool _pausedGame = false;
 
-        [SerializeField] private int[] yarnThresholds = { 200, 1000, 2500, 10000 };
+        [SerializeField] private int[] yarnThresholds = { 200, 2000, 20000 };
         private int _yarnThresholdIndex = 0;
         private bool _gameEnded = false;
 
@@ -130,6 +130,7 @@ namespace Game.Player.Scripts
                 leftSegments = maxSegments - _segments.Count;
                 GameEvents.NumberOfSegmentsChanged(leftSegments);
                 _yarnThresholdIndex++;
+                GameEvents.YarnAdded();
             }
         }
 

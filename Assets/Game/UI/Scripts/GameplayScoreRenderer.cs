@@ -1,3 +1,5 @@
+using System.Collections;
+using DG.Tweening;
 using Game.Core.Managers;
 using Game.Core.Score;
 using TMPro;
@@ -7,24 +9,34 @@ namespace Game.UI.Scripts
 {
     public class GameplayScoreRenderer : MonoBehaviour
     {
-        [Header("TextMeshPro References")]
         [SerializeField] private TextMeshProUGUI scoreText;
-        [SerializeField] private TextMeshProUGUI nicknameText;
+        [SerializeField] private GameObject yarn;
 
         private GameplayScore _gameplayScore;
 
         private void Start()
         {
-            // Get nickname from GameManager
-            string currentNickname = GameManager.Instance.CurrentNickname;
-            if (nicknameText != null)
-                nicknameText.text = currentNickname;
-
+            yarn.SetActive(false);
             // Subscribe to global score update event
             GameEvents.OnUpdateScore += UpdateScoreDisplay;
-
+            GameEvents.OnYarnAdded += DisplayYarn;
             // Set initial value
             UpdateScoreDisplay(0);
+        }
+
+        private void DisplayYarn()
+        {
+            if(yarn == null) return;
+            StartCoroutine(DisplayYarnCourtine());
+        }
+
+        private IEnumerator DisplayYarnCourtine()
+        {
+            yarn.SetActive(true);
+            yield return transform.DOPunchScale(Vector3.one * 0.5f, 0.5f);
+            yield return new WaitForSeconds(2f);
+            yarn.SetActive(false);
+            
         }
 
         private void OnDestroy()

@@ -6549,6 +6549,11 @@ MonoBehaviour:
   stopDelay: 3
   stopForever: 0
   pointOcuupied: 0
+--- !u!1 &1789994736 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3174508141436816704, guid: ee75d052543f0462fa2cdba454e07088, type: 3}
+  m_PrefabInstance: {fileID: 6576969382845044871}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1808662613
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10318,6 +10323,10 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.8867924
       objectReference: {fileID: 0}
+    - target: {fileID: 5728024842521084380, guid: ee75d052543f0462fa2cdba454e07088, type: 3}
+      propertyPath: yarn
+      value: 
+      objectReference: {fileID: 1789994736}
     - target: {fileID: 7555363310737388798, guid: ee75d052543f0462fa2cdba454e07088, type: 3}
       propertyPath: m_SizeDelta.x
       value: 152.6
