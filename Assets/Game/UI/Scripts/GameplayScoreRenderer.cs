@@ -4,20 +4,24 @@ using Game.Core.Managers;
 using Game.Core.Score;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Game.UI.Scripts
 {
     public class GameplayScoreRenderer : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI scoreText;
+        [SerializeField] private TextMeshProUGUI yarnText;
         [SerializeField] private GameObject yarn;
+        [SerializeField] private Image[] yarnImages;
+        [SerializeField] private Color blinkColor = Color.yellow;
 
         private GameplayScore _gameplayScore;
         private Coroutine courtine;
 
         private void Start()
         {
-            if(yarn != null) yarn.SetActive(false);
+            if (yarn != null) yarn.SetActive(false);
             // Subscribe to global score update event
             GameEvents.OnUpdateScore += UpdateScoreDisplay;
             GameEvents.OnYarnAdded += DisplayYarn;
@@ -27,21 +31,37 @@ namespace Game.UI.Scripts
 
         private void DisplayYarn()
         {
-            if(yarn == null || courtine != null) return;
+            if (courtine != null) return;
             courtine = StartCoroutine(DisplayYarnCourtine());
         }
 
         private IEnumerator DisplayYarnCourtine()
         {
-            yarn.SetActive(true);
+            if(yarn != null) yarn.SetActive(true);
+
+            if (yarnText != null)
+            {
+                // var originalColor = yarnText.color;
+                // yarnText.color = blinkColor;
+                // yarnText.DOFade(0.2f, 0.25f).SetLoops(8, LoopType.Yoyo).OnComplete(() =>
+                // {
+                //     yarnText.color = originalColor;
+                // });
+                yarnText.DOColor(blinkColor, 0.25f).SetLoops(8, LoopType.Yoyo);
+                
+            }
+            if (yarnImages != null)
+            {
+                foreach (var yarnImage in yarnImages)
+                {
+                    // yarnImage.DOFade(0.2f, 0.25f).SetLoops(8, LoopType.Yoyo);
+                    yarnImage.DOColor(blinkColor, 0.25f).SetLoops(8, LoopType.Yoyo);
+                }
+            }
             
-            // Make the score text blink. 
-            // The tween has an even number of loops, so it will end at the original alpha.
-            scoreText.DOFade(0.2f, 0.25f).SetLoops(8, LoopType.Yoyo);
-            
-            yield return yarn.transform.DOPunchScale(Vector3.one * 0.5f, 0.5f);
+            if(yarn != null) yield return yarn.transform.DOPunchScale(Vector3.one * 0.5f, 0.5f);
             yield return new WaitForSeconds(2f);
-            yarn.SetActive(false);
+            if(yarn != null) yarn.SetActive(false);
             courtine = null;
         }
 
@@ -53,8 +73,21 @@ namespace Game.UI.Scripts
 
         private void UpdateScoreDisplay(int score)
         {
+            int.TryParse(scoreText.text, out int currentScore);
+
             if (scoreText != null)
                 scoreText.text = $"{score}";
+            
+            if (score > currentScore)
+            {
+                // var originalColor = scoreText.color;
+                // scoreText.color = blinkColor;
+                // scoreText.DOFade(0.2f, 0.25f).SetLoops(8, LoopType.Yoyo).OnComplete(() =>
+                // {
+                //     scoreText.color = originalColor;
+                // });
+                scoreText.DOColor(blinkColor, 0.25f).SetLoops(8, LoopType.Yoyo);
+            }
         }
     }
 }

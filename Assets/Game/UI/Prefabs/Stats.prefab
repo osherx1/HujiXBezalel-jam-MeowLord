@@ -261,7 +261,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 3289521635732688376}
-  nicknameText: {fileID: 0}
+  yarnText: {fileID: 0}
+  yarn: {fileID: 0}
+  yarnImages:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  blinkColor: {r: 0.99215686, g: 0.7647059, b: 0.3019608, a: 1}
 --- !u!1 &8760587897913096631
 GameObject:
   m_ObjectHideFlags: 0
