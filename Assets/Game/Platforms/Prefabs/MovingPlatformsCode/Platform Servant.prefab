@@ -112,7 +112,7 @@ MonoBehaviour:
   forwardSpriteRenderer: {fileID: 0}
   backwardSpriteRenderer: {fileID: 0}
   forwardSkeletonMecanim: {fileID: 5895278988345312879}
-  backwardSkeletonMecanim: {fileID: 0}
+  backwardSkeletonMecanim: {fileID: 1983392244003467284}
   hasPlayerOnTop: 0
   hasYarnAttached: 0
   platformType: 2
@@ -265,6 +265,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
+--- !u!114 &1983392244003467284 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3872301495108382387, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
+  m_PrefabInstance: {fileID: 3331327874756075175}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9db98c60740638449864eb028fbe7ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &4652222579619192249 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7974540978787812126, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
