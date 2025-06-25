@@ -1,0 +1,624 @@
+fileFormatVersion: 2
+guid: 4bbdaae70e5884cc3bede0ac8b96fac5
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -2307496065117743745
+    second: cookFront_0
+  - first:
+      213: -6666096726796763486
+    second: cookFront_1
+  - first:
+      213: 5471390489637712207
+    second: cookFront_2
+  - first:
+      213: 1904406685813135153
+    second: cookFront_3
+  - first:
+      213: -341277762277433831
+    second: cookFront_4
+  - first:
+      213: 1697221218368113933
+    second: cookFront_5
+  - first:
+      213: 9176903026097091451
+    second: cookFront_6
+  - first:
+      213: -729379466028647826
+    second: cookFront_7
+  - first:
+      213: 518094621154740948
+    second: cookFront_8
+  - first:
+      213: -6128405017698986772
+    second: cookFront_9
+  - first:
+      213: -4484273791412627195
+    second: cookFront_10
+  - first:
+      213: 1000949467336328192
+    second: cookFront_11
+  - first:
+      213: 296131351976186190
+    second: cookFront_12
+  - first:
+      213: 2740669931519039711
+    second: cookFront_13
+  - first:
+      213: -1360175877204645097
+    second: cookFront_14
+  - first:
+      213: 4139444841248854639
+    second: cookFront_15
+  - first:
+      213: -4625409724760504972
+    second: cookFront_16
+  - first:
+      213: -5902858636538187257
+    second: cookFront_17
+  - first:
+      213: 7792890137112567408
+    second: cookFront_18
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 0
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 0
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 0
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: cookFront_0
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 673
+        width: 351
+        height: 339
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f759b0eed802affd0800000000000000
+      internalID: -2307496065117743745
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_1
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 889
+        width: 160
+        height: 96
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ae72e078544d73a0800000000000000
+      internalID: -6666096726796763486
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_2
+      rect:
+        serializedVersion: 2
+        x: 512
+        y: 889
+        width: 62
+        height: 95
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f417e4269a84eeb40800000000000000
+      internalID: 5471390489637712207
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_3
+      rect:
+        serializedVersion: 2
+        x: 574
+        y: 920
+        width: 76
+        height: 63
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 13755cf6acfcd6a10800000000000000
+      internalID: 1904406685813135153
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_4
+      rect:
+        serializedVersion: 2
+        x: 634
+        y: 820
+        width: 74
+        height: 100
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 91e96b1fea9834bf0800000000000000
+      internalID: -341277762277433831
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_5
+      rect:
+        serializedVersion: 2
+        x: 650
+        y: 920
+        width: 62
+        height: 83
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0d4612b4bdbd8710800000000000000
+      internalID: 1697221218368113933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_6
+      rect:
+        serializedVersion: 2
+        x: 352
+        y: 673
+        width: 282
+        height: 216
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b7379b05ea8ea5f70800000000000000
+      internalID: 9176903026097091451
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_7
+      rect:
+        serializedVersion: 2
+        x: 634
+        y: 658
+        width: 76
+        height: 162
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e6af5e47d39b0e5f0800000000000000
+      internalID: -729379466028647826
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_8
+      rect:
+        serializedVersion: 2
+        x: 708
+        y: 820
+        width: 16
+        height: 21
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4da08fd1054a03700800000000000000
+      internalID: 518094621154740948
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_9
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 366
+        width: 449
+        height: 307
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ce494582b1883faa0800000000000000
+      internalID: -6128405017698986772
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_10
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 562
+        width: 159
+        height: 107
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5099143deb8a4c1c0800000000000000
+      internalID: -4484273791412627195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_11
+      rect:
+        serializedVersion: 2
+        x: 609
+        y: 550
+        width: 67
+        height: 108
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 004c2bebc3614ed00800000000000000
+      internalID: 1000949467336328192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_12
+      rect:
+        serializedVersion: 2
+        x: 676
+        y: 624
+        width: 34
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e41956945e11c1400800000000000000
+      internalID: 296131351976186190
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_13
+      rect:
+        serializedVersion: 2
+        x: 676
+        y: 550
+        width: 46
+        height: 74
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fd859c238c0d80620800000000000000
+      internalID: 2740669931519039711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_14
+      rect:
+        serializedVersion: 2
+        x: 450
+        y: 495
+        width: 76
+        height: 67
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 71b69270f3faf1de0800000000000000
+      internalID: -1360175877204645097
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_15
+      rect:
+        serializedVersion: 2
+        x: 598
+        y: 366
+        width: 122
+        height: 184
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f6216f1c623427930800000000000000
+      internalID: 4139444841248854639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_16
+      rect:
+        serializedVersion: 2
+        x: 1
+        y: 1
+        width: 363
+        height: 365
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 475430f9c5e3fcfb0800000000000000
+      internalID: -4625409724760504972
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_17
+      rect:
+        serializedVersion: 2
+        x: 364
+        y: 1
+        width: 363
+        height: 365
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7027bc14855d41ea0800000000000000
+      internalID: -5902858636538187257
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: cookFront_18
+      rect:
+        serializedVersion: 2
+        x: 531
+        y: 366
+        width: 67
+        height: 105
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 07e5d3c8a48e52c60800000000000000
+      internalID: 7792890137112567408
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      cookFront_0: -2307496065117743745
+      cookFront_1: -6666096726796763486
+      cookFront_10: -4484273791412627195
+      cookFront_11: 1000949467336328192
+      cookFront_12: 296131351976186190
+      cookFront_13: 2740669931519039711
+      cookFront_14: -1360175877204645097
+      cookFront_15: 4139444841248854639
+      cookFront_16: -4625409724760504972
+      cookFront_17: -5902858636538187257
+      cookFront_18: 7792890137112567408
+      cookFront_2: 5471390489637712207
+      cookFront_3: 1904406685813135153
+      cookFront_4: -341277762277433831
+      cookFront_5: 1697221218368113933
+      cookFront_6: 9176903026097091451
+      cookFront_7: -729379466028647826
+      cookFront_8: 518094621154740948
+      cookFront_9: -6128405017698986772
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
