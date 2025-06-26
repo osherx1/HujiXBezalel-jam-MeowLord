@@ -143,6 +143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9895a66ce0f9ac4d83879b99a0ef0bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  musicSource: {fileID: 190731366193122410}
   sounds:
   - name: 0
     clip: {fileID: 8300000, guid: 2e3e987f852644eae805c2a69f30b8a1, type: 3}
@@ -151,7 +152,7 @@ MonoBehaviour:
     spatialBlend: 0
     loop: 1
   - name: 7
-    clip: {fileID: 8300000, guid: cd7593f25a9e64494981f1f9c1dac840, type: 3}
+    clip: {fileID: 8300000, guid: 9e1eb1681b644446cbe3b585cbeffac3, type: 3}
     volume: 0.481
     pitch: 1
     spatialBlend: 0
@@ -161,8 +162,43 @@ MonoBehaviour:
     volume: 0.481
     pitch: 1
     spatialBlend: 0
-    loop: 1
-  musicSource: {fileID: 190731366193122410}
+    loop: 0
+  - name: 2
+    clip: {fileID: 8300000, guid: cfd9c7a3a8dd24787a210b8bff491be1, type: 3}
+    volume: 0.481
+    pitch: 1
+    spatialBlend: 0
+    loop: 0
+  - name: 4
+    clip: {fileID: 8300000, guid: c04889d8b038347919d9cc440531b22f, type: 3}
+    volume: 0.481
+    pitch: 1
+    spatialBlend: 0
+    loop: 0
+  - name: 6
+    clip: {fileID: 8300000, guid: 60d41a425befb4e50ab956d6e27878c4, type: 3}
+    volume: 0.481
+    pitch: 1
+    spatialBlend: 0
+    loop: 0
+  - name: 9
+    clip: {fileID: 8300000, guid: 60d41a425befb4e50ab956d6e27878c4, type: 3}
+    volume: 0.481
+    pitch: 1
+    spatialBlend: 0
+    loop: 0
+  - name: 10
+    clip: {fileID: 8300000, guid: 1daae0b41b18a44e8bad52c2084594a8, type: 3}
+    volume: 0.481
+    pitch: 1
+    spatialBlend: 0
+    loop: 0
+  - name: 8
+    clip: {fileID: 8300000, guid: 805fa13afceaf41518016048ff9daed4, type: 3}
+    volume: 0.481
+    pitch: 1
+    spatialBlend: 0
+    loop: 0
 --- !u!114 &3106742271818743991
 MonoBehaviour:
   m_ObjectHideFlags: 0
