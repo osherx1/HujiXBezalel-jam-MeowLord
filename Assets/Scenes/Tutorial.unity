@@ -9314,6 +9314,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1955162665}
     - target: {fileID: 5754566085166342416, guid: 04c8f2c02ab5641328161543e1b10eb2, type: 3}
+      propertyPath: _cameraSecondPosition.x
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5754566085166342416, guid: 04c8f2c02ab5641328161543e1b10eb2, type: 3}
+      propertyPath: _cameraSecondPosition.y
+      value: 1.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 5754566085166342416, guid: 04c8f2c02ab5641328161543e1b10eb2, type: 3}
       propertyPath: servantStopedMovingText
       value: 'This is a servant! You can jump on them too.
 
