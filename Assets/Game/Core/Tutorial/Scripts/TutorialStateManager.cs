@@ -414,7 +414,6 @@ namespace Game.Core.Tutorial.Scripts
 
             InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed -= OnLeftClickPerformed;
             _leftClick = false;
-
             StartCoroutine(QueenState());
         }
 
@@ -465,10 +464,11 @@ namespace Game.Core.Tutorial.Scripts
         
         [SerializeField] private Image blurPanelGreatJobState;
         [SerializeField] private Image[] textAndImagesGreatJobState;
-
+        [SerializeField] private Vector3 _cameraSecondPosition;
 
         private IEnumerator QueenState()
         {
+            yield return cameraTarget.transform.DOMove(_cameraSecondPosition, 0.5f);
             PlatformEventSpawnData queenData = new PlatformEventSpawnData
             {
                 PlatformType = PlatformType.Queen

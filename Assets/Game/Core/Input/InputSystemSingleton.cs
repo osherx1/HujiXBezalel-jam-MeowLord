@@ -16,7 +16,7 @@ namespace Game.Core.Input
         
         void OnApplicationQuit()
         {
-            InputSystem.Disable();
+            Instance.InputSystem.Disable();
         }
     }
 }
