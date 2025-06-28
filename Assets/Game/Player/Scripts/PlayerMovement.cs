@@ -68,6 +68,7 @@ namespace Game.Player.Scripts
         [SerializeField] private int[] yarnThresholds = { 200, 2000, 20000 };
         private int _yarnThresholdIndex = 0;
         private bool _gameEnded = false;
+        private bool _isHovering = false;
 
         void Awake()
         {
@@ -587,6 +588,10 @@ namespace Game.Player.Scripts
                 isHovering = false;
             }
 
+            if (isHovering != _isHovering && isHovering)
+            {
+                AudioManager.Instance.Play(AudioName.CatJumpPrepare, Vector3.zero);
+            }
             animator.SetBool(IsHovering, isHovering);
             GameEvents.PlatformHover(isHovering);
         }

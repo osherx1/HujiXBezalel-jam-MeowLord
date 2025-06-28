@@ -11,7 +11,7 @@ namespace Game.Core.EndScene
         public void OnPlayButtonClick()
         {
             if(!active) return;
-            GameManager.Instance.StartGame();
+            GameManager.Instance.StartGameFromTutorial();
             active = false;
         }
     }

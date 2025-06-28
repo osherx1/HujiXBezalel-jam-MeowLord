@@ -148,5 +148,14 @@ namespace Game.Core.Managers
             camera.tutorialModeTargetFrame = 0;
             camera.AdjustTargetFraming(() => GameEvents.GameStarted());
         }
+
+        public void BackToStartScreen()
+        {
+            SceneLoader.Instance.SetSkeletonSortingLayer("Curtain", () =>
+                SceneLoader.Instance.TriggerClose(() =>
+                    SceneLoader.Instance.LoadSceneWithCallback(0, () =>
+                        SceneLoader.Instance.SetSkeletonSortingLayer("default", ()
+                            => SceneLoader.Instance.TriggerOut()))));
+        }
     }
 }
