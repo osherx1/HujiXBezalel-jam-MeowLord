@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Game.Core.Audio;
 using Game.Core.Managers;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -73,7 +74,7 @@ namespace Game.Core.Score
 
             int mouseCount = mousePositions.Count;
             if (mouseCount == 0) return;
-
+            AudioManager.Instance.Play(AudioName.MouseCatch,Vector3.zero);
             // Calculate points per mouse
             float basePoints = 100f;
             float multiplier = 1f;

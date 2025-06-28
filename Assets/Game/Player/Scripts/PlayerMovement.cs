@@ -547,7 +547,7 @@ namespace Game.Player.Scripts
         private void HandleGameLoss()
         {
             _gameEnded = true;
-            AudioManager.Instance.Play(AudioName.CatBadJump, transform.position);
+            AudioManager.Instance.Play(AudioName.RoyalInsideShape, Vector3.zero);
             GameEvents.GameFinished();
         }
 

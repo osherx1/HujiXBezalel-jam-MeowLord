@@ -36,6 +36,15 @@ namespace Game.Core.StartScene
         {
             nameInputField.text = playerName != null ? playerName : null;
             AudioManager.Instance.Play(AudioName.StartMusic, Vector3.zero);
+            
+        }
+
+        public void Update()
+        {
+            if (playerName != nameInputField.text)
+            {
+                AudioManager.Instance.Play(AudioName.TypingLetter, Vector3.zero);
+            }
         }
 
         public void OnTutorialButtonPressed()
