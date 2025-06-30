@@ -47,15 +47,29 @@ namespace Game.Player.Scripts
 
         public void Update()
         {
+            TinyMovementForCollision();
+        }
+        public void LateUpdate()
+        {
+            UpdatePosition();
             UpdateBoxCollider();
-            
+        }
+
+        private void TinyMovementForCollision()
+        {
             _nudgeTimer += Time.deltaTime;
             float nudgeAmount = Mathf.Sin(_nudgeTimer * 20f) * 0.00001f;
             transform.position += new Vector3(nudgeAmount, 0f, 0f);
         }
+        
+        
+        [InspectorButton]
+        private void UpdatePosition()
+        {
+            trailData.Lr.SetPosition(0, trailData.FromT.TransformPoint(trailData.FromLocalPos));
+            trailData.Lr.SetPosition(1, trailData.ToT.TransformPoint(trailData.ToLocalPos));
+        }
 
-        
-        
 
         public static TrailSegment CreateSegment(GameObject linePrefab, Transform parent, GameObject fromGo, GameObject toGo)
         {
@@ -100,12 +114,7 @@ namespace Game.Player.Scripts
             
             return seg.trailData;
         }
-
-        private static void SegmentKingQueenCollide()
-        {
-            OnSegmentKingQueenCollide?.Invoke();
-        }
-
+        
         public void OnChildTriggerEnter(Collider2D other)
         {
             OnSegmentKingQueenCollide?.Invoke();

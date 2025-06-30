@@ -332,6 +332,7 @@ namespace Game.Player.Scripts
                 _segments[_segments.Count - 1].ToT = transform;
                 UnregisterMovingPlatformEvent(_visited[^1]);
                 _visited.RemoveAt(_visited.Count - 1);
+                _visited.RemoveAt(_visited.Count - 1);
                 RegisterToPlatform(newPlatScript, _lastMovingPlatform);
                 MovePlayerToPlatform(newPlat);
                 animator.SetTrigger(Jump);
@@ -459,19 +460,10 @@ namespace Game.Player.Scripts
 
         void LateUpdate()
         {
-            UpdateSegmentLinePositions();
             if (_lastPlat != null && !isMoving && !_fall)
                 transform.position = _lastPlat.position;
         }
-
-        private void UpdateSegmentLinePositions()
-        {
-            foreach (var seg in _segments)
-            {
-                seg.Lr.SetPosition(0, seg.FromT.TransformPoint(seg.FromLocalPos));
-                seg.Lr.SetPosition(1, seg.ToT.TransformPoint(seg.ToLocalPos));
-            }
-        }
+        
 
         // ReSharper disable Unity.PerformanceAnalysis
         private void OnPlatformReturnHandler(Transform platform)
