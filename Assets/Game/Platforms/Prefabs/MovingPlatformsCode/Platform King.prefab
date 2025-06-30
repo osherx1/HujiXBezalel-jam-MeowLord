@@ -129,12 +129,24 @@ PrefabInstance:
       value: 0.43524194
       objectReference: {fileID: 0}
     - target: {fileID: 795229554763844788, guid: 41c0519cbec154c94aed6d14d6e217bb, type: 3}
+      propertyPath: m_Size.y
+      value: 0.5471833
+      objectReference: {fileID: 0}
+    - target: {fileID: 795229554763844788, guid: 41c0519cbec154c94aed6d14d6e217bb, type: 3}
       propertyPath: m_Offset.x
       value: -0.23777455
+      objectReference: {fileID: 0}
+    - target: {fileID: 795229554763844788, guid: 41c0519cbec154c94aed6d14d6e217bb, type: 3}
+      propertyPath: m_Offset.y
+      value: 1.7395855
       objectReference: {fileID: 0}
     - target: {fileID: 2717479079650447116, guid: 41c0519cbec154c94aed6d14d6e217bb, type: 3}
       propertyPath: m_Name
       value: ArtKingBack
+      objectReference: {fileID: 0}
+    - target: {fileID: 2717479079650447116, guid: 41c0519cbec154c94aed6d14d6e217bb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4941797289874845491, guid: 41c0519cbec154c94aed6d14d6e217bb, type: 3}
       propertyPath: m_Layer
@@ -218,6 +230,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ArtKingFront
       objectReference: {fileID: 0}
+    - target: {fileID: 5954039128077572859, guid: 60070face002a4473931c762045cc224, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6419506940508467863, guid: 60070face002a4473931c762045cc224, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -267,8 +283,16 @@ PrefabInstance:
       value: 0.42749146
       objectReference: {fileID: 0}
     - target: {fileID: 8255571606369215854, guid: 60070face002a4473931c762045cc224, type: 3}
+      propertyPath: m_Size.y
+      value: 0.53183746
+      objectReference: {fileID: 0}
+    - target: {fileID: 8255571606369215854, guid: 60070face002a4473931c762045cc224, type: 3}
       propertyPath: m_Offset.x
       value: -0.2106481
+      objectReference: {fileID: 0}
+    - target: {fileID: 8255571606369215854, guid: 60070face002a4473931c762045cc224, type: 3}
+      propertyPath: m_Offset.y
+      value: 1.7590284
       objectReference: {fileID: 0}
     - target: {fileID: 8337070095210260943, guid: 60070face002a4473931c762045cc224, type: 3}
       propertyPath: m_Layer
