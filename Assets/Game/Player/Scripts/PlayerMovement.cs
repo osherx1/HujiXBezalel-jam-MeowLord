@@ -69,6 +69,7 @@ namespace Game.Player.Scripts
         private int _yarnThresholdIndex = 0;
         private bool _gameEnded = false;
         private bool _isHovering = false;
+        private int current_idx;
 
         void Awake()
         {
@@ -200,16 +201,8 @@ namespace Game.Player.Scripts
         {
             if (platform == null) return;
             _lastPlat = platform;
-            if (_visited.Count == 0)
-            {
-                _visited.Add(platform);
-            }
-            else if (_visited[_visited.Count - 1] != platform)
-            {
-                _visited.Add(platform);
-                RegisterSensorPlatformEvent(platform);
-                playerLogger.Log($"Player {_visited.Count} moving to {platform.name}");
-            }
+            _visited.Add(platform);
+            RegisterSensorPlatformEvent(platform);
             RotatePlayerTowards(platform);
             AnimateAndMoveToPlatform(platform,withSound);
         }
@@ -336,6 +329,7 @@ namespace Game.Player.Scripts
                     GameEvents.PlayerLanded();
                 };
                 _segments[_segments.Count - 1].ToT = transform;
+                UnregisterMovingPlatformEvent(_visited[^1]);
                 _visited.RemoveAt(_visited.Count - 1);
                 RegisterToPlatform(newPlatScript, _lastMovingPlatform);
                 MovePlayerToPlatform(newPlat);
@@ -367,22 +361,24 @@ namespace Game.Player.Scripts
         {
             if (_visited.Contains(newPlat))
             {
-                int idx = _visited.IndexOf(newPlat);
-                List<Transform> loopPlatforms = _visited.GetRange(idx, _visited.Count - idx);
-                for (int i = idx + 1; i < _visited.Count; i++)
-                {
-                    UnregisterMovingPlatformEvent(_visited[i]);
-                }
-                _visited.RemoveRange(idx + 1, _visited.Count - idx - 1);
+                current_idx = _visited.IndexOf(newPlat);
+                
                 onMoveCompleteEvent = () =>
                 {
+                    
+                    List<Transform> loopPlatforms = _visited.GetRange(current_idx, _visited.Count - current_idx - 1);
+                    for (int i = current_idx + 1; i < _visited.Count - 1; i++)
+                    {
+                        UnregisterMovingPlatformEvent(_visited[i]);
+                    }
+                    _visited.RemoveRange(current_idx + 1, _visited.Count - current_idx - 1);
                     
                     if (_playerRatDetector.HasKingOrQueenInLoopPolygon(loopPlatforms, playerStats.platformLayer))
                     {
                         HandleGameLoss();
                         return;
                     }
-                    for (int i = _segments.Count - 1; i >= idx; i--)
+                    for (int i = _segments.Count - 1; i >= current_idx; i--)
                     {
                         RemoveSegment(i);
                     }
