@@ -47,7 +47,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 554c614d3bea1384d959141b0bcc4945, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
+  moveSpeed: 2.5
   _isMoving: 1
   animatorForward: {fileID: 4770556552100623453}
   animatorBackward: {fileID: 7525324053355554987}

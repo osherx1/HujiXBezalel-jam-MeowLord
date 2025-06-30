@@ -16,13 +16,13 @@ namespace Game.Player.Scripts
             public List<Transform> polygonPoints;
         }
 
-        private List<SegmentCreator.TrailSegment> _segments;
+        private List<Segment.TrailSegment> _segments;
         private List<Transform> _visited;
         private Transform _segmentsPointsFather;
         private List<GameObject> _intersectionPoints = new List<GameObject>();
         private readonly PlayerStats _playerStats;
 
-        public PlayerRatDetector(List<SegmentCreator.TrailSegment> segments, List<Transform> visited, Transform segmentsPointsFather,PlayerStats playerStats)
+        public PlayerRatDetector(List<Segment.TrailSegment> segments, List<Transform> visited, Transform segmentsPointsFather,PlayerStats playerStats)
         {
             _segments = segments;
             _visited = visited;
@@ -180,14 +180,14 @@ namespace Game.Player.Scripts
             foreach (var c in candidates)
             {
                 if (c == null) continue;
-                var root = Game.Core.Utils.EladsHelperFunctions.GetRootTransformPlatformHead(c.transform);
+                var root = EladsHelperFunctions.GetRootTransformPlatformHead(c.transform);
                 if (root == null) continue;
                 var movingPlatform = root.GetComponent<Game.Platforms.Scripts.MovingPlatform>();
                 if (movingPlatform != null &&
                     (movingPlatform.platformType == Game.Platforms.Scripts.PlatformType.King ||
                      movingPlatform.platformType == Game.Platforms.Scripts.PlatformType.Queen))
                 {
-                    if (Game.Core.Utils.EladsHelperFunctions.PointInPolygon(poly, root.position))
+                    if (EladsHelperFunctions.PointInPolygon(poly, root.position))
                     {
                         return true;
                     }

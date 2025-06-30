@@ -124,9 +124,21 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 795229554763844788, guid: 41c0519cbec154c94aed6d14d6e217bb, type: 3}
+      propertyPath: m_Size.x
+      value: 0.43524194
+      objectReference: {fileID: 0}
+    - target: {fileID: 795229554763844788, guid: 41c0519cbec154c94aed6d14d6e217bb, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.23777455
+      objectReference: {fileID: 0}
     - target: {fileID: 2717479079650447116, guid: 41c0519cbec154c94aed6d14d6e217bb, type: 3}
       propertyPath: m_Name
       value: ArtKingBack
+      objectReference: {fileID: 0}
+    - target: {fileID: 4941797289874845491, guid: 41c0519cbec154c94aed6d14d6e217bb, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5023116791512951939, guid: 41c0519cbec154c94aed6d14d6e217bb, type: 3}
       propertyPath: m_LocalPosition.x
@@ -206,10 +218,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ArtKingFront
       objectReference: {fileID: 0}
-    - target: {fileID: 5954039128077572859, guid: 60070face002a4473931c762045cc224, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6419506940508467863, guid: 60070face002a4473931c762045cc224, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -253,6 +261,18 @@ PrefabInstance:
     - target: {fileID: 6777542604723281338, guid: 60070face002a4473931c762045cc224, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8255571606369215854, guid: 60070face002a4473931c762045cc224, type: 3}
+      propertyPath: m_Size.x
+      value: 0.42749146
+      objectReference: {fileID: 0}
+    - target: {fileID: 8255571606369215854, guid: 60070face002a4473931c762045cc224, type: 3}
+      propertyPath: m_Offset.x
+      value: -0.2106481
+      objectReference: {fileID: 0}
+    - target: {fileID: 8337070095210260943, guid: 60070face002a4473931c762045cc224, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

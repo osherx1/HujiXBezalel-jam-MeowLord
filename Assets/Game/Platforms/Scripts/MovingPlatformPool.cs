@@ -179,7 +179,7 @@ namespace Game.Platforms.Scripts
             }
 
             // Pass the chosen route and a callback that knows which route to release
-            platform.Init(chosenRoute, platform.moveSpeed, (p) =>
+            platform.Init(chosenRoute, (p) =>
             {
                 ReturnToPool(p, chosenRoute);
                 platform.PlatformReturn();
@@ -240,7 +240,7 @@ namespace Game.Platforms.Scripts
             }
 
             // Pass the chosen route and a callback that knows which route to release
-            platform.Init(route, platform.moveSpeed, (p) =>
+            platform.Init(route, (p) =>
             {
                 ReturnToPool(p);
                 platform.PlatformReturn();

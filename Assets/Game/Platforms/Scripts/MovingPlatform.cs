@@ -9,7 +9,8 @@ namespace Game.Platforms.Scripts
 {
     public class MovingPlatform : MonoBehaviour
     {
-        [Header("Movement Settings")] public float moveSpeed;
+        [Header("Movement Settings")] 
+        [SerializeField] private float moveSpeed;
 
         [Header("Platform State")] [SerializeField]
         private bool _isMoving = false;
@@ -60,10 +61,9 @@ namespace Game.Platforms.Scripts
 
         
         // ---------- INIT ----------
-        public void Init(GameObject route, float speed, System.Action<MovingPlatform> onFinish)
+        public void Init(GameObject route, System.Action<MovingPlatform> onFinish)
         {
             routeParent = route;
-            moveSpeed = speed;
             _onFinish = onFinish;
 
             waypoints.Clear();

@@ -43,7 +43,7 @@ namespace Game.Player.Scripts
 
         
 
-        private List<SegmentCreator.TrailSegment> _segments = new List<SegmentCreator.TrailSegment>();
+        private List<Segment.TrailSegment> _segments = new List<Segment.TrailSegment>();
         private List<Transform> _visited = new List<Transform>();
         private Transform _lastPlat;
         private Camera _mainCam;
@@ -101,6 +101,7 @@ namespace Game.Player.Scripts
             GameEvents.OnPlayerPause += ActivatePauseGame;
             GameEvents.OnPlayerResume += ActivateResumeGame;
             GameEvents.OnUpdateScore += CheckYarn;
+            Segment.OnSegmentKingQueenCollide += HandleGameLoss;
         }
 
         private void GameFinished()
@@ -158,7 +159,7 @@ namespace Game.Player.Scripts
             GameEvents.OnGameFinished -= GameFinished;
             GameEvents.OnTutorialStarted -= GameStarted;
             GameEvents.OnTutorialReset -= GameStarted;
-            
+            Segment.OnSegmentKingQueenCollide -= HandleGameLoss;
         }
 
         private void HandlePlayerFall()
@@ -425,7 +426,7 @@ namespace Game.Player.Scripts
 
         private void CreateNewSegment(Transform fromPlat, Transform toPlat)
         {
-            _segments.Add(SegmentCreator.CreateSegment(trailRenderer, segmentsFather, fromPlat.gameObject,
+            _segments.Add(Segment.CreateSegment(trailRenderer, segmentsFather, fromPlat.gameObject,
                 toPlat.gameObject));
             leftSegments = maxSegments - _segments.Count;
             GameEvents.NumberOfSegmentsChanged(leftSegments);
