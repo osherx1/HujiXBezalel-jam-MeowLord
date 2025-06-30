@@ -9,7 +9,7 @@ namespace Game.Platforms.Scripts
 {
     public class MovingPlatform : MonoBehaviour
     {
-        [Header("Movement Settings")] public float moveSpeed = 2f;
+        [Header("Movement Settings")] public float moveSpeed;
 
         [Header("Platform State")] [SerializeField]
         private bool _isMoving = false;
@@ -431,10 +431,8 @@ namespace Game.Platforms.Scripts
         {
             isFrozen = frozen;
             Debug.Log("🧊 Frozen state set to: " + frozen);
-
             if (frozen)
             {
-                
                 foreach (var point in waypoints)
                 {
                     point.stopAtPoint = true;
@@ -467,7 +465,7 @@ namespace Game.Platforms.Scripts
         public void SetSkinActive(bool isActive)
         {
             string targetSkin = isActive ? "active" : "inactive";
-            if(platformType is PlatformType.King || platformType is PlatformType.Queen or PlatformType.ServantCart or PlatformType.ServantChef){
+            if(platformType is PlatformType.King || platformType is PlatformType.Queen){
                 return;
             }
             // Added for now as they don't have this setups yet

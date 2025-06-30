@@ -103,10 +103,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 554c614d3bea1384d959141b0bcc4945, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
-  _isMoving: 1
+  moveSpeed: 2.5
+  _isMoving: 0
   animatorForward: {fileID: 8049382775920395355}
-  animatorBackward: {fileID: 0}
+  animatorBackward: {fileID: 6543341561064017025}
   spriteRootForward: {fileID: 1606423050537056324}
   spriteRootBackward: {fileID: 4652222579619192249}
   forwardSpriteRenderer: {fileID: 0}
@@ -176,6 +176,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7917731241732862186}
     m_Modifications:
+    - target: {fileID: 485642113991319701, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 485642113991319701, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
       propertyPath: requiredCount
       value: 2
@@ -281,6 +285,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7974540978787812126, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
   m_PrefabInstance: {fileID: 3331327874756075175}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &6543341561064017025 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 8427887975634047526, guid: ea6dfaef6a9784346a76e934689ed614, type: 3}
+  m_PrefabInstance: {fileID: 3331327874756075175}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4015280717697640432
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -340,6 +349,10 @@ PrefabInstance:
     - target: {fileID: 5186205747028021582, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5484655398663331023, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5484655398663331023, guid: 828cf46848006418c97a539ff0a5a62d, type: 3}
       propertyPath: requiredCount
