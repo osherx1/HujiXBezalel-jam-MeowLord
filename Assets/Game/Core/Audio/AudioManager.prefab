@@ -146,55 +146,79 @@ MonoBehaviour:
   musicSource: {fileID: 190731366193122410}
   sounds:
   - name: 0
-    clip: {fileID: 8300000, guid: 2e3e987f852644eae805c2a69f30b8a1, type: 3}
-    volume: 0.481
-    pitch: 1
-    spatialBlend: 0
-    loop: 1
-  - name: 7
-    clip: {fileID: 8300000, guid: 9e1eb1681b644446cbe3b585cbeffac3, type: 3}
-    volume: 0.481
+    clip: {fileID: 8300000, guid: 40a181ecdbaac48fc93e63998f196e7a, type: 3}
+    volume: 0.15
     pitch: 1
     spatialBlend: 0
     loop: 1
   - name: 1
-    clip: {fileID: 8300000, guid: a5698b8c1a4624744b1e9b7d06e75474, type: 3}
-    volume: 0.481
-    pitch: 1
-    spatialBlend: 0
-    loop: 0
-  - name: 2
-    clip: {fileID: 8300000, guid: cfd9c7a3a8dd24787a210b8bff491be1, type: 3}
+    clip: {fileID: 8300000, guid: f8e3a216891954015ac0854965bc7ed8, type: 3}
     volume: 0.481
     pitch: 1
     spatialBlend: 0
     loop: 0
   - name: 4
-    clip: {fileID: 8300000, guid: c04889d8b038347919d9cc440531b22f, type: 3}
-    volume: 0.481
-    pitch: 1
-    spatialBlend: 0
-    loop: 0
-  - name: 6
-    clip: {fileID: 8300000, guid: 60d41a425befb4e50ab956d6e27878c4, type: 3}
-    volume: 0.481
-    pitch: 1
-    spatialBlend: 0
-    loop: 0
-  - name: 9
-    clip: {fileID: 8300000, guid: 60d41a425befb4e50ab956d6e27878c4, type: 3}
-    volume: 0.481
-    pitch: 1
-    spatialBlend: 0
-    loop: 0
-  - name: 10
-    clip: {fileID: 8300000, guid: 1daae0b41b18a44e8bad52c2084594a8, type: 3}
+    clip: {fileID: 8300000, guid: d77321a6990174a2a864e08731bba8f0, type: 3}
     volume: 0.481
     pitch: 1
     spatialBlend: 0
     loop: 0
   - name: 8
-    clip: {fileID: 8300000, guid: 805fa13afceaf41518016048ff9daed4, type: 3}
+    clip: {fileID: 8300000, guid: dca1292d9bbaf4965bd451f8feee34e7, type: 3}
+    volume: 0.481
+    pitch: 1
+    spatialBlend: 0
+    loop: 1
+  - name: 7
+    clip: {fileID: 8300000, guid: 91d46749f032446c0aa6c8c3a51431ae, type: 3}
+    volume: 0.481
+    pitch: 1
+    spatialBlend: 0
+    loop: 0
+  - name: 2
+    clip: {fileID: 8300000, guid: ccf47c4444d5b4ccc81c048cd61307a4, type: 3}
+    volume: 0.481
+    pitch: 1
+    spatialBlend: 0
+    loop: 0
+  - name: 6
+    clip: {fileID: 8300000, guid: e2dd01fdf892545bb9103e24c36060a1, type: 3}
+    volume: 0.481
+    pitch: 1
+    spatialBlend: 0
+    loop: 0
+  - name: 12
+    clip: {fileID: 8300000, guid: b939087fc69aa4430be2d2d96ca8bbf1, type: 3}
+    volume: 0.481
+    pitch: 1
+    spatialBlend: 0
+    loop: 0
+  - name: 10
+    clip: {fileID: 8300000, guid: 7590e1e1cc5004a028bf8cebc3fc4577, type: 3}
+    volume: 0.481
+    pitch: 1
+    spatialBlend: 0
+    loop: 0
+  - name: 17
+    clip: {fileID: 8300000, guid: c2123169ce31c4486a80ecf18ca5a20e, type: 3}
+    volume: 0.481
+    pitch: 1
+    spatialBlend: 0
+    loop: 0
+  - name: 15
+    clip: {fileID: 8300000, guid: adf3622cca0e14539a020867300132b2, type: 3}
+    volume: 0.11
+    pitch: 1
+    spatialBlend: 0
+    loop: 0
+  - name: 13
+    clip: {fileID: 8300000, guid: 7792f1e48bd914003b2e726701c11e26, type: 3}
+    volume: 0.481
+    pitch: 1
+    spatialBlend: 0
+    loop: 0
+  - name: 14
+    clip: {fileID: 8300000, guid: d8ecc95b0fe1c4939a4fab0326d40946, type: 3}
     volume: 0.481
     pitch: 1
     spatialBlend: 0

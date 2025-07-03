@@ -43,6 +43,7 @@ namespace Game.Core.StartScene
         {
             if (playerName != nameInputField.text)
             {
+                playerName = nameInputField.text;
                 AudioManager.Instance.Play(AudioName.TypingLetter, Vector3.zero);
             }
         }
