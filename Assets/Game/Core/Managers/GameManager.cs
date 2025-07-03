@@ -147,7 +147,7 @@ namespace Game.Core.Managers
         private IEnumerator GameStartCamera()
         {
             yield return null;
-            var camera = GameObject.FindFirstObjectByType<HybridCameraFollow>();
+            var camera = FindFirstObjectByType<HybridCameraFollow>();
             camera.tutorialModeTargetFrame = 0;
             camera.AdjustTargetFraming(GameEvents.GameStarted);
         }
