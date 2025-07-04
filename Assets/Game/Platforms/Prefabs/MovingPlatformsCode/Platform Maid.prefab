@@ -189,7 +189,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 9117002008954043273, guid: 843c66f4f39e246ad8aa9ee93fb4ab24, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 843c66f4f39e246ad8aa9ee93fb4ab24, type: 3}
@@ -275,7 +276,8 @@ PrefabInstance:
       value: ArtMaidFront
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1156750974043342321, guid: a070d503bd6544aa494bdd1f6a20a1f3, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a070d503bd6544aa494bdd1f6a20a1f3, type: 3}
