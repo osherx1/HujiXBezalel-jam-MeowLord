@@ -37,7 +37,10 @@ namespace Game.Core.Score
                 if (existing != null)
                 {
                     if (score > existing.Score)
+                    {
                         existing.Score = score;
+                        existing.FinishTime = finishedTime;
+                    }
                     else if (pendingFetch != null)
                     {
                         var fetch = pendingFetch;

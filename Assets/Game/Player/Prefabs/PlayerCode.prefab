@@ -64,6 +64,7 @@ MonoBehaviour:
   animator: {fileID: 5088570227441705168}
   moveSpeed: 9.8
   fallDuration: 0.75
+  yarnThresholds: c8000000d0070000204e0000
 --- !u!114 &592636455647064314
 MonoBehaviour:
   m_ObjectHideFlags: 0

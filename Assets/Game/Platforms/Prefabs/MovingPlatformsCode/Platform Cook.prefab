@@ -47,16 +47,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 554c614d3bea1384d959141b0bcc4945, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
+  moveSpeed: 2.5
   _isMoving: 1
-  animatorForward: {fileID: 0}
-  animatorBackward: {fileID: 0}
+  animatorForward: {fileID: 2598417648646248243}
+  animatorBackward: {fileID: 3678605988383070683}
   spriteRootForward: {fileID: 1162055188845293447}
   spriteRootBackward: {fileID: 5166924881929471841}
-  forwardSpriteRenderer: {fileID: 4987289046610821735}
-  backwardSpriteRenderer: {fileID: 2404774938905160006}
-  forwardSkeletonMecanim: {fileID: 0}
-  backwardSkeletonMecanim: {fileID: 0}
+  forwardSpriteRenderer: {fileID: 0}
+  backwardSpriteRenderer: {fileID: 0}
+  forwardSkeletonMecanim: {fileID: 8312433042990487366}
+  backwardSkeletonMecanim: {fileID: 8731266538012122046}
   hasPlayerOnTop: 0
   hasYarnAttached: 0
   platformType: 4
@@ -124,6 +124,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: ArtCookBack
       objectReference: {fileID: 0}
+    - target: {fileID: 5120863094369127742, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6751887521158316583, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 7735858849910805025, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -169,9 +177,9 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
---- !u!212 &2404774938905160006 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 986475777002470406, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
+--- !u!95 &3678605988383070683 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2297637108111953051, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
   m_PrefabInstance: {fileID: 3238035831288911168}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &5166924881929471841 stripped
@@ -179,6 +187,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7735858849910805025, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
   m_PrefabInstance: {fileID: 3238035831288911168}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8731266538012122046 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6180171005877669630, guid: 5a19b227d8b2744699730330c77d7be0, type: 3}
+  m_PrefabInstance: {fileID: 3238035831288911168}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9db98c60740638449864eb028fbe7ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3610357096603091855
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -227,6 +246,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3161039076381082197, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4224849510990127607, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7580321461049017688, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
       propertyPath: m_Name
       value: ArtCookFront
@@ -241,8 +268,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2466534086895954952, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
   m_PrefabInstance: {fileID: 3610357096603091855}
   m_PrefabAsset: {fileID: 0}
---- !u!212 &4987289046610821735 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 8587511613315727848, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
+--- !u!95 &2598417648646248243 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1591459187659691196, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
   m_PrefabInstance: {fileID: 3610357096603091855}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8312433042990487366 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4702076221444084937, guid: 29a0f88529ac84a0997e127a97926fcf, type: 3}
+  m_PrefabInstance: {fileID: 3610357096603091855}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9db98c60740638449864eb028fbe7ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

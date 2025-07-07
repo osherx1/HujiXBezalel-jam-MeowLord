@@ -28,7 +28,8 @@ namespace Game.UI.Scripts
             Vector3 localPos = worldSpaceCanvasTransform.InverseTransformPoint(worldPosition);
             textObj.rectTransform.localPosition = localPos;
 
-            textObj.text = value.ToString();
+            if(value > 0) textObj.text = "+" + value;
+            else textObj.text = value.ToString();
             Destroy(textObj.gameObject, timeUntilDispawn);
         }
     }

@@ -8,6 +8,7 @@ TagManager:
   - LightAreaPlatform
   - PlatformHead
   - BackCollider
+  - Yarn
   layers:
   - Default
   - TransparentFX
@@ -18,8 +19,8 @@ TagManager:
   - Platform
   - Enemy
   - BackCollider
-  - 
-  - 
+  - Segment
+  - King&Queen
   - 
   - 
   - 

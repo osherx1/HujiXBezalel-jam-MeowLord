@@ -224,8 +224,8 @@ ParticleSystem:
     startColor:
       serializedVersion: 2
       minMaxState: 2
-      minColor: {r: 0.8666667, g: 0.21568628, b: 0.24313726, a: 1}
-      maxColor: {r: 0.6392157, g: 0.16078432, b: 0.19215687, a: 1}
+      minColor: {r: 0.7647059, g: 0.27450982, b: 0.3137255, a: 1}
+      maxColor: {r: 0.6862745, g: 0.35686275, b: 0.32156864, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -4782,7 +4782,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 2f062f05aa02442958ee36b384c7bb69, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4859,7 +4859,7 @@ TrailRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 346b8be3d89f24b81976a6b9187c8872, type: 2}
+  - {fileID: 2100000, guid: 87474c5f8373f4213a9397be627eb095, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4880,7 +4880,7 @@ TrailRenderer:
   m_SortingLayerID: 251717713
   m_SortingLayer: 3
   m_SortingOrder: 3
-  m_Time: 0
+  m_Time: 0.3
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
@@ -4898,8 +4898,8 @@ TrailRenderer:
         inWeight: 0.33333334
         outWeight: 0.33333334
       - serializedVersion: 3
-        time: 0.742157
-        value: 0.38596344
+        time: 0.73817444
+        value: 0.612381
         inSlope: 0
         outSlope: 0
         tangentMode: 0

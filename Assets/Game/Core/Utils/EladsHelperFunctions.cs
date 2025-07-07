@@ -43,12 +43,6 @@ namespace Game.Core.Utils
         }
         
         
-        public static bool IsWithinBoundsXY(Bounds b, Vector3 pos)
-        {
-            return pos.x >= b.min.x && pos.x <= b.max.x &&
-                   pos.y >= b.min.y && pos.y <= b.max.y;
-        }
-
         public static Rect GetCenteredRect(float widthPercent, float heightPercent)
         {
             float screenWidth = Screen.width;
@@ -62,17 +56,7 @@ namespace Game.Core.Utils
                 h
             );
         }
-
-        public static Vector3 ClampPositionToBounds(Bounds bounds, Vector3 position)
-        {
-            var min = bounds.min;
-            var max = bounds.max;
-            return new Vector3(
-                Mathf.Clamp(position.x, min.x, max.x),
-                Mathf.Clamp(position.y, min.y, max.y),
-                position.z
-            );
-        }
+        
 
         public static Transform GetRootTransformPlatformHead(Transform t)
         {

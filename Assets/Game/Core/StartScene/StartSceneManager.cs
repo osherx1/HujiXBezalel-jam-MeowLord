@@ -35,7 +35,16 @@ namespace Game.Core.StartScene
         public void Start()
         {
             nameInputField.text = playerName != null ? playerName : null;
-            AudioManager.Instance.Play(AudioName.StartMusic, Vector3.zero);
+            
+        }
+
+        public void Update()
+        {
+            if (playerName != nameInputField.text)
+            {
+                playerName = nameInputField.text;
+                AudioManager.Instance.Play(AudioName.TypingLetter, Vector3.zero);
+            }
         }
 
         public void OnTutorialButtonPressed()
@@ -53,10 +62,9 @@ namespace Game.Core.StartScene
                 // TODO indicate to player that his input not good by sound/text, or switch the name to the player prefs name
                 return;
             }
-
             active = false;
             PlayerPrefs.SetInt("SawTutorial", 1);
-            playerName = nameInputField.text;
+            playerName = nameInputField.text.ToUpper();
             GameManager.Instance.SetNickname(playerName);
             PlayerPrefs.SetString("Name", playerName);
             GameEvents.GameInitialization();

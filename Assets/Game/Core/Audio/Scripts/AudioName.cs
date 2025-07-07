@@ -10,5 +10,12 @@ public enum AudioName
         StartMusic,
         EndMusic,
         CutrainMusic,
-        Wool
+        Wool,
+        TutorialMusic,
+        CurtainOpenToGame,
+        CurtainGameToEnd,
+        CurtainEndToOpening,
+        CatJumpPrepare,
+        RoyalInsideShape,
+        TypingLetter
     }

@@ -65,6 +65,7 @@ public class MouseSensor : MonoBehaviour
             IsMouseInRange = newValue;
             Debug.Log("MouseSensor: IsMouseInRange changed Active");
             OnAfraidChanged?.Invoke(IsMouseInRange);
+            OnPlatformDown?.Invoke();
             DOVirtual.DelayedCall(timeUntilPlatformDown, () => OnPlatformDown?.Invoke());
         }
     }

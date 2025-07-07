@@ -16,13 +16,13 @@ namespace Game.Player.Scripts
             public List<Transform> polygonPoints;
         }
 
-        private List<SegmentCreator.TrailSegment> _segments;
+        private List<Segment.TrailSegment> _segments;
         private List<Transform> _visited;
         private Transform _segmentsPointsFather;
         private List<GameObject> _intersectionPoints = new List<GameObject>();
         private readonly PlayerStats _playerStats;
 
-        public PlayerRatDetector(List<SegmentCreator.TrailSegment> segments, List<Transform> visited, Transform segmentsPointsFather,PlayerStats playerStats)
+        public PlayerRatDetector(List<Segment.TrailSegment> segments, List<Transform> visited, Transform segmentsPointsFather,PlayerStats playerStats)
         {
             _segments = segments;
             _visited = visited;
@@ -56,6 +56,11 @@ namespace Game.Player.Scripts
                         _intersectionPoints.Add(intersectionGO);
                         // Build the polygon: from i+1 to j, plus the intersection points at start and end
                         var polygonPoints = new List<Transform>();
+                        // in case of _visited change while function run
+                        if (_visited.Count < i + 2)
+                        {
+                            return new List<Polygon>();
+                        }
                         polygonPoints.Add(_visited[i + 1]); // Start after segA
                         for (int k = i + 2; k <= j; k++)
                         {
@@ -175,14 +180,14 @@ namespace Game.Player.Scripts
             foreach (var c in candidates)
             {
                 if (c == null) continue;
-                var root = Game.Core.Utils.EladsHelperFunctions.GetRootTransformPlatformHead(c.transform);
+                var root = EladsHelperFunctions.GetRootTransformPlatformHead(c.transform);
                 if (root == null) continue;
                 var movingPlatform = root.GetComponent<Game.Platforms.Scripts.MovingPlatform>();
                 if (movingPlatform != null &&
                     (movingPlatform.platformType == Game.Platforms.Scripts.PlatformType.King ||
                      movingPlatform.platformType == Game.Platforms.Scripts.PlatformType.Queen))
                 {
-                    if (Game.Core.Utils.EladsHelperFunctions.PointInPolygon(poly, root.position))
+                    if (EladsHelperFunctions.PointInPolygon(poly, root.position))
                     {
                         return true;
                     }

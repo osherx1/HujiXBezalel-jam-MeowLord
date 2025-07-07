@@ -76,12 +76,16 @@ MonoBehaviour:
   - {x: -0.442, y: 1.302}
   - {x: -0.31, y: 1.501}
   cinemachineConfiner: {fileID: 0}
+  softEdgeFactor: 0.42
+  minSpeedAtEdge: 0
   uiExclusionZone:
     serializedVersion: 2
     x: 280
     y: 10
     width: 200
     height: 90
+  isCameraLocked: 1
+  tutorialModeTargetFrame: 0
   cameraStuckThreshold: 0.3
 --- !u!114 &7166846718488591654
 MonoBehaviour:

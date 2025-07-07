@@ -52,6 +52,7 @@ namespace Game.Core.Managers
 
         private void OnTutorialReset()
         {
+            GameEvents.OnGameFinished -= OnTutorialReset;
             SceneLoader.Instance.TriggerClose(() =>
                 SceneLoader.Instance.LoadSceneWithCallback(1, () =>
                     GameEvents.TutorialReset((Action action) =>
@@ -70,6 +71,7 @@ namespace Game.Core.Managers
         {
             GameEvents.OnGameInitialization -= InitializeRelevantObjects;
             GameEvents.OnGameFinished -= OnGameFinished;
+            GameEvents.OnTutorialStarted -= TutorialStarted;
         }
 
         private void InitializeRelevantObjects()
@@ -103,15 +105,18 @@ namespace Game.Core.Managers
 
         private void OnGameFinished()
         {
+            GameEvents.OnGameFinished -= OnGameFinished;
             float finishedTime = Time.time - _timeStarted;
             _highScoreManager.TryAddHighScore(_gameplayScore.Score, CurrentNickname, finishedTime);
             var camera = GameObject.FindFirstObjectByType<HybridCameraFollow>();
             camera.tutorialModeTargetFrame = 6;
+            AudioManager.Instance.Play(AudioName.CurtainGameToEnd,Vector3.zero);
             camera.AdjustTargetFraming(() =>
                 SceneLoader.Instance.TriggerClose(() =>
                     SceneLoader.Instance.SetSkeletonSortingLayer("Curtain",() =>
                     SceneLoader.Instance.LoadSceneWithCallback(3, () =>
                     {
+                        AudioManager.Instance.Play(AudioName.EndMusic, Vector3.zero);
                         GameEvents.EndSceneStarted();
                         SceneLoader.Instance.TriggerOut(() => SceneLoader.Instance.SetSkeletonSortingLayer("default"));
                     }))));
@@ -120,6 +125,7 @@ namespace Game.Core.Managers
 
         public void StartGame()
         {
+            AudioManager.Instance.Play(AudioName.CurtainOpenToGame,Vector3.zero);
             SceneLoader.Instance.SetSkeletonSortingLayer("Curtain", () =>
                 SceneLoader.Instance.TriggerClose(() =>
                     SceneLoader.Instance.LoadSceneWithCallback(2, () =>
@@ -141,9 +147,19 @@ namespace Game.Core.Managers
         private IEnumerator GameStartCamera()
         {
             yield return null;
-            var camera = GameObject.FindFirstObjectByType<HybridCameraFollow>();
+            var camera = FindFirstObjectByType<HybridCameraFollow>();
             camera.tutorialModeTargetFrame = 0;
-            camera.AdjustTargetFraming(() => GameEvents.GameStarted());
+            camera.AdjustTargetFraming(GameEvents.GameStarted);
+        }
+
+        public void BackToStartScreen()
+        {
+            AudioManager.Instance.Play(AudioName.CurtainEndToOpening,Vector3.zero);
+            SceneLoader.Instance.SetSkeletonSortingLayer("Curtain", () =>
+                SceneLoader.Instance.TriggerClose(() =>
+                    SceneLoader.Instance.LoadSceneWithCallback(0, () =>
+                        SceneLoader.Instance.TriggerOut(()
+                            => SceneLoader.Instance.SetSkeletonSortingLayer("default")))));
         }
     }
 }

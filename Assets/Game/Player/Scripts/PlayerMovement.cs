@@ -43,7 +43,7 @@ namespace Game.Player.Scripts
 
         
 
-        private List<SegmentCreator.TrailSegment> _segments = new List<SegmentCreator.TrailSegment>();
+        private List<Segment.TrailSegment> _segments = new List<Segment.TrailSegment>();
         private List<Transform> _visited = new List<Transform>();
         private Transform _lastPlat;
         private Camera _mainCam;
@@ -65,8 +65,11 @@ namespace Game.Player.Scripts
         private MovingPlatform _lastMovingPlatform;
         private bool _pausedGame = false;
 
-        [SerializeField] private int[] yarnThresholds = { 200, 1000, 2500, 10000 };
+        [SerializeField] private int[] yarnThresholds = { 200, 2000, 20000 };
         private int _yarnThresholdIndex = 0;
+        private bool _gameEnded = false;
+        private bool _isHovering = false;
+        private int current_idx;
 
         void Awake()
         {
@@ -83,7 +86,7 @@ namespace Game.Player.Scripts
             // Register and snap onto it if found
             onMoveCompleteEvent = GameEvents.PlayerLanded;
             RegisterToPlatform(sensor, movingPlatform);
-            MovePlayerToPlatform(nearest);
+            MovePlayerToPlatform(nearest, false);
             _mainCam = Camera.main;
             GameEvents.NumberOfSegmentsChanged(leftSegments);
             // Find the nearest platform and its sensor
@@ -98,6 +101,7 @@ namespace Game.Player.Scripts
             GameEvents.OnPlayerPause += ActivatePauseGame;
             GameEvents.OnPlayerResume += ActivateResumeGame;
             GameEvents.OnUpdateScore += CheckYarn;
+            Segment.OnSegmentKingQueenCollide += HandleGameLoss;
         }
 
         private void GameFinished()
@@ -129,6 +133,8 @@ namespace Game.Player.Scripts
                 leftSegments = maxSegments - _segments.Count;
                 GameEvents.NumberOfSegmentsChanged(leftSegments);
                 _yarnThresholdIndex++;
+                GameEvents.YarnAdded();
+                CheckYarn(score);
             }
         }
 
@@ -153,7 +159,7 @@ namespace Game.Player.Scripts
             GameEvents.OnGameFinished -= GameFinished;
             GameEvents.OnTutorialStarted -= GameStarted;
             GameEvents.OnTutorialReset -= GameStarted;
-            
+            Segment.OnSegmentKingQueenCollide -= HandleGameLoss;
         }
 
         private void HandlePlayerFall()
@@ -161,7 +167,6 @@ namespace Game.Player.Scripts
             if (onMoveCompleteEvent != null) return;
             _fall = true;
             animator.SetTrigger(Fall);
-            AudioManager.Instance.Play(AudioName.CatBadJump, transform.position);
             GameEvents.PlayerFallPointsUpdate(transform.position);
             RemoveAllSegments();
             UnregisterAllVisitedPlatforms();
@@ -193,38 +198,29 @@ namespace Game.Player.Scripts
                 _lastMovingPlatform.hasPlayerOnTop = true;
         }
 
-        private void MovePlayerToPlatform(Transform platform, bool withDelay = true)
+        private void MovePlayerToPlatform(Transform platform, bool withSound = true)
         {
             if (platform == null) return;
             _lastPlat = platform;
-            if (_visited.Count == 0)
-            {
-                _visited.Add(platform);
-            }
-            else if (_visited[_visited.Count - 1] != platform)
-            {
-                _visited.Add(platform);
-                RegisterSensorPlatformEvent(platform);
-                playerLogger.Log($"Player {_visited.Count} moving to {platform.name}");
-            }
+            _visited.Add(platform);
+            RegisterSensorPlatformEvent(platform);
             RotatePlayerTowards(platform);
-            AnimateAndMoveToPlatform(platform);
+            AnimateAndMoveToPlatform(platform,withSound);
         }
 
-        private void AnimateAndMoveToPlatform(Transform platform)
+        private void AnimateAndMoveToPlatform(Transform platform, bool withSound)
         {
             DOTween.Kill(transform); // Kill any previous tweens on this transform
             isMoving = true;
-            AudioManager.Instance.Play(AudioName.CatJump, transform.position);
+            GameEvents.PlayerMoved();
+            if (withSound) AudioManager.Instance.Play(AudioName.CatJump, transform.position);
             if (moveCoroutine != null) StopCoroutine(moveCoroutine);
             moveCoroutine = StartCoroutine(MoveToPlatformCoroutine(platform));
             playerLogger?.Log("Player Activated event PlayerMoved");
-            GameEvents.PlayerMoved();
         }
 
         private IEnumerator MoveToPlatformCoroutine(Transform platform)
         {
-            isMoving = true;
             while (Vector3.Distance(transform.position, platform.position) > 0.05f)
             {
                 while (_pausedGame)
@@ -296,7 +292,7 @@ namespace Game.Player.Scripts
 
         private void OnClick(InputAction.CallbackContext ctx)
         {
-            if (isMoving || _fall || _pausedGame) return;
+            if (isMoving || _fall || _pausedGame || _gameEnded) return;
             Vector2 screenPos = Mouse.current.position.ReadValue();
             Vector3 worldPos = _mainCam.ScreenToWorldPoint(screenPos);
             var hit = Physics2D.Raycast(worldPos, Vector2.zero, 0f, clickableLayer);
@@ -334,6 +330,8 @@ namespace Game.Player.Scripts
                     GameEvents.PlayerLanded();
                 };
                 _segments[_segments.Count - 1].ToT = transform;
+                UnregisterMovingPlatformEvent(_visited[^1]);
+                _visited.RemoveAt(_visited.Count - 1);
                 _visited.RemoveAt(_visited.Count - 1);
                 RegisterToPlatform(newPlatScript, _lastMovingPlatform);
                 MovePlayerToPlatform(newPlat);
@@ -365,21 +363,27 @@ namespace Game.Player.Scripts
         {
             if (_visited.Contains(newPlat))
             {
-                int idx = _visited.IndexOf(newPlat);
-                List<Transform> loopPlatforms = _visited.GetRange(idx, _visited.Count - idx);
-                for (int i = idx + 1; i < _visited.Count; i++)
-                {
-                    UnregisterMovingPlatformEvent(_visited[i]);
-                }
-                _visited.RemoveRange(idx + 1, _visited.Count - idx - 1);
+                current_idx = _visited.IndexOf(newPlat);
+                
                 onMoveCompleteEvent = () =>
                 {
+                    
+                    List<Transform> loopPlatforms = _visited.GetRange(current_idx, _visited.Count - current_idx - 1);
+                    for (int i = current_idx + 1; i < _visited.Count - 1; i++)
+                    {
+                        UnregisterMovingPlatformEvent(_visited[i]);
+                    }
+                    _visited.RemoveRange(current_idx + 1, _visited.Count - current_idx - 1);
+                    
                     if (_playerRatDetector.HasKingOrQueenInLoopPolygon(loopPlatforms, playerStats.platformLayer))
                     {
                         HandleGameLoss();
                         return;
                     }
-                    
+                    for (int i = _segments.Count - 1; i >= current_idx; i--)
+                    {
+                        RemoveSegment(i);
+                    }
                     AudioManager.Instance.Play(AudioName.CatLand, transform.position);
                     if (_playerRatDetector.DestroyEnemiesInLoop(loopPlatforms, enemyLayer))
                     {
@@ -388,10 +392,6 @@ namespace Game.Player.Scripts
                     else
                     {
                         DOVirtual.DelayedCall(playerLandedTimer, () => GameEvents.PlayerLanded());
-                    }
-                    for (int i = _segments.Count - 1; i >= idx; i--)
-                    {
-                        RemoveSegment(i);
                     }
                 };
                 RegisterToPlatform(newPlatScript, _lastMovingPlatform);
@@ -427,7 +427,7 @@ namespace Game.Player.Scripts
 
         private void CreateNewSegment(Transform fromPlat, Transform toPlat)
         {
-            _segments.Add(SegmentCreator.CreateSegment(trailRenderer, segmentsFather, fromPlat.gameObject,
+            _segments.Add(Segment.CreateSegment(trailRenderer, segmentsFather, fromPlat.gameObject,
                 toPlat.gameObject));
             leftSegments = maxSegments - _segments.Count;
             GameEvents.NumberOfSegmentsChanged(leftSegments);
@@ -460,19 +460,10 @@ namespace Game.Player.Scripts
 
         void LateUpdate()
         {
-            UpdateSegmentLinePositions();
             if (_lastPlat != null && !isMoving && !_fall)
                 transform.position = _lastPlat.position;
         }
-
-        private void UpdateSegmentLinePositions()
-        {
-            foreach (var seg in _segments)
-            {
-                seg.Lr.SetPosition(0, seg.FromT.TransformPoint(seg.FromLocalPos));
-                seg.Lr.SetPosition(1, seg.ToT.TransformPoint(seg.ToLocalPos));
-            }
-        }
+        
 
         // ReSharper disable Unity.PerformanceAnalysis
         private void OnPlatformReturnHandler(Transform platform)
@@ -505,14 +496,14 @@ namespace Game.Player.Scripts
 
         private void Update()
         {
-            if (_pausedGame) return;
+            if (_pausedGame || _gameEnded) return;
             CheckForClosedPolygons();
             CheckIfMouseOnPlatform();
         }
 
         private void CheckForClosedPolygons()
         {
-            if (isMoving || _fall) return;
+            if (isMoving || _fall ) return;
             var polygons = _playerRatDetector.CheckForClosedPolygons();
             if (polygons == null || polygons.Count == 0) return;
             int segRemoveTo = -1;
@@ -544,7 +535,8 @@ namespace Game.Player.Scripts
 
         private void HandleGameLoss()
         {
-            AudioManager.Instance.Play(AudioName.CatBadJump, transform.position);
+            _gameEnded = true;
+            AudioManager.Instance.Play(AudioName.RoyalInsideShape, Vector3.zero);
             GameEvents.GameFinished();
         }
 
@@ -585,6 +577,10 @@ namespace Game.Player.Scripts
                 isHovering = false;
             }
 
+            if (isHovering != _isHovering && isHovering)
+            {
+                AudioManager.Instance.Play(AudioName.CatJumpPrepare, Vector3.zero);
+            }
             animator.SetBool(IsHovering, isHovering);
             GameEvents.PlatformHover(isHovering);
         }

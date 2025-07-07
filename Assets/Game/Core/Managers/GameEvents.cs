@@ -154,5 +154,11 @@ namespace Game.Core.Managers
         {
             OnTutorialReset?.Invoke(onComplete);
         }
+
+        public static event Action OnYarnAdded;
+        public static void YarnAdded()
+        {
+            OnYarnAdded?.Invoke();
+        }
     }
 }
