@@ -9,18 +9,13 @@ public class LeaderboardUI : MonoBehaviour
     public TMP_Text[] nameFields;
     public TMP_Text[] scoreFields;
     public TMP_Text[] timeFields;
-    
-    private void OnEnable()
-    {
-        GameEvents.OnEndSceneStarted += PrintHighScores;
-    }
 
-    private void OnDisable()
+    private void Start()
     {
-        GameEvents.OnEndSceneStarted  -= PrintHighScores;
+        var leaderboardEntries = GameManager.Instance.HighScoreManager.GetHighScoreTable();
+        UpdatingScore(leaderboardEntries);
     }
-
-    void CallBackForUpdatingScore(List<(int, int, string, float)> table)
+    void UpdatingScore(List<LeaderboardEntry> table)
     {
         Debug.Log("Entered Callback");
         UnityMainThreadDispatcher.Instance.Enqueue(() => {
@@ -29,9 +24,9 @@ public class LeaderboardUI : MonoBehaviour
             Debug.Log("Starting to assign values");
             if (i < table.Count)
             {
-                nameFields[i].text = table[i].Item3;
-                scoreFields[i].text = table[i].Item2.ToString();
-                timeFields[i].text = FormatTime(table[i].Item4);
+                nameFields[i].text = table[i].Name;
+                scoreFields[i].text = table[i].Score.ToString();
+                timeFields[i].text = FormatTime(table[i].FinishTime);
             }
             else
             {
@@ -41,11 +36,6 @@ public class LeaderboardUI : MonoBehaviour
             }
         }
         });
-    }
-    void PrintHighScores()
-    {
-        // Suppose you have access to your HighScoreManager
-        GameManager.Instance.HighScoreManager.GetHighScoreTable(CallBackForUpdatingScore);
     }
     
     
