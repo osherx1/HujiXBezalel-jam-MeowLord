@@ -29,6 +29,7 @@ namespace UI
         public LayerMask platformLayerMask;
 
         private CursorState currentState = CursorState.Normal;
+        private bool isHovering = false;
 
         void Awake()
         {
@@ -41,7 +42,15 @@ namespace UI
             if (cursorRect == null) return;
             cursorRect.position = Input.mousePosition;
 
-            // סומכים רק על הערך שמגיע מהאירוע:
+            // UI interaction first
+            CursorState uiState = GetUICursorState();
+            if (uiState != CursorState.Normal)
+            {
+                SetState(uiState);
+                return;
+            }
+
+            // Then, check platform hover via event
             if (isHovering)
             {
                 if (Input.GetMouseButton(0))
@@ -54,10 +63,6 @@ namespace UI
                 SetState(CursorState.Normal);
             }
         }
-
-        
-
-        private bool isHovering = false;
 
         private void OnEnable()
         {
@@ -72,52 +77,39 @@ namespace UI
             isHovering = hovering;
         }
 
-
-        private CursorState GetCursorState2D()
+        // Check if hovering or clicking on any interactive UI element
+        private CursorState GetUICursorState()
         {
-            // בדיקה אם העכבר מעל UI
-            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
-            {
-                if (Input.GetMouseButton(0))
-                {
-                    var pointerData = new PointerEventData(EventSystem.current)
-                    {
-                        position = Input.mousePosition
-                    };
-                    var results = new System.Collections.Generic.List<RaycastResult>();
-                    EventSystem.current.RaycastAll(pointerData, results);
-
-                    foreach (var r in results)
-                    {
-                        if (r.gameObject.GetComponent<Button>() != null)
-                        {
-                            return CursorState.Active; // Mouse pressed on UI Button
-                        }
-                    }
-                }
+            if (EventSystem.current == null)
                 return CursorState.Normal;
-            }
 
-            // בדיקה בעולם
-            Vector3 mouseScreen = Input.mousePosition;
-            Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(mouseScreen);
-
-            RaycastHit2D hit = Physics2D.Raycast(mouseWorld, Vector2.zero, 0f, platformLayerMask);
-
-            if (hit.collider != null)
+            if (EventSystem.current.IsPointerOverGameObject())
             {
-                var platform = hit.collider.GetComponent<Platform>();
-                if (platform != null ) //&& platform.IsReallyActive())
+                var pointerData = new PointerEventData(EventSystem.current)
                 {
-                    if (Input.GetMouseButton(0))
-                        return CursorState.Active;
-                    else
-                        return CursorState.Hover;
+                    position = Input.mousePosition
+                };
+                var results = new System.Collections.Generic.List<RaycastResult>();
+                EventSystem.current.RaycastAll(pointerData, results);
+
+                foreach (var r in results)
+                {
+                    // Check if UI element is interactive
+                    if (r.gameObject.GetComponent<Button>() != null ||
+                        r.gameObject.GetComponent<Toggle>() != null ||
+                        r.gameObject.GetComponent<UnityEngine.UI.InputField>() != null ||
+                        r.gameObject.GetComponent<UnityEngine.UI.Slider>() != null ||
+                        r.gameObject.GetComponent<UnityEngine.UI.Dropdown>() != null)
+                    {
+                        if (Input.GetMouseButton(0))
+                            return CursorState.Active;
+                        else
+                            return CursorState.Hover;
+                    }
                 }
             }
             return CursorState.Normal;
         }
-
 
         public void SetState(CursorState state)
         {

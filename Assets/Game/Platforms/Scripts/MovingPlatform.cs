@@ -477,7 +477,7 @@ namespace Game.Platforms.Scripts
             {
                 forwardSkeletonMecanim.Skeleton.SetSkin(targetSkin);
                 forwardSkeletonMecanim.Skeleton.SetSlotsToSetupPose();
-                forwardSkeletonMecanim.LateUpdate(); // חשוב כדי לעדכן את התצוגה מיד
+                forwardSkeletonMecanim.LateUpdate();
             }
 
             if (backwardSkeletonMecanim != null && backwardSkeletonMecanim.Skeleton != null)
