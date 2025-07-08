@@ -45,23 +45,12 @@ namespace Game.Player.Scripts
             trailData.BoxCollider.transform.rotation = Quaternion.Euler(0, 0, angle);
         }
 
-        public void Update()
-        {
-            TinyMovementForCollision();
-        }
+       
         public void LateUpdate()
         {
             UpdatePosition();
-            UpdateBoxCollider();
+            // UpdateBoxCollider();
         }
-
-        private void TinyMovementForCollision()
-        {
-            _nudgeTimer += Time.deltaTime;
-            float nudgeAmount = Mathf.Sin(_nudgeTimer * 20f) * 0.00001f;
-            transform.position += new Vector3(nudgeAmount, 0f, 0f);
-        }
-        
         
         [InspectorButton]
         private void UpdatePosition()
@@ -74,7 +63,7 @@ namespace Game.Player.Scripts
         public static TrailSegment CreateSegment(GameObject linePrefab, Transform parent, GameObject fromGo, GameObject toGo)
         {
             // Instantiate the prefab and parent it
-            var lineObject = Object.Instantiate(linePrefab);
+            var lineObject = Instantiate(linePrefab);
             lineObject.name = "ClickTrail";
 
             // Optionally reset local transform
@@ -90,6 +79,7 @@ namespace Game.Player.Scripts
             if (box == null)
                 Debug.LogError(new Exception("No BoxCollider2D component attached to a child."));
             box.offset = Vector2.zero;
+            box.size = Vector2.zero;
             lr.useWorldSpace = true;
             lr.positionCount = 2;
 

@@ -1,4 +1,5 @@
 using System.Collections;
+using Game.Core.Audio;
 using Game.Core.Managers;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -20,6 +21,10 @@ namespace Game.Enemies.Scripts
 
         [SerializeField] private float flyToScoreSpeed = 1.5f;
 
+        private AudioManager _audioManager;
+        
+        [SerializeField]private AudioName mosueCatchSoundName; 
+
 
         private void OnEnable()
         {
@@ -29,6 +34,8 @@ namespace Game.Enemies.Scripts
             
             if (visualTransform != null)
                 visualTransform.localScale = Vector3.one;
+            if (_audioManager == null)
+                _audioManager = AudioManager.Instance;
         }
 
         private void ResetAnimator()
@@ -56,6 +63,7 @@ namespace Game.Enemies.Scripts
 
         private void Die()
         {
+            _audioManager.Play(mosueCatchSoundName, transform.position);
             GameEvents.MouseCatch(transform.position); 
             int deathIndex = Random.Range(1, 5);
             animator.SetInteger(RandomDeath, deathIndex);
@@ -106,13 +114,13 @@ namespace Game.Enemies.Scripts
             float elapsed = 0f;
 
             Vector3 start = flyObj.transform.position;
-            Vector3 end = score.transform.position;
 
             while (elapsed < duration)
             {
                 elapsed += Time.deltaTime;
                 float t = Mathf.SmoothStep(0, 1, elapsed / duration);
-                flyObj.transform.position = Vector3.Lerp(start, end, t);
+                Vector3 currentTarget = score.transform.position;
+                flyObj.transform.position = Vector3.Lerp(start, currentTarget, t);
                 yield return null;
             }
 

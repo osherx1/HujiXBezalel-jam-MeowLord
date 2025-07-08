@@ -15,7 +15,6 @@ namespace Game.Core.Managers
     {
         private GameplayScore _gameplayScore;
         private HighScoreManager _highScoreManager;
-        private FirebaseInitializer _firebaseIntializer;
         private PauseController _pauseController;
         [SerializeField] private HighScoreLogger highScoreLogger;
         private float _timeStarted;
@@ -80,17 +79,11 @@ namespace Game.Core.Managers
             {
                 _pauseController = new PauseController();
             }
-
             if (highScoreLogger == null)
             {
                 highScoreLogger = gameObject.AddComponent<HighScoreLogger>();
             }
-
-            if (_firebaseIntializer == null)
-            {
-                _firebaseIntializer = new FirebaseInitializer(highScoreLogger);
-            }
-
+            FirebaseBridge.Instance.Initialize();
             if (_highScoreManager == null) _highScoreManager = new HighScoreManager(highScoreLogger);
             if (_gameplayScore == null) _gameplayScore = new GameplayScore();
             _timeStarted = Time.time;
@@ -107,7 +100,7 @@ namespace Game.Core.Managers
         {
             GameEvents.OnGameFinished -= OnGameFinished;
             float finishedTime = Time.time - _timeStarted;
-            _highScoreManager.TryAddHighScore(_gameplayScore.Score, CurrentNickname, finishedTime);
+            _highScoreManager.TryAddHighScore(CurrentNickname,_gameplayScore.Score,  finishedTime);
             var camera = GameObject.FindFirstObjectByType<HybridCameraFollow>();
             camera.tutorialModeTargetFrame = 6;
             AudioManager.Instance.Play(AudioName.CurtainGameToEnd,Vector3.zero);
@@ -117,7 +110,6 @@ namespace Game.Core.Managers
                     SceneLoader.Instance.LoadSceneWithCallback(3, () =>
                     {
                         AudioManager.Instance.Play(AudioName.EndMusic, Vector3.zero);
-                        GameEvents.EndSceneStarted();
                         SceneLoader.Instance.TriggerOut(() => SceneLoader.Instance.SetSkeletonSortingLayer("default"));
                     }))));
         }

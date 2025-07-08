@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Game.Core.Audio;
 using Game.Core.Managers;
 using Spine.Unity;
 using UnityEngine;
@@ -26,6 +27,10 @@ namespace Game.Platforms.Scripts
 
         [Header("References for Layer Changing")]
         public SpriteRenderer forwardSpriteRenderer;
+        
+        [Header("Cat Landing Points")]
+        [SerializeField] private Transform catLandingPointFront;
+        [SerializeField] private Transform catLandingPointBack;
 
         public SpriteRenderer backwardSpriteRenderer;
         public SkeletonMecanim forwardSkeletonMecanim;
@@ -473,7 +478,7 @@ namespace Game.Platforms.Scripts
             {
                 forwardSkeletonMecanim.Skeleton.SetSkin(targetSkin);
                 forwardSkeletonMecanim.Skeleton.SetSlotsToSetupPose();
-                forwardSkeletonMecanim.LateUpdate(); // חשוב כדי לעדכן את התצוגה מיד
+                forwardSkeletonMecanim.LateUpdate();
             }
 
             if (backwardSkeletonMecanim != null && backwardSkeletonMecanim.Skeleton != null)
@@ -482,6 +487,11 @@ namespace Game.Platforms.Scripts
                 backwardSkeletonMecanim.Skeleton.SetSlotsToSetupPose();
                 backwardSkeletonMecanim.LateUpdate();
             }
+        }
+        
+        public Transform GetActiveCatLandingPoint()
+        {
+            return _isFacingForward ? catLandingPointFront : catLandingPointBack;
         }
 
     }
