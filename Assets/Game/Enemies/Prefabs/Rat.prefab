@@ -117,7 +117,7 @@ MonoBehaviour:
   forwardSpriteRenderer: {fileID: 4310494063007055227}
   backwardSpriteRenderer: {fileID: 0}
   forwardSkeletonMecanim: {fileID: 6510808105326370135}
-  backwardSkeletonMecanim: {fileID: 0}
+  backwardSkeletonMecanim: {fileID: 7582389302529985946}
 --- !u!114 &2788262734768422978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -276,6 +276,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4071068861283744430, guid: bd13998e9b9b9484393397a1c4935540, type: 3}
   m_PrefabInstance: {fileID: 1358556302017608493}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7582389302529985946 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8926276468152284855, guid: bd13998e9b9b9484393397a1c4935540, type: 3}
+  m_PrefabInstance: {fileID: 1358556302017608493}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3034080521265980437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9db98c60740638449864eb028fbe7ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &4346134216613565273
 PrefabInstance:
   m_ObjectHideFlags: 0
