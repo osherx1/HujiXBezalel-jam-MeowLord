@@ -9,7 +9,7 @@ namespace Game.Player.Scripts
         [SerializeField] private string layerTwoName;
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (!other.isTrigger || !other.CompareTag("BackCollider"))
+            if (!other.isTrigger || !other.CompareTag($"PlayerDoorCollider"))
                 return;
             _meshRenderer.sortingLayerName = _meshRenderer.sortingLayerName == layerOneName ? layerTwoName : layerOneName;
         }

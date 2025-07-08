@@ -9,6 +9,7 @@ TagManager:
   - PlatformHead
   - BackCollider
   - Yarn
+  - PlayerDoorCollider
   layers:
   - Default
   - TransparentFX

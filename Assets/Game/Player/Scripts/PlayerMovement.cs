@@ -205,9 +205,16 @@ namespace Game.Player.Scripts
             if (platform == null) return;
             _lastPlat = platform;
             _visited.Add(platform);
+            StartCoroutine(ChangeMeshDelay());
             RegisterSensorPlatformEvent(platform);
             RotatePlayerTowards(platform);
             AnimateAndMoveToPlatform(platform,withSound);
+        }
+
+        private IEnumerator ChangeMeshDelay()
+        {
+            yield return new WaitForSeconds(0.1f);
+            _meshRenderer.sortingLayerName = layerOneName;
         }
 
         private void AnimateAndMoveToPlatform(Transform platform, bool withSound)
@@ -477,7 +484,9 @@ namespace Game.Player.Scripts
                 moving.hasYarnAttached = false;
             }
         }
-
+        [SerializeField] private MeshRenderer _meshRenderer;
+        [SerializeField] private string layerOneName;
+        [SerializeField] private string layerTwoName;
 
         void LateUpdate()
         {
@@ -485,7 +494,9 @@ namespace Game.Player.Scripts
             {
                 if (movePlatform)
                 {
-                    var transformPlat = _lastPlat.GetComponentInChildren<MovingPlatform>()?.GetActiveCatLandingPoint();
+                    var moving = _lastPlat.GetComponentInChildren<MovingPlatform>();
+                    var transformPlat = moving?.GetActiveCatLandingPoint();
+                    _meshRenderer.sortingLayerName = moving.publicTargetLayer == "Platform" ? layerOneName : layerTwoName;
                     transform.position = transformPlat?.position ?? _lastPlat.transform.position;
                     if(_segments.Count > 0) _segments[^1].ToT = transformPlat ?? _lastPlat.transform;
                 }

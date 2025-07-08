@@ -500,6 +500,7 @@ namespace Game.Core.Tutorial.Scripts
             {
                 wayPointServant2.stopForever = false;
                 waypointPointServantEnd.stopForever = false;
+                waypointPointServantEnter.stopForever = false;
                 var rat = Instantiate(mouseTutorial2, firstPositionOfCamera.position, Quaternion.identity);
                 rat.transform.position = startingMouseLocation.position;
                 rat.transform.rotation = startingMouseLocation.rotation;

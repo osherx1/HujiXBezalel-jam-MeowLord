@@ -430,8 +430,11 @@ namespace Game.Platforms.Scripts
                     meshRenderer.sortingLayerName = targetLayer;
                 }
             }
+            publicTargetLayer = targetLayer;
         }
-        
+
+        public string publicTargetLayer { get; set; }
+
         public void SetFrozen(bool frozen)
         {
             isFrozen = frozen;
