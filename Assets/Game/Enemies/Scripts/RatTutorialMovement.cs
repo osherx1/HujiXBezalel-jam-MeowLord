@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Game.Core.Managers;
 using Spine.Unity;
@@ -58,7 +59,7 @@ namespace Game.Enemies.Scripts
             PickNewDirection();
             StartCoroutine(Move());
         }
-        
+
 
         private void PickNewDirection()
         {
