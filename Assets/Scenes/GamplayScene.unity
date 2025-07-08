@@ -1920,7 +1920,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.22974023, y: -4.13, z: -1.0053988}
+  m_LocalPosition: {x: 5.8811383, y: -3.1225598, z: -1.0053988}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3496,6 +3496,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerText: {fileID: 1833173216}
+  _timeLeft: 300
+  edgeFlashes:
+  - {fileID: 2140138614}
 --- !u!95 &1022567770 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 8889526713996864834, guid: e09090cbfa4c24be3aaddd137d35e02a, type: 3}
