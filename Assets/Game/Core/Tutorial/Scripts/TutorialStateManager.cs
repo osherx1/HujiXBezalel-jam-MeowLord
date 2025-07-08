@@ -30,7 +30,6 @@ namespace Game.Core.Tutorial.Scripts
 
         private void StartTutorialStateOrder()
         {
-            AudioManager.Instance.Play(AudioName.TutorialMusic, Vector3.zero);
             StartCoroutine(StartOfTutorialState());
         }
 
@@ -45,7 +44,6 @@ namespace Game.Core.Tutorial.Scripts
 
         private void TutorialResetStateInvoker(Action<Action> obj)
         {
-            AudioManager.Instance.Play(AudioName.TutorialMusic, Vector3.zero);
             StartCoroutine(TutorialResetState(obj));
         }
 
