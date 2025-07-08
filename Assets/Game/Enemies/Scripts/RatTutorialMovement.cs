@@ -1,5 +1,6 @@
 using System.Collections;
 using Game.Core.Managers;
+using Spine.Unity;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -30,6 +31,13 @@ namespace Game.Enemies.Scripts
         [SerializeField] private Transform visualTransform;
         [SerializeField] private GameObject frontSkeleton;
         [SerializeField] private GameObject backSkeleton;
+        
+        [Header("Flip")]
+        public SpriteRenderer forwardSpriteRenderer;
+        public SpriteRenderer backwardSpriteRenderer;
+        
+        public SkeletonMecanim forwardSkeletonMecanim;
+        public SkeletonMecanim backwardSkeletonMecanim;
         public bool StopedMoving { get; set; }
        
 
@@ -137,6 +145,38 @@ namespace Game.Enemies.Scripts
             animator.SetBool(IsWalking, false);
             frontSkeleton.SetActive(true);
             backSkeleton.SetActive(false);
+        }
+        
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (!other.isTrigger || !other.CompareTag("BackCollider"))
+                return;
+
+            // Forwards SpriteRenderer
+            if (forwardSpriteRenderer != null)
+            {
+                string nextLayer = forwardSpriteRenderer.sortingLayerName != "Enemy" ? "Enemy" : "Background";
+                forwardSpriteRenderer.sortingLayerName = nextLayer;
+            }
+
+            // Backwards SpriteRenderer
+            if (backwardSpriteRenderer != null)
+            {
+                string nextLayer = backwardSpriteRenderer.sortingLayerName != "Enemy" ? "Enemy" : "Background";
+                backwardSpriteRenderer.sortingLayerName = nextLayer;
+            }
+
+            // Forwards SkeletonMecanim
+            if (forwardSkeletonMecanim != null)
+            {
+                var meshRenderer = forwardSkeletonMecanim.GetComponent<Renderer>();
+                if (meshRenderer != null)
+                {
+                    string current = meshRenderer.sortingLayerName;
+                    string nextLayer = current != "Enemy" ? "Enemy" : "Background";
+                    meshRenderer.sortingLayerName = nextLayer;
+                }
+            }
         }
     }
 }
