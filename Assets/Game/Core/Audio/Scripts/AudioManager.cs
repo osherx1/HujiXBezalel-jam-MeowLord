@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Game.Core.Audio
 {
@@ -109,13 +110,15 @@ namespace Game.Core.Audio
         {
             return sounds;
         }
-        
+
+        /// <summary>
+        /// Instantly stops all music (all looping AudioSources).
+        /// </summary>
         public void StopAllMusic()
         {
             if (musicSource != null && musicSource.isPlaying)
                 musicSource.Stop();
 
-            // Optional: Stop all dynamically created looping AudioSources as well
             AudioSource[] allSources = FindObjectsOfType<AudioSource>();
             foreach (var src in allSources)
             {
@@ -126,5 +129,51 @@ namespace Game.Core.Audio
             }
         }
 
+        /// <summary>
+        /// Gradually fades out and stops all music (all looping AudioSources).
+        /// </summary>
+        /// <param name="fadeDuration">Fade-out time in seconds</param>
+        public void StopAllMusicGradually(float fadeDuration = 1.0f)
+        {
+            StartCoroutine(FadeOutAllMusic(fadeDuration));
+        }
+
+        private System.Collections.IEnumerator FadeOutAllMusic(float fadeDuration)
+        {
+            AudioSource[] allSources = FindObjectsOfType<AudioSource>();
+            var sourcesToFade = new List<AudioSource>();
+
+            foreach (var src in allSources)
+            {
+                if (src != null && src.isPlaying && src.loop)
+                    sourcesToFade.Add(src);
+            }
+
+            var startVolumes = new float[sourcesToFade.Count];
+            for (int i = 0; i < sourcesToFade.Count; i++)
+                startVolumes[i] = sourcesToFade[i].volume;
+
+            float t = 0f;
+            while (t < fadeDuration)
+            {
+                t += Time.deltaTime;
+                float ratio = 1f - Mathf.Clamp01(t / fadeDuration);
+                for (int i = 0; i < sourcesToFade.Count; i++)
+                {
+                    if (sourcesToFade[i] != null)
+                        sourcesToFade[i].volume = startVolumes[i] * ratio;
+                }
+                yield return null;
+            }
+
+            for (int i = 0; i < sourcesToFade.Count; i++)
+            {
+                if (sourcesToFade[i] != null)
+                {
+                    sourcesToFade[i].volume = 0f;
+                    sourcesToFade[i].Stop();
+                }
+            }
+        }
     }
 }
