@@ -3674,7 +3674,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timerText: {fileID: 1833173216}
-  _timeLeft: 300
+  _timeLeft: 181
   edgeFlashes:
   - {fileID: 285082433}
 --- !u!95 &1022567770 stripped
