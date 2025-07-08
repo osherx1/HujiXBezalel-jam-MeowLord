@@ -109,5 +109,22 @@ namespace Game.Core.Audio
         {
             return sounds;
         }
+        
+        public void StopAllMusic()
+        {
+            if (musicSource != null && musicSource.isPlaying)
+                musicSource.Stop();
+
+            // Optional: Stop all dynamically created looping AudioSources as well
+            AudioSource[] allSources = FindObjectsOfType<AudioSource>();
+            foreach (var src in allSources)
+            {
+                if (src != musicSource && src.isPlaying && src.loop)
+                {
+                    src.Stop();
+                }
+            }
+        }
+
     }
 }
