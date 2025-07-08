@@ -42,9 +42,15 @@ namespace Game.Core.Managers
             GameEvents.OnGameInitialization += InitializeRelevantObjects;
             GameEvents.OnGameStarted += GameSarted;
             GameEvents.OnTutorialStarted += TutorialStarted;
+            GameEvents.OnTutorialReset += TutorialStarted;
         }
 
         private void TutorialStarted()
+        {
+            GameEvents.OnGameFinished += OnTutorialReset;
+        }
+        
+        private void TutorialStarted(Action<Action> action)
         {
             GameEvents.OnGameFinished += OnTutorialReset;
         }
@@ -71,6 +77,7 @@ namespace Game.Core.Managers
             GameEvents.OnGameInitialization -= InitializeRelevantObjects;
             GameEvents.OnGameFinished -= OnGameFinished;
             GameEvents.OnTutorialStarted -= TutorialStarted;
+            GameEvents.OnTutorialReset -= TutorialStarted;
         }
 
         private void InitializeRelevantObjects()

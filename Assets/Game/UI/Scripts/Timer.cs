@@ -39,7 +39,8 @@ namespace Game.UI.Scripts
         public void OnDisable()
         {
             GameEvents.OnGameStarted -= Activate;
-            GameEvents.OnGameFinished += Stop;
+            GameEvents.OnGameFinished -= Stop;
+            TutorialStateManager.StartTimer -= ActivateTutorial;
         }
 
         private void Activate()
