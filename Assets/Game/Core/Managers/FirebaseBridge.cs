@@ -13,14 +13,38 @@ using Firebase.Database;
 
 namespace Game.Core.Managers
 {
+    [Serializable]
+    public class HighScoreEntry
+    {
+        public int Score;
+        public string Nickname;
+        public float FinishTime;
+    }
+
+    // Called from JS to C# with leaderboard data (JSON string)
+    [Serializable]
+    public class HighScoreEntryListWrapper
+    {
+        public List<HighScoreEntry> entries;
+    }
+    
     public class FirebaseBridge : MonoSingleton<FirebaseBridge>
     {
-#if UNITY_WEBGL && !UNITY_EDITOR
+        private bool _intilaized = false;
+        private readonly Queue<Action> actionsQueue = new Queue<Action>();
+#if UNITY_WEBGL
         [DllImport("__Internal")]
-        private static extern void SaveScoreToFirebase(string nickname, int score, float finishTime, string callbackSuccess, string callbackError);
+        private static extern void SaveScoreToFirebase(string nickname, int score, float finishTime,
+            string callbackSuccess, string callbackError);
 
         [DllImport("__Internal")]
         private static extern void GetLeaderboardFromFirebase(string callbackSuccess, string callbackError);
+
+        [DllImport("__Internal")]
+        private static extern void InitializeFirebase();
+
+        private static Action _pendingInitSuccess;
+        private static Action<string> _pendingInitError;
 #endif
 
         // For C# SDK: store callback for pending leaderboard fetch
@@ -30,14 +54,29 @@ namespace Game.Core.Managers
         private bool isGetHighScoreTableInProgress = false;
         private const int MaxHighScores = 10;
         private const string HighScoresPath = "highscores";
-        private static Action<List<(int, int, string, float)>> _pendingLeaderboardCallback;
-        private static Action _pendingLeaderboardErrorCallback;
+
 #endif
 
-        // Initialize Firebase and sign in anonymously (non-WebGL)
+        private static Action<List<(int, int, string, float)>> _pendingLeaderboardCallback;
+        private static Action _pendingLeaderboardErrorCallback;
+
+
         public void Initialize(Action onReady = null, Action<string> onError = null)
         {
-#if !UNITY_WEBGL
+            Debug.Log("Firebase starts intiliztion");
+            Action onReadyWrapper = () =>
+            {
+                _intilaized = true;
+                onReady?.Invoke();
+                DequeWaitingAction();
+            };
+
+#if UNITY_WEBGL
+            _pendingInitSuccess = onReadyWrapper;
+            _pendingInitError = onError;
+            Debug.Log("Firebase enter java script on webgl");
+            InitializeFirebase();
+#else
             FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
             {
                 var dependencyStatus = task.Result;
@@ -49,7 +88,7 @@ namespace Game.Core.Managers
                         if (authTask.IsCompleted && !authTask.IsFaulted && !authTask.IsCanceled)
                         {
                             Debug.Log("Signed in anonymously to Firebase!");
-                            onReady?.Invoke();
+                            onReadyWrapper?.Invoke();
                         }
                         else
                         {
@@ -64,29 +103,53 @@ namespace Game.Core.Managers
                     onError?.Invoke($"Could not resolve all Firebase dependencies: {dependencyStatus}");
                 }
             });
-#else
-            // On WebGL, Firebase is initialized in JS
-            Debug.Log("Firebase initialization is handled by JavaScript in WebGL builds.");
-            onReady?.Invoke();
 #endif
         }
 
-        // SubmitScore with success and error callbacks
-        public void SubmitScore(int score, string nickname, float finishTime, Action onSuccess = null, Action<string> onError = null)
+        private void DequeWaitingAction()
         {
-#if UNITY_WEBGL && !UNITY_EDITOR
+            Debug.Log("Firebase deque ENTERED");
+            if (actionsQueue.Count > 0)
+            {
+                Debug.Log("Firebase deque action is queued");
+                var action = actionsQueue.Dequeue();
+                action?.Invoke();
+            }
+        }
+
+        // SubmitScore with success and error callbacks
+        public void SubmitScore(int score, string nickname, float finishTime, Action onSuccess = null,
+            Action<string> onError = null)
+        {
+            if (!_intilaized)
+            {
+                Debug.Log("Firebase not initialized yet, quequeing Submit Score");
+                actionsQueue.Enqueue(() => SubmitScore(score, nickname, finishTime, onSuccess, onError));
+                return;
+            }
+
+            Action onSuccessWrapper =
+                () =>
+                {
+                    onSuccess?.Invoke();
+                    DequeWaitingAction();
+                };
+
+#if UNITY_WEBGL
             // JS should call back to OnSubmitScoreSuccess or OnSubmitScoreError
             SaveScoreToFirebase(nickname, score, finishTime, "OnSubmitScoreSuccess", "OnSubmitScoreError");
-            _pendingSubmitSuccess = onSuccess;
+            _pendingSubmitSuccess = onSuccessWrapper;
             _pendingSubmitError = onError;
 #else
             SubmitScoreCSharp(score, nickname, finishTime, onSuccess, onError);
 #endif
         }
 
-#if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL
         private static Action _pendingSubmitSuccess;
+
         private static Action<string> _pendingSubmitError;
+
         // Called from JS on success
         public void OnSubmitScoreSuccess(string msg)
         {
@@ -95,6 +158,7 @@ namespace Game.Core.Managers
             _pendingSubmitSuccess = null;
             _pendingSubmitError = null;
         }
+
         // Called from JS on error
         public void OnSubmitScoreError(string error)
         {
@@ -113,7 +177,8 @@ namespace Game.Core.Managers
                 nickname = "Player";
             FetchLeaderboardCSharp(table =>
             {
-                var list = table.Select(e => new HighScoreEntry { Score = e.Item2, Nickname = e.Item3, FinishTime = e.Item4 }).ToList();
+                var list = table.Select(e => new HighScoreEntry { Score = e.Item2, Nickname = e.Item3, FinishTime =
+ e.Item4 }).ToList();
                 var existing = list.Find(entry => entry.Nickname == nickname);
                 if (existing != null)
                 {
@@ -176,8 +241,21 @@ namespace Game.Core.Managers
         // FetchLeaderboard with success and error callbacks
         public void FetchLeaderboard(Action<List<(int, int, string, float)>> onSuccess, Action onError = null)
         {
-#if UNITY_WEBGL && !UNITY_EDITOR
-            _pendingLeaderboardCallback = onSuccess;
+            if (!_intilaized)
+            {
+                Debug.Log("Firebase not initialized yet, quequeing Fetch Leaderboard");
+                actionsQueue.Enqueue(() => FetchLeaderboard(onSuccess, onError));
+                return;
+            }
+
+            Action<List<(int, int, string, float)>> onSuccessWrapper =
+                (list) =>
+                {
+                    onSuccess?.Invoke(list);
+                    DequeWaitingAction();
+                };
+#if UNITY_WEBGL
+            _pendingLeaderboardCallback = onSuccessWrapper;
             _pendingLeaderboardErrorCallback = onError;
             GetLeaderboardFromFirebase("OnLeaderboardReceived", "OnFetchLeaderboardError");
 #else
@@ -240,64 +318,83 @@ namespace Game.Core.Managers
             });
         }
 
-        private class HighScoreEntry
-        {
-            public int Score;
-            public string Nickname;
-            public float FinishTime;
-            public HighScoreEntry() { }
-            public HighScoreEntry(int score, string nickname, float finishTime)
-            {
-                Score = score;
-                Nickname = nickname;
-                FinishTime = finishTime;
-            }
-        }
+
 #endif
 
-#if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_WEBGL
         // Called from JS on error
         public void OnFetchLeaderboardError(string error)
         {
-            Debug.LogError("Fetch leaderboard failed (WebGL/JS): " + error);
-            _pendingLeaderboardErrorCallback?.Invoke();
-            _pendingLeaderboardErrorCallback = null;
+            UnityMainThreadDispatcher.Instance.Enqueue(() =>
+            {
+                Debug.LogError("Fetch leaderboard failed (WebGL/JS): " + error);
+                _pendingLeaderboardErrorCallback?.Invoke();
+                _pendingLeaderboardErrorCallback = null;
+            });
         }
 #endif
+        
 
-        // Called from JS to C# with leaderboard data (JSON string)
         public void OnLeaderboardReceived(string json)
         {
-            Debug.Log("Leaderboard received from JS: " + json);
-#if UNITY_WEBGL && !UNITY_EDITOR
-            if (_pendingLeaderboardCallback != null)
+#if UNITY_WEBGL
+            UnityMainThreadDispatcher.Instance.Enqueue(() =>
             {
-                try
+                Debug.Log("Leaderboard received from JS: " + json);
+                if (_pendingLeaderboardCallback != null)
                 {
-                    var leaderboard = JsonUtility.FromJson<LeaderboardList>("{\"entries\": " + json + "}");
-                    _pendingLeaderboardCallback(leaderboard.entries);
+                    try
+                    {
+                        var wrapper = JsonUtility.FromJson<HighScoreEntryListWrapper>("{\"entries\": " + json + "}");
+                        if (wrapper != null && wrapper.entries != null)
+                        {
+                            Debug.Log($"Parsed {wrapper.entries.Count} leaderboard entries");
+                            foreach (var entry in wrapper.entries)
+                            {
+                                Debug.Log($"{entry.Nickname} {entry.Score} {entry.FinishTime}");
+                            }
+
+                            // Convert to tuple format for callback
+                            var tupleList = wrapper.entries
+                                .Select((e, i) => (i + 1, e.Score, e.Nickname, e.FinishTime))
+                                .ToList();
+                            _pendingLeaderboardCallback(tupleList);
+                        }
+                        else
+                        {
+                            Debug.LogError("Failed to parse leaderboard JSON or entries are null.");
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError("Error parsing leaderboard JSON: " + e.Message);
+                    }
                 }
-                catch (Exception e)
-                {
-                    Debug.LogError("Error parsing leaderboard JSON: " + e.Message);
-                }
-            }
+            });
 #endif
         }
 
-        // Called from JS to C# after Firebase initialization/sign-in (WebGL)
+        // Called from JS via SendMessage
         public void OnFirebaseInitialized(string result)
         {
-            if (result == "success")
-            {
-                Debug.Log("Firebase initialized and signed in (WebGL/JS)!");
-                // TODO: Proceed with game logic that depends on Firebase
-            }
-            else if (result.StartsWith("error:"))
-            {
-                Debug.LogError("Firebase failed to initialize (WebGL/JS): " + result.Substring(6));
-                // TODO: Handle error (show message, retry, etc.)
-            }
+#if UNITY_WEBGL
+            UnityMainThreadDispatcher.Instance.Enqueue(() =>
+                {
+                    Debug.Log("Firebase maybe Initialized: " + result);
+                    if (result == "success")
+                    {
+                        _pendingInitSuccess?.Invoke();
+                    }
+                    else if (result.StartsWith("error:"))
+                    {
+                        _pendingInitError?.Invoke("Failed to sign in anonymously");
+                    }
+
+                    _pendingInitSuccess = null;
+                    _pendingInitError = null;
+                }
+            );
+#endif
         }
     }
-} 
+}

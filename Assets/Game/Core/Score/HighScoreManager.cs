@@ -41,8 +41,10 @@ namespace Game.Core.Score
             _localLeaderboard = LoadLocalLeaderboard();
             FirebaseBridge.Instance.FetchLeaderboard(firebaseEntries =>
             {
+                // We must save local leaderboard to player prefs on main thread
                 UnityMainThreadDispatcher.Instance.Enqueue((() =>
                 {
+                    Debug.Log($"Leaderboard loaded: STARTING MERGE!");
                     var merged = MergeLeaderboards(_localLeaderboard, firebaseEntries);
                     SaveLocalLeaderboard(merged);
                     _localLeaderboard = merged;
@@ -75,6 +77,7 @@ namespace Game.Core.Score
         private List<LeaderboardEntry> MergeLeaderboards(List<LeaderboardEntry> local,
             List<(int, int, string, float)> firebase)
         {
+            Debug.Log($"[MergeLeaderboards] Local count: {local.Count}, Firebase count: {firebase.Count}");
             // Convert firebase to LeaderboardEntry
             var firebaseEntries = firebase.Select(e => new LeaderboardEntry
             {
@@ -83,6 +86,7 @@ namespace Game.Core.Score
                 FinishTime = e.Item4,
                 PendingUpload = false
             }).ToList();
+            Debug.Log($"[MergeLeaderboards] Firebase entries: {string.Join(", ", firebaseEntries.Select(fb => $"{fb.Name}:{fb.Score}:{fb.FinishTime}"))}");
 
             // Combine all entries
             var allEntries = new List<LeaderboardEntry>(firebaseEntries);
@@ -100,6 +104,7 @@ namespace Game.Core.Score
                     // Mark as pending upload (not in Firebase)
                     localEntry.PendingUpload = true;
                     allEntries.Add(localEntry);
+                    Debug.Log($"[MergeLeaderboards] Local entry not in Firebase, marking pending: {localEntry.Name}:{localEntry.Score}:{localEntry.FinishTime}");
                 }
             }
 
@@ -108,6 +113,7 @@ namespace Game.Core.Score
                 .GroupBy(e => (e.Name, e.Score, e.FinishTime))
                 .Select(g => g.First())
                 .ToList();
+            Debug.Log($"[MergeLeaderboards] After deduplication: {allEntries.Count} entries");
 
             // Sort and keep top 10
             var mergedList = allEntries
@@ -115,6 +121,7 @@ namespace Game.Core.Score
                 .ThenBy(e => e.FinishTime)
                 .Take(MaxHighScores)
                 .ToList();
+            Debug.Log($"[MergeLeaderboards] Final merged list: {string.Join(", ", mergedList.Select(e => $"{e.Name}:{e.Score}:{e.FinishTime}:{e.PendingUpload}"))}");
 
             // Upload pending scores after merging
             UploadPendingScoresSequentially(mergedList);
@@ -216,19 +223,25 @@ namespace Game.Core.Score
         // PlayerPrefs helpers
         private void SaveLocalLeaderboard(List<LeaderboardEntry> entries)
         {
+            Debug.Log($"[SaveLocalLeaderboard] Saving {entries.Count} entries");
             var wrapper = new LeaderboardListWrapper { entries = entries };
             string json = JsonUtility.ToJson(wrapper);
+            Debug.Log($"[SaveLocalLeaderboard] JSON: {json}");
             PlayerPrefs.SetString(LocalLeaderboardKey, json);
             PlayerPrefs.Save();
-            GetHighScoreTable();
         }
 
         private List<LeaderboardEntry> LoadLocalLeaderboard()
         {
             string json = PlayerPrefs.GetString(LocalLeaderboardKey, "");
+            Debug.Log($"[LoadLocalLeaderboard] Loaded JSON: {json}");
             if (string.IsNullOrEmpty(json))
+            {
+                Debug.Log("[LoadLocalLeaderboard] No local leaderboard found, returning empty list.");
                 return new List<LeaderboardEntry>();
+            }
             var wrapper = JsonUtility.FromJson<LeaderboardListWrapper>(json);
+            Debug.Log($"[LoadLocalLeaderboard] Loaded {wrapper?.entries?.Count ?? 0} entries from local leaderboard.");
             return wrapper.entries ?? new List<LeaderboardEntry>();
         }
     }
