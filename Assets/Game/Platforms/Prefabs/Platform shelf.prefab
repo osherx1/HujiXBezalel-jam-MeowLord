@@ -87,6 +87,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1847421192034804116
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 473382694594211670}
+  m_Layer: 0
+  m_Name: CatLandingLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &473382694594211670
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1847421192034804116}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.03, y: 0.54, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4554016938563402372}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6900820168118909321
 GameObject:
   m_ObjectHideFlags: 0
@@ -98,6 +129,7 @@ GameObject:
   - component: {fileID: 4554016938563402372}
   - component: {fileID: 9082510076665247986}
   - component: {fileID: 247516570570881841}
+  - component: {fileID: 2520787945079487574}
   m_Layer: 6
   m_Name: Platform shelf
   m_TagString: PlatformHead
@@ -118,6 +150,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 473382694594211670}
   - {fileID: 3465786474522371768}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -231,6 +264,19 @@ PolygonCollider2D:
       - {x: 1.2545118, y: 0.7375088}
       - {x: -0.004418373, y: 1.2196966}
   m_UseDelaunayMesh: 0
+--- !u!114 &2520787945079487574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6900820168118909321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46310854a7d0d344f9dc7f64a1ccbec5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  landingPoint: {fileID: 473382694594211670}
 --- !u!1001 &1432494452739411227
 PrefabInstance:
   m_ObjectHideFlags: 0

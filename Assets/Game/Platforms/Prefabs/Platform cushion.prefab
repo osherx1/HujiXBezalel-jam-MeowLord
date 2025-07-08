@@ -98,6 +98,7 @@ GameObject:
   - component: {fileID: 3129988947814582107}
   - component: {fileID: 8823488109909885276}
   - component: {fileID: 3717172822981647370}
+  - component: {fileID: 6325864396359854749}
   m_Layer: 6
   m_Name: Platform cushion
   m_TagString: PlatformHead
@@ -118,6 +119,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4699656995172632326}
   - {fileID: 1784314237102660904}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -232,6 +234,50 @@ PolygonCollider2D:
       - {x: 1.2722292, y: 1.215868}
       - {x: 0.43850613, y: 2.2472825}
   m_UseDelaunayMesh: 0
+--- !u!114 &6325864396359854749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537641399049483457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46310854a7d0d344f9dc7f64a1ccbec5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  landingPoint: {fileID: 4699656995172632326}
+--- !u!1 &7583224383074769424
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4699656995172632326}
+  m_Layer: 0
+  m_Name: CatLandingLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4699656995172632326
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7583224383074769424}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.12, y: 1, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3129988947814582107}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4267974468496750219
 PrefabInstance:
   m_ObjectHideFlags: 0
