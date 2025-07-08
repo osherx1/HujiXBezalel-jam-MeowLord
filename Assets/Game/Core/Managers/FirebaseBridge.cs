@@ -27,7 +27,7 @@ namespace Game.Core.Managers
     {
         public List<HighScoreEntry> entries;
     }
-    
+
     public class FirebaseBridge : MonoSingleton<FirebaseBridge>
     {
         private bool _intilaized = false;
@@ -171,69 +171,86 @@ namespace Game.Core.Managers
 
 #if !UNITY_WEBGL
         // C# SDK logic for submitting a score
-        private void SubmitScoreCSharp(int score, string nickname, float finishTime, Action onSuccess, Action<string> onError)
+        private void SubmitScoreCSharp(int score, string nickname, float finishTime, Action onSuccess,
+            Action<string> onError)
         {
             if (string.IsNullOrEmpty(nickname))
                 nickname = "Player";
             FetchLeaderboardCSharp(table =>
             {
-                var list = table.Select(e => new HighScoreEntry { Score = e.Item2, Nickname = e.Item3, FinishTime =
- e.Item4 }).ToList();
-                var existing = list.Find(entry => entry.Nickname == nickname);
-                if (existing != null)
+                UnityMainThreadDispatcher.Instance.Enqueue((() =>
                 {
-                    if (score > existing.Score)
+                    var list = table.Select(e => new HighScoreEntry
                     {
-                        existing.Score = score;
-                        existing.FinishTime = finishTime;
-                    }
-                    else if (pendingFetch != null)
+                        Score = e.Item2, Nickname = e.Item3, FinishTime =
+                            e.Item4
+                    }).ToList();
+                    var existing = list.Find(entry => entry.Nickname == nickname);
+                    if (existing != null)
                     {
-                        var fetch = pendingFetch;
-                        pendingFetch = null;
-                        fetch();
-                        onSuccess?.Invoke();
-                        return;
-                    } // No update needed
-                }
-                else
-                {
-                    list.Add(new HighScoreEntry(score, nickname, finishTime));
-                }
-                // Sort and keep only top 10
-                list = list.OrderByDescending(e => e.Score).Take(MaxHighScores).ToList();
-                // Write back to Firebase
-                var db = FirebaseDatabase.DefaultInstance;
-                var dict = new Dictionary<string, object>();
-                foreach (var entry in list)
-                {
-                    dict[entry.Nickname] = new Dictionary<string, object>
-                    {
-                        { "Score", entry.Score },
-                        { "FinishTime", entry.FinishTime }
-                    };
-                }
-                Debug.Log($"Writing high scores to Firebase: {string.Join(", ", list.Select(e => $"{e.Nickname}:{e.Score}"))}");
-                isWriteInProgress = true;
-                db.RootReference.Child(HighScoresPath).SetValueAsync(dict).ContinueWith(task => {
-                    isWriteInProgress = false;
-                    if (task.IsCompleted && !task.IsFaulted && !task.IsCanceled)
-                    {
-                        Debug.Log("Write complete. Success");
-                        onSuccess?.Invoke();
+                        if (score > existing.Score)
+                        {
+                            existing.Score = score;
+                            existing.FinishTime = finishTime;
+                        }
+                        else if (pendingFetch != null)
+                        {
+                            var fetch = pendingFetch;
+                            pendingFetch = null;
+                            fetch();
+                            onSuccess?.Invoke();
+                            return;
+                        } // No update needed
                     }
                     else
                     {
-                        Debug.LogError("Write failed: " + task.Exception);
-                        onError?.Invoke(task.Exception?.ToString() ?? "Unknown error");
+                        list.Add(new HighScoreEntry
+                        {
+                            Score = score,
+                            FinishTime = finishTime,
+                            Nickname =  nickname
+                        });
                     }
-                    if (pendingFetch != null)
+
+                    // Sort and keep only top 10
+                    list = list.OrderByDescending(e => e.Score).Take(MaxHighScores).ToList();
+                    // Write back to Firebase
+                    var db = FirebaseDatabase.DefaultInstance;
+                    var dict = new Dictionary<string, object>();
+                    foreach (var entry in list)
                     {
-                        var fetch = pendingFetch;
-                        pendingFetch = null;
-                        fetch();
+                        dict[entry.Nickname] = new Dictionary<string, object>
+                        {
+                            { "Score", entry.Score },
+                            { "FinishTime", entry.FinishTime }
+                        };
                     }
-                });
+
+                    Debug.Log(
+                        $"Writing high scores to Firebase: {string.Join(", ", list.Select(e => $"{e.Nickname}:{e.Score}"))}");
+                    isWriteInProgress = true;
+                    db.RootReference.Child(HighScoresPath).SetValueAsync(dict).ContinueWith(task =>
+                    {
+                        isWriteInProgress = false;
+                        if (task.IsCompleted && !task.IsFaulted && !task.IsCanceled)
+                        {
+                            Debug.Log("Write complete. Success");
+                            onSuccess?.Invoke();
+                        }
+                        else
+                        {
+                            Debug.LogError("Write failed: " + task.Exception);
+                            onError?.Invoke(task.Exception?.ToString() ?? "Unknown error");
+                        }
+
+                        if (pendingFetch != null)
+                        {
+                            var fetch = pendingFetch;
+                            pendingFetch = null;
+                            fetch();
+                        }
+                    });
+                }));
             }, () => onError?.Invoke("Failed to fetch leaderboard for submission"));
         }
 #endif
@@ -272,50 +289,60 @@ namespace Game.Core.Managers
                 pendingFetch = () => FetchLeaderboardCSharp(onSuccess, onError);
                 return;
             }
+
             var db = FirebaseDatabase.DefaultInstance;
             isGetHighScoreTableInProgress = true;
-            db.RootReference.Child(HighScoresPath).OrderByValue().LimitToLast(MaxHighScores).GetValueAsync().ContinueWith(task =>
-            {
-                var result = new List<(int, int, string, float)>();
-                if (task.IsCompleted && task.Result != null && task.Result.Exists)
+            db.RootReference.Child(HighScoresPath).OrderByValue().LimitToLast(MaxHighScores).GetValueAsync()
+                .ContinueWith(task =>
                 {
-                    var entries = new List<HighScoreEntry>();
-                    foreach (var child in task.Result.Children)
+                    var result = new List<(int, int, string, float)>();
+                    if (task.IsCompleted && task.Result != null && task.Result.Exists)
                     {
-                        string name = child.Key;
-                        int score = 0;
-                        float finishTime = 0f;
-
-                        if (child.Value is Dictionary<string, object> entryDict)
+                        var entries = new List<HighScoreEntry>();
+                        foreach (var child in task.Result.Children)
                         {
-                            if (entryDict.TryGetValue("Score", out var scoreObj))
-                                int.TryParse(scoreObj.ToString(), out score);
-                            if (entryDict.TryGetValue("FinishTime", out var timeObj))
-                                float.TryParse(timeObj.ToString(), out finishTime);
-                        }
-                        else if (child.Value is string || child.Value is long || child.Value is int)
-                        {
-                            // Backward compatibility: only score stored
-                            int.TryParse(child.Value.ToString(), out score);
+                            string name = child.Key;
+                            int score = 0;
+                            float finishTime = 0f;
+
+                            if (child.Value is Dictionary<string, object> entryDict)
+                            {
+                                if (entryDict.TryGetValue("Score", out var scoreObj))
+                                    int.TryParse(scoreObj.ToString(), out score);
+                                if (entryDict.TryGetValue("FinishTime", out var timeObj))
+                                    float.TryParse(timeObj.ToString(), out finishTime);
+                            }
+                            else if (child.Value is string || child.Value is long || child.Value is int)
+                            {
+                                // Backward compatibility: only score stored
+                                int.TryParse(child.Value.ToString(), out score);
+                            }
+
+                            entries.Add(new HighScoreEntry
+                            {
+                                Score = score,
+                                FinishTime = finishTime,
+                                Nickname = name
+                            });
                         }
 
-                        entries.Add(new HighScoreEntry(score, name, finishTime));
+                        // Sort descending
+                        entries = entries.OrderByDescending(e => e.Score).Take(MaxHighScores).ToList();
+                        for (int i = 0; i < entries.Count; i++)
+                        {
+                            result.Add((i + 1, entries[i].Score, entries[i].Nickname, entries[i].FinishTime));
+                        }
+
+                        onSuccess?.Invoke(result);
                     }
-                    // Sort descending
-                    entries = entries.OrderByDescending(e => e.Score).Take(MaxHighScores).ToList();
-                    for (int i = 0; i < entries.Count; i++)
+                    else
                     {
-                        result.Add((i + 1, entries[i].Score, entries[i].Nickname, entries[i].FinishTime));
+                        Debug.LogWarning("Failed to fetch leaderboard from Firebase, using local backup.");
+                        onError?.Invoke();
                     }
-                    onSuccess?.Invoke(result);
-                }
-                else
-                {
-                    Debug.LogWarning("Failed to fetch leaderboard from Firebase, using local backup.");
-                    onError?.Invoke();
-                }
-                isGetHighScoreTableInProgress = false;
-            });
+
+                    isGetHighScoreTableInProgress = false;
+                });
         }
 
 
@@ -333,7 +360,7 @@ namespace Game.Core.Managers
             });
         }
 #endif
-        
+
 
         public void OnLeaderboardReceived(string json)
         {

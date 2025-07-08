@@ -92,6 +92,7 @@ namespace Game.UI.Scripts
             {
                 // Reset to default
                 timerText.color = Color.white;
+                if(edgeFlashes == null) return;
                 foreach (var edge in edgeFlashes)
                 {
                     if (edge != null)
