@@ -76,7 +76,7 @@ MonoBehaviour:
   - {x: -0.442, y: 1.302}
   - {x: -0.31, y: 1.501}
   cinemachineConfiner: {fileID: 0}
-  softEdgeFactor: 0.42
+  softEdgeFactor: 0
   minSpeedAtEdge: 0
   uiExclusionZone:
     serializedVersion: 2
