@@ -23,11 +23,13 @@ namespace Game.UI.Scripts
         public void OnEnable()
         {
             GameEvents.OnGameStarted += Activate;
+            GameEvents.OnGameFinished += Stop;
         }
         
         public void OnDisable()
         {
             GameEvents.OnGameStarted -= Activate;
+            GameEvents.OnGameFinished += Stop;
         }
 
         private void Activate()
@@ -35,9 +37,15 @@ namespace Game.UI.Scripts
             activate = true;
         }
 
+        private void Stop()
+        {
+            activate = false;
+        }
+
         // Update is called once per frame
         void Update()
         {
+            if (!activate) return;
             if (_timeLeft > 0)
             {
                 _timeLeft -= Time.deltaTime;
