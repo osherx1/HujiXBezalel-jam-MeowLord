@@ -136,6 +136,7 @@ MonoBehaviour:
   score: {fileID: 0}
   scoreFlyObjectPrefab: {fileID: 1299011833969213261, guid: d62d2cfe678334eb087bff6106f486c6, type: 3}
   flyToScoreSpeed: 1.5
+  mosueCatchSoundName: 6
 --- !u!70 &28706090543579344
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

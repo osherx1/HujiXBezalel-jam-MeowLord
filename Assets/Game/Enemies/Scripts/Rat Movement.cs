@@ -1,3 +1,4 @@
+using Game.Core.Audio;
 using Game.Core.Managers;
 using Spine.Unity;
 using UnityEngine;
@@ -40,6 +41,7 @@ namespace Game.Enemies.Scripts
         [Header("just created")]
         private bool _isJustCreated;
         private int _justCreatedDirection;
+
 
 
         private void OnEnable()
