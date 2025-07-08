@@ -26,6 +26,10 @@ namespace Game.Platforms.Scripts
 
         [Header("References for Layer Changing")]
         public SpriteRenderer forwardSpriteRenderer;
+        
+        [Header("Cat Landing Points")]
+        [SerializeField] private Transform catLandingPointFront;
+        [SerializeField] private Transform catLandingPointBack;
 
         public SpriteRenderer backwardSpriteRenderer;
         public SkeletonMecanim forwardSkeletonMecanim;
@@ -482,6 +486,11 @@ namespace Game.Platforms.Scripts
                 backwardSkeletonMecanim.Skeleton.SetSlotsToSetupPose();
                 backwardSkeletonMecanim.LateUpdate();
             }
+        }
+        
+        public Transform GetActiveCatLandingPoint()
+        {
+            return _isFacingForward ? catLandingPointFront : catLandingPointBack;
         }
 
     }

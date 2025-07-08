@@ -31,6 +31,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6134425632349790920}
+  - {fileID: 5551486159309666484}
   - {fileID: 8021442461913170467}
   - {fileID: 436504606201344136}
   m_Father: {fileID: 0}
@@ -54,6 +56,8 @@ MonoBehaviour:
   spriteRootForward: {fileID: 8021442461913170467}
   spriteRootBackward: {fileID: 436504606201344136}
   forwardSpriteRenderer: {fileID: 0}
+  catLandingPointFront: {fileID: 6134425632349790920}
+  catLandingPointBack: {fileID: 5551486159309666484}
   backwardSpriteRenderer: {fileID: 0}
   forwardSkeletonMecanim: {fileID: 129927303127434600}
   backwardSkeletonMecanim: {fileID: 5691039735150458022}
@@ -112,6 +116,68 @@ PolygonCollider2D:
       - {x: 0.58778536, y: -0.80901694}
       - {x: 0.9510565, y: 0.30901712}
   m_UseDelaunayMesh: 0
+--- !u!1 &630234473365771101
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5551486159309666484}
+  m_Layer: 0
+  m_Name: BackwardLandingPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5551486159309666484
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 630234473365771101}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.07, y: 2.06, z: -0.004490244}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1076850464774849079}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7868075760448187813
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6134425632349790920}
+  m_Layer: 0
+  m_Name: ForwardLandingPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6134425632349790920
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7868075760448187813}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.39, y: 1.76, z: -0.004490244}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1076850464774849079}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2692108518029773143
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -179,6 +245,10 @@ PrefabInstance:
     - target: {fileID: 7495568182064786044, guid: 6d24f7981a41b492da39369c5d483fc5, type: 3}
       propertyPath: m_Name
       value: ArtQueenFront
+      objectReference: {fileID: 0}
+    - target: {fileID: 7495568182064786044, guid: 6d24f7981a41b492da39369c5d483fc5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8636544402684043588, guid: 6d24f7981a41b492da39369c5d483fc5, type: 3}
       propertyPath: m_Mesh
