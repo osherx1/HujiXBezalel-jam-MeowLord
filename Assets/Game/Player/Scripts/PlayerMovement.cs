@@ -658,5 +658,7 @@ namespace Game.Player.Scripts
             playerLogger?.Log("Player fell: reset trail and snapped to nearest platform.");
             _fall = false;
         }
+        
+        
     }
 }

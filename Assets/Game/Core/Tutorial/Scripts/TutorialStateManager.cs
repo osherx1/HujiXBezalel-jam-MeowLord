@@ -319,7 +319,7 @@ namespace Game.Core.Tutorial.Scripts
                         col.enabled = false;
                     }
 
-                    DOVirtual.DelayedCall(0.1f, () =>
+                    DOVirtual.DelayedCall(0.01f, () =>
                     {
                         foreach (var plat in platformToDisableLightAreas)
                         {
