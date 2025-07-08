@@ -174,7 +174,7 @@ MonoBehaviour:
     volume: 0.481
     pitch: 1
     spatialBlend: 0
-    loop: 0
+    loop: 1
   - name: 2
     clip: {fileID: 8300000, guid: ccf47c4444d5b4ccc81c048cd61307a4, type: 3}
     volume: 0.481

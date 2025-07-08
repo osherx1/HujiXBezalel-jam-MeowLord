@@ -103,6 +103,7 @@ namespace Game.Core.Managers
             _highScoreManager.TryAddHighScore(CurrentNickname,_gameplayScore.Score,  finishedTime);
             var camera = GameObject.FindFirstObjectByType<HybridCameraFollow>();
             camera.tutorialModeTargetFrame = 6;
+            AudioManager.Instance.StopAllMusic();
             CurtainMusicHelper.PlayWithFade(AudioName.CurtainGameToEnd, 2f, 1.5f);
             camera.AdjustTargetFraming(() =>
                 SceneLoader.Instance.TriggerClose(() =>
@@ -117,6 +118,7 @@ namespace Game.Core.Managers
 
         public void StartGame()
         {
+            AudioManager.Instance.StopAllMusic();
             CurtainMusicHelper.PlayWithFade(AudioName.CurtainOpenToGame, 2f, 1.5f);
             SceneLoader.Instance.SetSkeletonSortingLayer("Curtain", () =>
                 SceneLoader.Instance.TriggerClose(() =>
@@ -146,6 +148,7 @@ namespace Game.Core.Managers
 
         public void BackToStartScreen()
         {
+            AudioManager.Instance.StopAllMusic();
             CurtainMusicHelper.PlayWithFade(AudioName.CurtainEndToOpening, 2f, 1.5f);
             SceneLoader.Instance.SetSkeletonSortingLayer("Curtain", () =>
                 SceneLoader.Instance.TriggerClose(() =>
