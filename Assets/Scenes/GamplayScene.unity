@@ -10254,6 +10254,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Platform shelf
       objectReference: {fileID: 0}
+    - target: {fileID: 6900820168118909321, guid: b0aa7bfc9fd6a4f1bb6c9fb4e01bb168, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9082510076665247986, guid: b0aa7bfc9fd6a4f1bb6c9fb4e01bb168, type: 3}
       propertyPath: m_SortingOrder
       value: 1

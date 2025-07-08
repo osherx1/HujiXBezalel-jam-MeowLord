@@ -1,5 +1,6 @@
 using System;
 using Game.Core.Managers;
+using Game.Core.Tutorial.Scripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -19,13 +20,22 @@ namespace Game.UI.Scripts
         
 
         private bool activate = false;
+        private event Action EndEvent;
 
         public void OnEnable()
         {
             GameEvents.OnGameStarted += Activate;
             GameEvents.OnGameFinished += Stop;
+            TutorialStateManager.StartTimer += ActivateTutorial;
         }
-        
+
+        private void ActivateTutorial()
+        {
+            activate = true;
+            _timeLeft = 5f;
+            EndEvent = GameManager.Instance.StartGame;
+        }
+
         public void OnDisable()
         {
             GameEvents.OnGameStarted -= Activate;
@@ -35,6 +45,7 @@ namespace Game.UI.Scripts
         private void Activate()
         {
             activate = true;
+            EndEvent = GameEvents.GameFinished;
         }
 
         private void Stop()
@@ -54,7 +65,7 @@ namespace Game.UI.Scripts
             if (_timeLeft < 0)
             {
                 _timeLeft = 0;
-                GameEvents.GameFinished();
+                EndEvent.Invoke(); 
             }
             int minutes = Mathf.FloorToInt(_timeLeft / 60);
             int seconds = Mathf.FloorToInt(_timeLeft % 60);

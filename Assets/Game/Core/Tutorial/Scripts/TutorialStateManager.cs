@@ -465,6 +465,7 @@ namespace Game.Core.Tutorial.Scripts
         [SerializeField] private Image blurPanelGreatJobState;
         [SerializeField] private Image[] textAndImagesGreatJobState;
         [SerializeField] private Vector3 _cameraSecondPosition;
+        public static event Action StartTimer;
 
         private IEnumerator QueenState()
         {
@@ -535,7 +536,8 @@ namespace Game.Core.Tutorial.Scripts
 
             InputSystemSingleton.Instance.InputSystem.PlayerControls.Click.performed -= OnLeftClickPerformed;
             _leftClick = false;
-            tutorialTextRenderer.HideBlurAndImages(blurPanelGreatJobState,textAndImagesGreatJobState,() => GameManager.Instance.StartGame());
+            
+            tutorialTextRenderer.HideBlurAndImages(blurPanelGreatJobState,textAndImagesGreatJobState,() => StartTimer.Invoke());
         }
 
         #endregion
