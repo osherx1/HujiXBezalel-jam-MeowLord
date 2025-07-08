@@ -1,4 +1,5 @@
 using System;
+using Game.Core.Utils;
 using Game.Platforms.Scripts;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -6,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace Game.Player.Scripts
 {
-    public class Segment: MonoBehaviour
+    public class Segment : MonoBehaviour
     {
         public class TrailSegment
         {
@@ -15,52 +16,63 @@ namespace Game.Player.Scripts
             public Vector3 FromLocalPos, ToLocalPos;
             public BoxCollider2D BoxCollider;
         }
-        
+
         public static event Action OnSegmentKingQueenCollide;
-        
+
         private TrailSegment trailData;
-        
+
         private float _nudgeTimer;
-        
-        
+
+
         [InspectorButton]
         private void UpdateBoxCollider()
         {
-            if (trailData?.FromT == null || trailData?.ToT == null) 
+            if (trailData?.FromT == null || trailData?.ToT == null)
             {
                 Debug.LogWarning("Cannot update box collider: FromT or ToT is null.");
                 return;
             }
-            
+
             Vector2 fromPos = trailData.FromT.position;
             Vector2 toPos = trailData.ToT.position;
             Vector2 direction = (toPos - fromPos).normalized;
             float distance = Vector2.Distance(fromPos, toPos);
-            
-            trailData.BoxCollider.size = new Vector2(distance, trailData.Lr.endWidth); 
+
+            trailData.BoxCollider.size = new Vector2(distance, trailData.Lr.endWidth);
             trailData.BoxCollider.transform.position = (fromPos + toPos) * 0.5f;
             trailData.BoxCollider.offset = Vector2.zero;
-            
+
             float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             trailData.BoxCollider.transform.rotation = Quaternion.Euler(0, 0, angle);
         }
 
-       
+
         public void LateUpdate()
         {
             UpdatePosition();
             // UpdateBoxCollider();
         }
-        
+
         [InspectorButton]
         private void UpdatePosition()
         {
+            var fromHead = EladsHelperFunctions.GetRootTransformPlatformHead(trailData.FromT);
+            var toHead = EladsHelperFunctions.GetRootTransformPlatformHead(trailData.ToT);
+            var fromTUpdate = fromHead.CompareTag("PlatformHead")
+                ? fromHead.GetComponentInChildren<MovingPlatform>()?.GetActiveCatLandingPoint()
+                : null;
+            var toTUpdate = toHead.CompareTag("PlatformHead")
+                ? toHead.GetComponentInChildren<MovingPlatform>()?.GetActiveCatLandingPoint()
+                : null;
+            if (fromTUpdate != null) trailData.FromT = fromTUpdate;
+            if (toTUpdate != null) trailData.ToT = toTUpdate;
             trailData.Lr.SetPosition(0, trailData.FromT.TransformPoint(trailData.FromLocalPos));
             trailData.Lr.SetPosition(1, trailData.ToT.TransformPoint(trailData.ToLocalPos));
         }
 
 
-        public static TrailSegment CreateSegment(GameObject linePrefab, Transform parent, GameObject fromGo, GameObject toGo)
+        public static TrailSegment CreateSegment(GameObject linePrefab, Transform parent, GameObject fromGo,
+            GameObject toGo)
         {
             // Instantiate the prefab and parent it
             var lineObject = Instantiate(linePrefab);
@@ -101,10 +113,10 @@ namespace Game.Player.Scripts
                 ToLocalPos = toLocal,
                 BoxCollider = box,
             };
-            
+
             return seg.trailData;
         }
-        
+
         public void OnChildTriggerEnter(Collider2D other)
         {
             OnSegmentKingQueenCollide?.Invoke();

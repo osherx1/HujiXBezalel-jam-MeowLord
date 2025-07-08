@@ -70,6 +70,8 @@ namespace Game.Player.Scripts
         private bool _gameEnded = false;
         private bool _isHovering = false;
         private int current_idx;
+        private bool movePlatform;
+        private Transform positionMove;
 
         void Awake()
         {
@@ -221,17 +223,29 @@ namespace Game.Player.Scripts
 
         private IEnumerator MoveToPlatformCoroutine(Transform platform)
         {
-            while (Vector3.Distance(transform.position, platform.position) > 0.05f)
+            movePlatform = false;
+            positionMove = platform.GetComponentInChildren<StaticLandingPoint>()?.GetActiveCatLandingPoint();
+            if (positionMove == null)
             {
+                movePlatform = true;
+                positionMove = platform.GetComponentInChildren<MovingPlatform>()?.GetActiveCatLandingPoint();
+            }
+            while (Vector3.Distance(transform.position, positionMove.position) > 0.05f)
+            {
+                if (movePlatform)
+                {
+                    // position may change as the moving paltform has two positions.
+                    positionMove = platform.GetComponentInChildren<MovingPlatform>()?.GetActiveCatLandingPoint();
+                }
                 while (_pausedGame)
                     yield return null;
                 // Move towards the current platform position
                 transform.position =
-                    Vector3.MoveTowards(transform.position, platform.position, moveSpeed * Time.deltaTime);
+                    Vector3.MoveTowards(transform.position, positionMove.position, moveSpeed * Time.deltaTime);
                 yield return null;
             }
-
-            transform.position = platform.position;
+            
+            transform.position = positionMove.position;
             animator.SetTrigger(Land);
             
             onMoveCompleteEvent?.Invoke();
@@ -304,7 +318,13 @@ namespace Game.Player.Scripts
             var prevPlat = _lastPlat;
             if (newPlat == _lastPlat) return; // Ignore clicking on the same platform
             if (HandleBacktrack(newPlat, newPlatScript)) return;
-            CreateNewSegment(prevPlat, transform);
+            var activeCatLandingPoint = prevPlat.GetComponentInChildren<StaticLandingPoint>()?.GetActiveCatLandingPoint() ?? prevPlat;
+            if(_segments.Count > 0)
+            {
+                _segments[^1].ToT = activeCatLandingPoint;
+            }
+            transform.position = activeCatLandingPoint.position;
+            CreateNewSegment(activeCatLandingPoint, transform);
             if (HandleSpecialPlatform(newPlat, newPlatScript)) return;
             if (HandleLoop(newPlat, newPlatScript)) return;
             HandleNormalMove(newPlat, newPlatScript);
@@ -351,6 +371,7 @@ namespace Game.Player.Scripts
                 {
                     HandleGameLoss();
                 });
+                
                 RegisterToPlatform(newPlatScript, _lastMovingPlatform);
                 MovePlayerToPlatform(newPlat);
                 animator.SetTrigger(Jump);
@@ -409,7 +430,7 @@ namespace Game.Player.Scripts
                 SegmentMaxCheck();
                 AudioManager.Instance.Play(AudioName.CatLand, transform.position);
                 GameEvents.PlayerLanded();
-                _segments[^1].ToT = _lastPlat;
+                _segments[^1].ToT = positionMove;
             };
             RegisterToPlatform(newPlatScript, _lastMovingPlatform);
             MovePlayerToPlatform(newPlat);
@@ -461,7 +482,14 @@ namespace Game.Player.Scripts
         void LateUpdate()
         {
             if (_lastPlat != null && !isMoving && !_fall)
-                transform.position = _lastPlat.position;
+            {
+                if (movePlatform)
+                {
+                    var transformPlat = _lastPlat.GetComponentInChildren<MovingPlatform>()?.GetActiveCatLandingPoint();
+                    transform.position = transformPlat?.position ?? _lastPlat.transform.position;
+                    if(_segments.Count > 0) _segments[^1].ToT = transformPlat ?? _lastPlat.transform;
+                }
+            }
         }
         
 
@@ -500,6 +528,8 @@ namespace Game.Player.Scripts
             CheckForClosedPolygons();
             CheckIfMouseOnPlatform();
         }
+
+        
 
         private void CheckForClosedPolygons()
         {
@@ -542,7 +572,6 @@ namespace Game.Player.Scripts
 
         private void HandlePolygonEnemies(HashSet<Collider2D> totalEnemies, int segRemoveTo, int platRemoveTo)
         {
-            
             foreach (var enemy in totalEnemies)
             {
                 _playerRatDetector.ApplyDamageToRat(enemy);
