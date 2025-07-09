@@ -24,7 +24,7 @@ namespace Game.Enemies.Scripts
         private AudioManager _audioManager;
         
         [SerializeField]private AudioName mosueCatchSoundName; 
-
+        
 
         private void OnEnable()
         {

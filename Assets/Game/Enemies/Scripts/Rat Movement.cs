@@ -193,6 +193,37 @@ namespace Game.Enemies.Scripts
         
         private void StopMovementAndShowFront()
         {
+            string nextLayer = "Platform";
+            if (forwardSpriteRenderer != null)
+            {
+                forwardSpriteRenderer.sortingLayerName = nextLayer;
+            }
+
+            // Backwards SpriteRenderer
+            if (backwardSpriteRenderer != null)
+            {
+                backwardSpriteRenderer.sortingLayerName = nextLayer;
+            }
+
+            // Forwards SkeletonMecanim
+            if (forwardSkeletonMecanim != null)
+            {
+                var meshRenderer = forwardSkeletonMecanim.GetComponent<Renderer>();
+                if (meshRenderer != null)
+                {
+                    meshRenderer.sortingLayerName = nextLayer;
+                }
+            }
+
+            // Backwards SkeletonMecanim
+            if (backwardSkeletonMecanim != null)
+            {
+                var meshRenderer = backwardSkeletonMecanim.GetComponent<Renderer>();
+                if (meshRenderer != null)
+                {
+                    meshRenderer.sortingLayerName = nextLayer;
+                }
+            }
             _isMoving = false;
             _isDead = true;
 
