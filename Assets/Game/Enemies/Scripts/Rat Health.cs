@@ -71,8 +71,8 @@ namespace Game.Enemies.Scripts
 
             
             StartCoroutine(ScaleUpEffect());
-            if (score != null)
-                StartCoroutine(FlyToScoreTarget());
+            // if (score != null)
+            //     StartCoroutine(FlyToScoreTarget());
             StartCoroutine(DelayedReturn());
         }
         
