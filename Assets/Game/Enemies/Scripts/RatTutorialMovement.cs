@@ -136,11 +136,19 @@ namespace Game.Enemies.Scripts
         {
             // Only affect this rat
             if (Vector3.Distance(transform.position, pos) > 0.1f) return;
-
+            RatMesh();
             StopMovementAndShowFront();
         }
         
         private void StopMovementAndShowFront()
+        {
+            // Force back skeleton to hide, front to show
+            animator.SetBool(IsWalking, false);
+            frontSkeleton.SetActive(true);
+            backSkeleton.SetActive(false);
+        }
+
+        private void RatMesh()
         {
             string nextLayer = "Platform";
             if (forwardSpriteRenderer != null)
@@ -173,12 +181,8 @@ namespace Game.Enemies.Scripts
                     meshRenderer.sortingLayerName = nextLayer;
                 }
             }
-            // Force back skeleton to hide, front to show
-            animator.SetBool(IsWalking, false);
-            frontSkeleton.SetActive(true);
-            backSkeleton.SetActive(false);
         }
-        
+
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (!other.isTrigger || !other.CompareTag("BackCollider"))
