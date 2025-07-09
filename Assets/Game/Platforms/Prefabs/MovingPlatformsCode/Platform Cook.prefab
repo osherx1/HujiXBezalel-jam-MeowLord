@@ -86,12 +86,10 @@ MonoBehaviour:
   animatorBackward: {fileID: 3678605988383070683}
   spriteRootForward: {fileID: 1162055188845293447}
   spriteRootBackward: {fileID: 5166924881929471841}
-  forwardSpriteRenderer: {fileID: 0}
-  catLandingPointFront: {fileID: 1227290540198009772}
-  catLandingPointBack: {fileID: 5783864812683290040}
-  backwardSpriteRenderer: {fileID: 0}
   forwardSkeletonMecanim: {fileID: 8312433042990487366}
   backwardSkeletonMecanim: {fileID: 8731266538012122046}
+  catLandingPointFront: {fileID: 1227290540198009772}
+  catLandingPointBack: {fileID: 5783864812683290040}
   hasPlayerOnTop: 0
   hasYarnAttached: 0
   platformType: 4

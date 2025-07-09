@@ -26,19 +26,15 @@ namespace Game.Platforms.Scripts
         private float _frozenOriginalSpeed = 0f;
 
         [Header("References for Layer Changing")]
-        public SpriteRenderer forwardSpriteRenderer;
+        public SkeletonMecanim forwardSkeletonMecanim;
+        public SkeletonMecanim backwardSkeletonMecanim;
         
         [Header("Cat Landing Points")]
         [SerializeField] private Transform catLandingPointFront;
         [SerializeField] private Transform catLandingPointBack;
-
-        public SpriteRenderer backwardSpriteRenderer;
-        public SkeletonMecanim forwardSkeletonMecanim;
-        public SkeletonMecanim backwardSkeletonMecanim;
+        
         private bool isFrozen = false;
-
-
-        // Which direction are we facing right now?
+        
         private bool _isFacingForward = true;
         public bool IsFacingForward => _isFacingForward;
 
@@ -300,6 +296,7 @@ namespace Game.Platforms.Scripts
 
         private void SetSpriteRootActive(bool isForward)
         {
+            _isFacingForward = isForward;
             spriteRootForward.gameObject.SetActive(isForward);
             spriteRootBackward.gameObject.SetActive(!isForward);
         }
@@ -396,44 +393,27 @@ namespace Game.Platforms.Scripts
         public void PlatformReturn() => OnPlatformReturn?.Invoke();
 
 
+        public string publicTargetLayer { get; private set; }
+        
+        private bool isInBackground = true;
+
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (!other.isTrigger || !other.CompareTag("BackCollider"))
                 return;
 
-            string targetLayer = null;
-            
-        
-            if (forwardSpriteRenderer != null)
-            {
-                targetLayer = forwardSpriteRenderer.sortingLayerName == "Platform" ? "Background" : "Platform";
-            }
-            else if (backwardSpriteRenderer != null)
-            {
-                targetLayer = backwardSpriteRenderer.sortingLayerName == "Platform" ? "Background" : "Platform";
-            }
-            else
-            {
-                targetLayer = "Platform";
-            }
+            string targetLayer = isInBackground ? "Platform" : "Background";
 
-         
-            foreach (var spriteRenderer in GetComponentsInChildren<SpriteRenderer>(true))
-            {
-                spriteRenderer.sortingLayerName = targetLayer;
-            }
-            
-            foreach (var meshRenderer in GetComponentsInChildren<Renderer>(true))
-            {
-                if (!(meshRenderer is SpriteRenderer))
-                {
-                    meshRenderer.sortingLayerName = targetLayer;
-                }
-            }
+            if (forwardSkeletonMecanim != null)
+                forwardSkeletonMecanim.GetComponent<Renderer>().sortingLayerName = targetLayer;
+            if (backwardSkeletonMecanim != null)
+                backwardSkeletonMecanim.GetComponent<Renderer>().sortingLayerName = targetLayer;
+
             publicTargetLayer = targetLayer;
+            isInBackground = !isInBackground;
         }
 
-        public string publicTargetLayer { get; set; }
+
 
         public void SetFrozen(bool frozen)
         {
