@@ -137,6 +137,8 @@ namespace Game.Core.Managers
 
         public void StartGameFromTutorial()
         {
+            AudioManager.Instance.StopAllMusic();
+            CurtainMusicHelper.PlayWithFade(AudioName.CurtainOpenToGame, 2f, 1.5f);
             SceneLoader.Instance.SetSkeletonSortingLayer("Curtain", () =>
                     SceneLoader.Instance.TriggerClose(() =>
                         SceneLoader.Instance.LoadSceneWithCallback(1, 
