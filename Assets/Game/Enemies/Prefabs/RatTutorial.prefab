@@ -106,8 +106,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
-  maxMovement: 4
-  minMovement: 4
+  maxMovement: 3.7
+  minMovement: 3.5
   leftMovement: 45
   rightMovement: 135
   animator: {fileID: 863507590429610504}

@@ -223,6 +223,12 @@ MonoBehaviour:
     pitch: 1
     spatialBlend: 0
     loop: 0
+  - name: 11
+    clip: {fileID: 8300000, guid: 40d92fb0aaf344901b45621944e9176a, type: 3}
+    volume: 0.418
+    pitch: 1
+    spatialBlend: 0
+    loop: 1
 --- !u!114 &3106742271818743991
 MonoBehaviour:
   m_ObjectHideFlags: 0
