@@ -9307,7 +9307,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3237714633234046202, guid: aefd73caaea8148cf896470ec890c64d, type: 3}
       propertyPath: sounds.Array.size
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 3237714633234046202, guid: aefd73caaea8148cf896470ec890c64d, type: 3}
+      propertyPath: sounds.Array.data[10].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 7792f1e48bd914003b2e726701c11e26, type: 3}
+    - target: {fileID: 3237714633234046202, guid: aefd73caaea8148cf896470ec890c64d, type: 3}
+      propertyPath: sounds.Array.data[10].name
       value: 13
+      objectReference: {fileID: 0}
+    - target: {fileID: 3237714633234046202, guid: aefd73caaea8148cf896470ec890c64d, type: 3}
+      propertyPath: sounds.Array.data[11].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: d8ecc95b0fe1c4939a4fab0326d40946, type: 3}
+    - target: {fileID: 3237714633234046202, guid: aefd73caaea8148cf896470ec890c64d, type: 3}
+      propertyPath: sounds.Array.data[11].name
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 3237714633234046202, guid: aefd73caaea8148cf896470ec890c64d, type: 3}
       propertyPath: sounds.Array.data[13].clip
@@ -9318,8 +9334,16 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3237714633234046202, guid: aefd73caaea8148cf896470ec890c64d, type: 3}
+      propertyPath: sounds.Array.data[0].volume
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3237714633234046202, guid: aefd73caaea8148cf896470ec890c64d, type: 3}
       propertyPath: sounds.Array.data[13].pitch
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3237714633234046202, guid: aefd73caaea8148cf896470ec890c64d, type: 3}
+      propertyPath: sounds.Array.data[10].volume
+      value: 0.481
       objectReference: {fileID: 0}
     - target: {fileID: 3237714633234046202, guid: aefd73caaea8148cf896470ec890c64d, type: 3}
       propertyPath: sounds.Array.data[13].volume
