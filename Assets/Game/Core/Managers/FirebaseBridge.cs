@@ -212,24 +212,17 @@ namespace Game.Core.Managers
                         });
                     }
 
-                    // Sort and keep only top 10
-                    list = list.OrderByDescending(e => e.Score).Take(MaxHighScores).ToList();
-                    // Write back to Firebase
+                    // Only update/add this user's score in Firebase
                     var db = FirebaseDatabase.DefaultInstance;
-                    var dict = new Dictionary<string, object>();
-                    foreach (var entry in list)
+                    var entryData = new Dictionary<string, object>
                     {
-                        dict[entry.Nickname] = new Dictionary<string, object>
-                        {
-                            { "Score", entry.Score },
-                            { "FinishTime", entry.FinishTime }
-                        };
-                    }
+                        { "Score", score },
+                        { "FinishTime", finishTime }
+                    };
 
-                    Debug.Log(
-                        $"Writing high scores to Firebase: {string.Join(", ", list.Select(e => $"{e.Nickname}:{e.Score}"))}");
+                    Debug.Log($"Writing high score for {nickname}: {score}");
                     isWriteInProgress = true;
-                    db.RootReference.Child(HighScoresPath).SetValueAsync(dict).ContinueWith(task =>
+                    db.RootReference.Child(HighScoresPath).Child(nickname).SetValueAsync(entryData).ContinueWith(task =>
                     {
                         isWriteInProgress = false;
                         if (task.IsCompleted && !task.IsFaulted && !task.IsCanceled)
@@ -292,8 +285,8 @@ namespace Game.Core.Managers
 
             var db = FirebaseDatabase.DefaultInstance;
             isGetHighScoreTableInProgress = true;
-            db.RootReference.Child(HighScoresPath).OrderByValue().LimitToLast(MaxHighScores).GetValueAsync()
-                .ContinueWith(task =>
+            db.RootReference.Child(HighScoresPath).OrderByChild("Score").LimitToLast(MaxHighScores).GetValueAsync()
+                .ContinueWithOnMainThread(task =>
                 {
                     var result = new List<(int, int, string, float)>();
                     if (task.IsCompleted && task.Result != null && task.Result.Exists)
